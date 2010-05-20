@@ -18,7 +18,7 @@ OUT	= app
 
 SRC	+= main.c terminal.c view.c
 SRC	+= caps.c debug.c marshal.c vtestream.c vtetc.c
-#SRC	+= pty.c reaper.c ring.c table.c trie.c vterowdata.c matcher.c
+SRC	+= pty.c reaper.c ring.c table.c trie.c vterowdata.c matcher.c
 
 OBJ	= $(SRC:.c=.o)
 HDR	= caps.h config.h debug.h gnome-pty.h matcher.h pty.h reaper.h ring.h \
