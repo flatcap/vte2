@@ -17,8 +17,8 @@ SORT	= LANG=C sort
 OUT	= app
 
 SRC	+= main.c terminal.c view.c
-SRC	+= caps.c debug.c marshal.c reaper.c table.c vterowdata.c vtestream.c vtetc.c
-#SRC	+= pty.c ring.c trie.c matcher.c
+SRC	+= caps.c debug.c marshal.c pty.c reaper.c table.c vterowdata.c vtestream.c vtetc.c
+#SRC	+= ring.c trie.c matcher.c
 
 OBJ	= $(SRC:.c=.o)
 HDR	= caps.h config.h debug.h gnome-pty.h matcher.h pty.h reaper.h ring.h \
@@ -27,8 +27,8 @@ HDR	= caps.h config.h debug.h gnome-pty.h matcher.h pty.h reaper.h ring.h \
 	  vtestream-file.h vtestream.h vtetc.h
 
 # Generated source, to be compiled
-GEN_SRC	= marshal.c
-GEN_HDR	= marshal.h
+GEN_SRC	= marshal.c vtetypebuiltins.c
+GEN_HDR	= marshal.h vtetypebuiltins.h
 
 SRC	+= $(GEN_SRC)
 HDR	+= $(GEN_HDR)
@@ -124,4 +124,10 @@ marshal.c: marshal.list
 
 marshal.h: marshal.list
 	$(GEN_GGM) --prefix=_vte_marshal --header --internal $^ > $@
+
+vtetypebuiltins.c: vtepty.h
+	$(GEN_GME) --template vtetypebuiltins.c.template vtepty.h > $@
+
+vtetypebuiltins.h: vtepty.h
+	$(GEN_GME) --template vtetypebuiltins.h.template vtepty.h > $@
 

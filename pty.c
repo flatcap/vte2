@@ -32,7 +32,11 @@
 
 #include "vtepty.h"
 #include "vtepty-private.h"
-//RARXXX #include "vte.h"
+#ifdef RARXXX
+#include "vtetypebuiltins.h"
+#else
+#include "vte.h"
+#endif // RARXXX
 
 #include <sys/types.h>
 #include <sys/ioctl.h>
