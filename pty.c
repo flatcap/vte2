@@ -1551,7 +1551,11 @@ vte_pty_init (VtePty *pty)
         priv->foreign = FALSE;
         priv->using_helper = FALSE;
         priv->helper_tag = NULL;
+#ifdef RARXXX
+	priv->term = g_intern_static_string(VTE_DEFAULT_EMULATION);
+#else
         priv->term = vte_terminal_get_default_emulation(NULL /* that's ok, this function is just retarded */); /* already interned */
+#endif // RARXXX
 }
 
 static void

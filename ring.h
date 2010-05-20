@@ -26,6 +26,13 @@
 #include <gio/gio.h>
 //RARXXX #include "vte.h"
 
+#ifdef RARXXX // copied from vte.h
+typedef enum {
+  VTE_TERMINAL_WRITE_DEFAULT = 0
+} VteTerminalWriteFlags;
+#endif //RARXXX
+
+
 #include "vterowdata.h"
 #include "vtestream.h"
 

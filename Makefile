@@ -17,8 +17,8 @@ SORT	= LANG=C sort
 OUT	= app
 
 SRC	+= main.c terminal.c view.c
-SRC	+= caps.c debug.c marshal.c vtestream.c vtetc.c
-SRC	+= pty.c reaper.c ring.c table.c trie.c vterowdata.c matcher.c
+SRC	+= caps.c debug.c marshal.c reaper.c table.c vterowdata.c vtestream.c vtetc.c
+#SRC	+= pty.c ring.c trie.c matcher.c
 
 OBJ	= $(SRC:.c=.o)
 HDR	= caps.h config.h debug.h gnome-pty.h matcher.h pty.h reaper.h ring.h \
@@ -45,6 +45,7 @@ CFLAGS	+= -DLIBEXECDIR='"/home/dev/install/libexec"'
 CFLAGS	+= -DLOCALEDIR='"/home/dev/install/share/locale"'
 CFLAGS	+= -DVTE_COMPILATION
 #CFLAGS	+= -DVTE_DEBUG
+CFLAGS	+= -DRARXXX
 
 # Warning flags
 CFLAGS	+= -Waggregate-return
@@ -77,7 +78,7 @@ CFLAGS	+= -I.
 CFLAGS  += $(shell pkg-config gobject-2.0 gio-unix-2.0 --cflags)
 LDFLAGS += $(shell pkg-config gobject-2.0 gio-unix-2.0 --libs)
 
-all:	$(SRC) $(HDR) $(LINKS) $(OUT)
+all:	$(SRC) $(HDR) $(LINKS) $(TAGS) $(OUT)
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -97,6 +98,9 @@ distclean: clean
 
 tags:	force
 	ctags *.[ch]
+
+supertags:
+	ctags *.[ch] src/*.[ch]
 
 gobject:
 	$(LN) /usr/src/dev/glib-2.22.5/gobject
