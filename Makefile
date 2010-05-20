@@ -16,16 +16,15 @@ SORT	= LANG=C sort
 
 OUT	= app
 
-SRC	= caps.c main.c reaper.c terminal.c \
-	  view.c vtestream.c vtetc.c debug.c
-
-#SRC	+= ring.c vterowdata.c trie.c table.c pty.c matcher.c
+SRC	+= main.c terminal.c view.c
+SRC	+= caps.c debug.c marshal.c vtestream.c vtetc.c
+#SRC	+= pty.c reaper.c ring.c table.c trie.c vterowdata.c matcher.c
 
 OBJ	= $(SRC:.c=.o)
-HDR	= caps.h config.h config.h matcher.h pty.h reaper.h ring.h table.h \
-	  terminal.h terminal-private.h trie.h view.h view-private.h vtepty.h \
-	  vtepty-private.h vterowdata.h vtestream-base.h vtestream-file.h \
-	  vtestream.h vtetc.h debug.h gnome-pty.h
+HDR	= caps.h config.h debug.h gnome-pty.h matcher.h pty.h reaper.h ring.h \
+	  table.h terminal.h terminal-private.h trie.h view.h view-private.h \
+	  vtepty.h vtepty-private.h vterowdata.h vtestream-base.h \
+	  vtestream-file.h vtestream.h vtetc.h
 
 # Generated source, to be compiled
 GEN_SRC	= marshal.c
