@@ -45,10 +45,10 @@ GType rar_terminal_get_type(void);
 
 GObject *rar_terminal_new(void);
 
-void rar_terminal_set_shell      (RarTerminal *term, char *shell);
+void rar_terminal_set_shell      (RarTerminal *term, const char *shell);
 void rar_terminal_set_size       (RarTerminal *term, int width, int height);
 void rar_terminal_set_scrollback (RarTerminal *term, int lines);
-void rar_terminal_set_env        (RarTerminal *term, char **env);
+void rar_terminal_set_env        (RarTerminal *term, const char **env);
 void rar_terminal_run_shell      (RarTerminal *term);
 
 RarView * rar_terminal_new_view  (RarTerminal *term);

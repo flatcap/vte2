@@ -14,7 +14,7 @@ main (int argc, char *argv[])
 	RarTerminal *term = NULL;
 	RarView *view1 = NULL;
 	RarView *view2 = NULL;
-	char *env[] = { "ONE=apple", "TWO=banana", NULL };
+	const char *env[] = { "ONE=apple", "TWO=banana", NULL };
 	int h1, h2;
 	int t1, t2;
 	char *str1, *str2;

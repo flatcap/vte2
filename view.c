@@ -101,7 +101,7 @@ rar_view_dispose (GObject *gobject)
 /**
  * rar_view_finalize
  */
-void
+static void
 rar_view_finalize(GObject *object)
 {
 	printf ("%s: %p dying\n", __FUNCTION__, object);
@@ -120,7 +120,7 @@ rar_view_finalize(GObject *object)
 /**
  * rar_view_get_property
  */
-void
+static void
 rar_view_get_property (GObject *object,
                            guint prop_id,
                            GValue *value,
@@ -140,7 +140,7 @@ rar_view_get_property (GObject *object,
 /**
  * rar_view_set_property
  */
-void
+static void
 rar_view_set_property (GObject *object,
                            guint prop_id,
                            const GValue *value,
@@ -192,7 +192,7 @@ rar_view_set_follow_cursor (RarView *view, gboolean follow)
  * rar_view_send_text
  */
 void
-rar_view_send_text (RarView *view, char *text)
+rar_view_send_text (RarView *view, const char *text)
 {
 	printf ("%s: %s", __FUNCTION__, text);
 }
@@ -227,7 +227,7 @@ rar_view_get_top_row (RarView *view)
 char *
 rar_view_get_text_row (RarView *view, int row)
 {
-	char *text = "-rw-r-----. 1   434 2010-05-20 17:35 Makefile";
+	const char *text = "-rw-r-----. 1   434 2010-05-20 17:35 Makefile";
 
 	printf ("%s: row %d: %s\n", __FUNCTION__, row, text);
 	return strdup (text);

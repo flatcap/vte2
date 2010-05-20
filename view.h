@@ -44,7 +44,7 @@ GType rar_view_get_type(void);
 GObject *rar_view_new(void);
 
 void   rar_view_set_follow_cursor (RarView *view, gboolean follow);
-void   rar_view_send_text         (RarView *view, char *text);
+void   rar_view_send_text         (RarView *view, const char *text);
 int    rar_view_get_height        (RarView *view);
 int    rar_view_get_top_row       (RarView *view);
 char * rar_view_get_text_row      (RarView *view, int row);

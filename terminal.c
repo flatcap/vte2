@@ -101,7 +101,7 @@ rar_terminal_dispose (GObject *gobject)
 /**
  * rar_terminal_finalize
  */
-void
+static void
 rar_terminal_finalize(GObject *object)
 {
 	printf ("%s: %p dying\n", __FUNCTION__, object);
@@ -120,7 +120,7 @@ rar_terminal_finalize(GObject *object)
 /**
  * rar_terminal_get_property
  */
-void
+static void
 rar_terminal_get_property (GObject *object,
                            guint prop_id,
                            GValue *value,
@@ -140,7 +140,7 @@ rar_terminal_get_property (GObject *object,
 /**
  * rar_terminal_set_property
  */
-void
+static void
 rar_terminal_set_property (GObject *object,
                            guint prop_id,
                            const GValue *value,
@@ -183,7 +183,7 @@ rar_terminal_class_init(RarTerminalClass *klass)
  * rar_terminal_set_shell
  */
 void
-rar_terminal_set_shell (RarTerminal *term, char *shell)
+rar_terminal_set_shell (RarTerminal *term, const char *shell)
 {
 	printf ("%s: shell = %s\n", __FUNCTION__, shell);
 }
@@ -210,7 +210,7 @@ rar_terminal_set_scrollback (RarTerminal *term, int lines)
  * rar_terminal_set_env
  */
 void
-rar_terminal_set_env (RarTerminal *term, char **env)
+rar_terminal_set_env (RarTerminal *term, const char **env)
 {
 	printf ("%s: env =", __FUNCTION__);
 	for (; *env; env++) {
