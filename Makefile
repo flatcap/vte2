@@ -25,6 +25,8 @@ $(OUT): $(OBJ)
 clean:
 	$(RM) $(OBJ) $(OUT) tags $(LINKS)
 
+distclean: clean
+
 tags:	force
 	ctags *.[ch]
 
