@@ -21,11 +21,7 @@
 #ifndef vterowdata_h_included
 #define vterowdata_h_included
 
-//RARXXX #include "vteunistr.h"
-
-#ifdef RARXXX // copied from vteunistr.h
-typedef guint32 vteunistr;
-#endif //RARXXX
+#include "vteunistr.h"
 
 G_BEGIN_DECLS
 

@@ -26,15 +26,9 @@
 #include <glib.h>
 #include <glib-object.h>
 #include "debug.h"
-//RARXXX #include "iso2022.h"
+#include "iso2022.h"
 #include "matcher.h"
 #include "table.h"
-
-#ifdef RARXXX // copied from iso2022.h
-#define VTE_ISO2022_ENCODED_WIDTH_BIT_OFFSET	28
-#define VTE_ISO2022_ENCODED_WIDTH_MASK		(3 << VTE_ISO2022_ENCODED_WIDTH_BIT_OFFSET)
-#define VTE_ISO2022_HAS_ENCODED_WIDTH(__c)	(((__c) & VTE_ISO2022_ENCODED_WIDTH_MASK) != 0)
-#endif //RARXXX
 
 /* Table info. */
 #define VTE_TABLE_MAX_LITERAL (128 + 32)

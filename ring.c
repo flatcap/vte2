@@ -19,11 +19,11 @@
  */
 
 #include <config.h>
+#include <string.h>
 
 #include "debug.h"
 #include "ring.h"
-
-#include <string.h>
+#include "vteunistr.h"
 
 /*
  * VteRing: A buffer ring

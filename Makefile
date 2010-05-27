@@ -1,3 +1,6 @@
+#-------------------------------------------------------------------------------
+# Commands
+#
 AWK	= awk
 CAT	= cat
 CC	= gcc
@@ -10,21 +13,28 @@ LN	= ln -s
 MKDIR	= mkdir -p
 MV	= mv
 NM	= nm
-RM	= rm -f
+RM	= rm -fr
 SED	= sed
 SORT	= LANG=C sort
 
+#-------------------------------------------------------------------------------
+# File lists
+#
 OUT	= app
 
 SRC	+= main.c terminal.c view.c
-SRC	+= caps.c debug.c marshal.c pty.c reaper.c table.c vterowdata.c vtestream.c vtetc.c
-#SRC	+= ring.c trie.c matcher.c
+SRC	+= caps.c debug.c marshal.c pty.c reaper.c table.c vterowdata.c
+SRC	+= vtestream.c vtetc.c vtetree.c vteconv.c iso2022.c vteunistr.c ring.c
+SRC	+= trie.c matcher.c
+SRC	+= rseq-vte.c
 
 OBJ	= $(SRC:.c=.o)
-HDR	= caps.h config.h debug.h gnome-pty.h matcher.h pty.h reaper.h ring.h \
-	  table.h terminal.h terminal-private.h trie.h view.h view-private.h \
-	  vtepty.h vtepty-private.h vterowdata.h vtestream-base.h \
-	  vtestream-file.h vtestream.h vtetc.h
+HDR	= buffer.h caps.h config.h debug.h gdk_keysyms.h gnome-pty.h iso2022.h \
+	  marshal.h matcher.h pty.h reaper.h ring.h table.h terminal.h \
+	  terminal-private.h trie.h view.h view-private.h vteconv.h vtepty.h \
+	  vtepty-private.h vterowdata.h vtestream-base.h vtestream-file.h \
+	  vtestream.h vtetc.h vtetree.h vtetypebuiltins.h
+HDR	+= vteunistr.h
 
 # Generated source, to be compiled
 GEN_SRC	= marshal.c vtetypebuiltins.c
@@ -33,8 +43,11 @@ GEN_HDR	= marshal.h vtetypebuiltins.h
 SRC	+= $(GEN_SRC)
 HDR	+= $(GEN_HDR)
 
-LINKS	= gobject gtk src symbols work
+LINKS	= gobject gtk src symbols work unitable
 
+#-------------------------------------------------------------------------------
+# Compilation flags
+#
 # Extra definitions
 CFLAGS	+= -DDATADIR='"/home/dev/install/share"'
 #CFLAGS	+= -DG_DISABLE_ASSERT
@@ -75,9 +88,13 @@ CFLAGS	+= -Wwrite-strings
 
 # Basic include dirs
 CFLAGS	+= -I.
+CFLAGS	+= -Iunitable
 CFLAGS  += $(shell pkg-config gobject-2.0 gio-unix-2.0 --cflags)
 LDFLAGS += $(shell pkg-config gobject-2.0 gio-unix-2.0 --libs)
 
+#-------------------------------------------------------------------------------
+# Build targets
+#
 all:	$(SRC) $(HDR) $(LINKS) $(TAGS) $(OUT)
 
 .c.o:
@@ -95,18 +112,26 @@ distclean: clean
 	$(RM) tags
 	$(RM) $(LINKS)
 	$(RM) $(GEN_SRC) $(GEN_HDR)
+	$(RM) unitable
 
 tags:	force
 	ctags *.[ch]
 
+force:
+
 supertags:
 	ctags *.[ch] src/*.[ch]
 
+#-------------------------------------------------------------------------------
+# Symlinks, etc
+#
+links:	$(LINKS)
+
 gobject:
-	$(LN) /usr/src/dev/glib-2.22.5/gobject
+	$(LN) /usr/src/dev/glib-2.24.1/gobject
 
 gtk:
-	$(LN) /usr/src/dev/gtk+-2.18.9/gtk
+	$(LN) /usr/src/dev/gtk+-2.20.1/gtk
 
 symbols:
 	$(LN) /home/dev/notes/symbols
@@ -117,8 +142,13 @@ src:
 work:
 	$(LN) /home/dev/vte $@
 
-force:
+unitable:
+	$(MKDIR) $@
+	$(CP) -l /home/dev/git.vte/src/unitable.* $@
 
+#-------------------------------------------------------------------------------
+# Generated files
+#
 marshal.c: marshal.list
 	$(GEN_GGM) --prefix=_vte_marshal --header --body --internal $^ > $@
 
