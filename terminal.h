@@ -4,6 +4,7 @@
 #include <glib-object.h>
 
 #include "view.h"
+#include "screen.h"
 
 #define RAR_TYPE_TERMINAL            (rar_terminal_get_type())
 #define RAR_TERMINAL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), RAR_TYPE_TERMINAL, RarTerminal))
@@ -16,6 +17,10 @@ typedef struct _RarTerminal         RarTerminal;
 typedef struct _RarTerminalPrivate  RarTerminalPrivate;
 typedef struct _RarTerminalClass    RarTerminalClass;
 
+typedef struct _dummy {
+	glong value;
+} Adj;
+
 /**
  * RarTerminal
  */
@@ -23,6 +28,43 @@ struct _RarTerminal {
 	GObject parent;
 
 	RarTerminalPrivate *pvt;
+
+	/* These were in VteTerminal */
+	Adj *adjustment;	// GtkAdjustment
+	glong column_count;
+	glong row_count;
+
+	/* There were in VtePrivate */
+	RarScreen *alternate_screen;
+	RarScreen *normal_screen;
+	int cursor_mode;
+	gboolean cursor_visible;
+	GHashTable *dec_saved;
+	const char *emulation;
+	struct vte_terminal_flags {
+		gboolean am;
+		gboolean bw;
+		gboolean LP;
+		gboolean ul;
+		gboolean xn;
+	} flags;
+	gboolean hp_fkey_mode;
+	int keypad_mode;
+	gboolean legacy_fkey_mode;
+	gboolean margin_bell;
+	gboolean meta_sends_escape;
+	int mouse_tracking_mode;
+	gboolean nrc_mode;
+	RarScreen *screen;
+	long scrollback_lines;
+	gboolean smooth_scroll;
+	gboolean sun_fkey_mode;
+	GHashTable *tabstops;
+	struct _vte_termcap *termcap;
+	gboolean text_deleted_flag;
+	gboolean text_modified_flag;
+	gboolean text_inserted_flag;
+	gboolean vt220_fkey_mode;
 };
 
 /**
