@@ -22,19 +22,15 @@ SORT	= LANG=C sort
 #
 OUT	= app
 
-SRC	+= main.c terminal.c view.c
-SRC	+= caps.c debug.c marshal.c pty.c reaper.c table.c vterowdata.c
-SRC	+= vtestream.c vtetc.c vtetree.c vteconv.c iso2022.c vteunistr.c ring.c
-SRC	+= trie.c matcher.c
-SRC	+= rseq-vte.c
-
+SRC	= caps.c debug.c iso2022.c main.c marshal.c matcher.c pty.c reaper.c \
+	  ring.c rseq-vte.c table.c terminal.c trie.c view.c vteconv.c \
+	  vterowdata.c vtestream.c vtetc.c vtetree.c vteunistr.c
 OBJ	= $(SRC:.c=.o)
 HDR	= buffer.h caps.h config.h debug.h gdk_keysyms.h gnome-pty.h iso2022.h \
 	  marshal.h matcher.h pty.h reaper.h ring.h table.h terminal.h \
 	  terminal-private.h trie.h view.h view-private.h vteconv.h vtepty.h \
 	  vtepty-private.h vterowdata.h vtestream-base.h vtestream-file.h \
-	  vtestream.h vtetc.h vtetree.h vtetypebuiltins.h
-HDR	+= vteunistr.h
+	  vtestream.h vtetc.h vtetree.h vtetypebuiltins.h vteunistr.h
 
 # Generated source, to be compiled
 GEN_SRC	= marshal.c vtetypebuiltins.c
@@ -48,6 +44,13 @@ LINKS	= gobject gtk src symbols work unitable
 #-------------------------------------------------------------------------------
 # Compilation flags
 #
+# General compiler flags
+CFLAGS	+= -g
+#CFLAGS	+= -O2
+CFLAGS	+= -fno-common
+#CFLAGS	+= -fprofile-arcs
+#CFLAGS	+= -ftest-coverage
+
 # Extra definitions
 CFLAGS	+= -DDATADIR='"/home/dev/install/share"'
 #CFLAGS	+= -DG_DISABLE_ASSERT
@@ -89,13 +92,13 @@ CFLAGS	+= -Wwrite-strings
 # Basic include dirs
 CFLAGS	+= -I.
 CFLAGS	+= -Iunitable
-CFLAGS  += $(shell pkg-config gobject-2.0 gio-unix-2.0 --cflags)
-LDFLAGS += $(shell pkg-config gobject-2.0 gio-unix-2.0 --libs)
+CFLAGS	+= $(shell pkg-config gobject-2.0 gio-unix-2.0 --cflags)
+LDFLAGS	+= $(shell pkg-config gobject-2.0 gio-unix-2.0 --libs)
 
 #-------------------------------------------------------------------------------
 # Build targets
 #
-all:	$(SRC) $(HDR) $(LINKS) $(TAGS) $(OUT)
+all:	$(SRC) $(HDR) $(LINKS) tags $(OUT)
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
