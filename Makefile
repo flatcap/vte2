@@ -112,7 +112,7 @@ clean:
 	$(RM) $(OBJ) $(OUT)
 
 distclean: clean
-	$(RM) tags
+	$(RM) tags*
 	$(RM) $(LINKS)
 	$(RM) $(GEN_SRC) $(GEN_HDR)
 	$(RM) unitable
