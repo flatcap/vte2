@@ -2011,7 +2011,7 @@ vte_sequence_handler_cursor_preceding_line (RarTerminal *terminal, GValueArray *
  * Manipulate certain terminal attributes.
  */
 /*static*/ void
-vte_sequence_handler_decset_internal(RarTerminal *terminal,
+vte_sequence_handler_decset_internal (RarTerminal *terminal,
 				     int setting,
 				     gboolean restore,
 				     gboolean save,
