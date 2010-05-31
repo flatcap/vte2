@@ -290,9 +290,7 @@ rar_terminal_new_view (RarTerminal *term)
 }
 
 
-/* process incoming data without copying */
-static struct _vte_incoming_chunk *free_chunks;
-
+// VTESEQ
 /**
  * _vte_terminal_handle_sequence
  * Handle a terminal control sequence and its parameters.
@@ -323,8 +321,13 @@ _vte_terminal_handle_sequence (RarTerminal *terminal,
 #endif
 }
 
+
+// VTE
+/* process incoming data without copying */
+static struct _vte_incoming_chunk *free_chunks;
+
 /**
- * _vte_incoming_chunk
+ * get_chunk
  */
 /*static*/ struct _vte_incoming_chunk *
 get_chunk (void)
@@ -341,10 +344,11 @@ get_chunk (void)
 	chunk->len = 0;
 	return chunk;
 }
-static void
+
 /**
  * release_chunk
  */
+static void
 release_chunk (struct _vte_incoming_chunk *chunk)
 {
 	chunk->next = free_chunks;
@@ -911,6 +915,7 @@ remove_from_active_list (RarTerminal *terminal)
 	}
 #endif
 }
+
 /**
  * vte_terminal_stop_processing
  */
@@ -953,6 +958,7 @@ _vte_terminal_feed_chunks (RarTerminal *terminal, struct _vte_incoming_chunk *ch
 	last->next = terminal->pvt->incoming;
 	terminal->pvt->incoming = chunks;
 }
+
 /**
  * vte_terminal_io_read:
  * Read and handle data from the child.
@@ -1095,6 +1101,7 @@ mark_input_source_invalid (RarTerminal *terminal)
 	_vte_debug_print (VTE_DEBUG_IO, "removed poll of vte_terminal_io_read\n");
 	terminal->pvt->pty_input_source = 0;
 }
+
 /**
  * _vte_terminal_connect_pty_read
  */
