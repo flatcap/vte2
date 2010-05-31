@@ -75,22 +75,6 @@ display_control_sequence(const char *name, GValueArray *params)
 
 /* A couple are duplicated from vte.c, to keep them static... */
 
-/* Find the character an the given position in the backscroll buffer. */
-static VteCell *
-vte_terminal_find_charcell (VteTerminal *terminal, glong col, glong row)
-{
-	VteRowData *rowdata;
-	VteCell *ret = NULL;
-	VteScreen *screen;
-	g_assert(VTE_IS_TERMINAL(terminal));
-	screen = terminal->pvt->screen;
-	if (_vte_ring_contains (screen->row_data, row)) {
-		rowdata = _vte_ring_index_writable (screen->row_data, row);
-		ret = _vte_row_data_get_writable (rowdata, col);
-	}
-	return ret;
-}
-
 /* Check how long a string of unichars is.  Slow version. */
 static gssize
 vte_unichar_strlen(gunichar *c)
@@ -255,161 +239,6 @@ vte_terminal_emit_resize_window(VteTerminal *terminal,
 
 
 /* Some common functions */
-
-static void
-_vte_terminal_home_cursor (VteTerminal *terminal)
-{
-	VteScreen *screen;
-	screen = terminal->pvt->screen;
-	screen->cursor_current.row = screen->insert_delta;
-	screen->cursor_current.col = 0;
-}
-
-/* Clear the entire screen. */
-static void
-_vte_terminal_clear_screen (VteTerminal *terminal)
-{
-	long i, initial, row;
-	VteScreen *screen;
-	screen = terminal->pvt->screen;
-	initial = screen->insert_delta;
-	row = screen->cursor_current.row - screen->insert_delta;
-	initial = _vte_ring_next(screen->row_data);
-	/* Add a new screen's worth of rows. */
-	for (i = 0; i < terminal->row_count; i++)
-		_vte_terminal_ring_append (terminal, TRUE);
-	/* Move the cursor and insertion delta to the first line in the
-	 * newly-cleared area and scroll if need be. */
-	screen->insert_delta = initial;
-	screen->cursor_current.row = row + screen->insert_delta;
-	_vte_terminal_adjust_adjustments(terminal);
-	/* Redraw everything. */
-	_vte_invalidate_all(terminal);
-	/* We've modified the display.  Make a note of it. */
-	terminal->pvt->text_deleted_flag = TRUE;
-}
-
-/* Clear the current line. */
-static void
-_vte_terminal_clear_current_line (VteTerminal *terminal)
-{
-	VteRowData *rowdata;
-	VteScreen *screen;
-
-	screen = terminal->pvt->screen;
-
-	/* If the cursor is actually on the screen, clear data in the row
-	 * which corresponds to the cursor. */
-	if (_vte_ring_next(screen->row_data) > screen->cursor_current.row) {
-		/* Get the data for the row which the cursor points to. */
-		rowdata = _vte_ring_index_writable (screen->row_data, screen->cursor_current.row);
-		g_assert(rowdata != NULL);
-		/* Remove it. */
-		_vte_row_data_shrink (rowdata, 0);
-		/* Add enough cells to the end of the line to fill out the row. */
-		_vte_row_data_fill (rowdata, &screen->fill_defaults, terminal->column_count);
-		rowdata->attr.soft_wrapped = 0;
-		/* Repaint this row. */
-		_vte_invalidate_cells(terminal,
-				      0, terminal->column_count,
-				      screen->cursor_current.row, 1);
-	}
-
-	/* We've modified the display.  Make a note of it. */
-	terminal->pvt->text_deleted_flag = TRUE;
-}
-
-/* Clear above the current line. */
-static void
-_vte_terminal_clear_above_current (VteTerminal *terminal)
-{
-	VteRowData *rowdata;
-	long i;
-	VteScreen *screen;
-	screen = terminal->pvt->screen;
-	/* If the cursor is actually on the screen, clear data in the row
-	 * which corresponds to the cursor. */
-	for (i = screen->insert_delta; i < screen->cursor_current.row; i++) {
-		if (_vte_ring_next(screen->row_data) > i) {
-			/* Get the data for the row we're erasing. */
-			rowdata = _vte_ring_index_writable (screen->row_data, i);
-			g_assert(rowdata != NULL);
-			/* Remove it. */
-			_vte_row_data_shrink (rowdata, 0);
-			/* Add new cells until we fill the row. */
-			_vte_row_data_fill (rowdata, &screen->fill_defaults, terminal->column_count);
-			rowdata->attr.soft_wrapped = 0;
-			/* Repaint the row. */
-			_vte_invalidate_cells(terminal,
-					0, terminal->column_count, i, 1);
-		}
-	}
-	/* We've modified the display.  Make a note of it. */
-	terminal->pvt->text_deleted_flag = TRUE;
-}
-
-/* Scroll the text, but don't move the cursor.  Negative = up, positive = down. */
-static void
-_vte_terminal_scroll_text (VteTerminal *terminal, int scroll_amount)
-{
-	long start, end, i;
-	VteScreen *screen;
-
-	screen = terminal->pvt->screen;
-
-	if (screen->scrolling_restricted) {
-		start = screen->insert_delta + screen->scrolling_region.start;
-		end = screen->insert_delta + screen->scrolling_region.end;
-	} else {
-		start = screen->insert_delta;
-		end = start + terminal->row_count - 1;
-	}
-
-	while (_vte_ring_next(screen->row_data) <= end)
-		_vte_terminal_ring_append (terminal, FALSE);
-
-	if (scroll_amount > 0) {
-		for (i = 0; i < scroll_amount; i++) {
-			_vte_terminal_ring_remove (terminal, end);
-			_vte_terminal_ring_insert (terminal, start, TRUE);
-		}
-	} else {
-		for (i = 0; i < -scroll_amount; i++) {
-			_vte_terminal_ring_remove (terminal, start);
-			_vte_terminal_ring_insert (terminal, end, TRUE);
-		}
-	}
-
-	/* Update the display. */
-	_vte_terminal_scroll_region(terminal, start, end - start + 1,
-				   scroll_amount);
-
-	/* Adjust the scrollbars if necessary. */
-	_vte_terminal_adjust_adjustments(terminal);
-
-	/* We've modified the display.  Make a note of it. */
-	terminal->pvt->text_inserted_flag = TRUE;
-	terminal->pvt->text_deleted_flag = TRUE;
-}
-
-static gboolean
-vte_terminal_termcap_string_same_as_for (VteTerminal *terminal,
-					 const char  *cap_str,
-					 const char  *cap_other)
-{
-	char *other_str;
-	gboolean ret;
-
-	other_str = _vte_termcap_find_string(terminal->pvt->termcap,
-					     terminal->pvt->emulation,
-					     cap_other);
-
-	ret = other_str && (g_ascii_strcasecmp(cap_str, other_str) == 0);
-
-	g_free (other_str);
-
-	return ret;
-}
 
 /* Set icon/window titles. */
 static void
@@ -1242,6 +1071,13 @@ _vte_terminal_handle_sequence(VteTerminal *terminal,
 	}
 }
 
+//moved:_vte_terminal_clear_above_current:rseq-vte.c
+//moved:_vte_terminal_clear_current_line:rseq-vte.c
+//moved:_vte_terminal_clear_screen:rseq-vte.c
+//moved:_vte_terminal_home_cursor:rseq-vte.c
+//moved:_vte_terminal_scroll_text:rseq-vte.c
+//moved:vte_terminal_find_charcell:rseq-vte.c
+//moved:vte_terminal_termcap_string_same_as_for:rseq-vte.c
 
 //moved:vte_sequence_handler_AL:rseq-vte.c
 //moved:vte_sequence_handler_DC:rseq-vte.c

@@ -263,12 +263,12 @@ vte_sequence_handler_offset(RarTerminal *terminal,
 }
 
 /**
- * vte_terminal_clear_current_line
+ * _vte_terminal_clear_current_line
  *
  * Clear the current line.
  */
 /*static*/ void
-vte_terminal_clear_current_line (RarTerminal *terminal)
+_vte_terminal_clear_current_line (RarTerminal *terminal)
 {
 	VteRowData *rowdata;
 	RarScreen *screen;
@@ -297,12 +297,12 @@ vte_terminal_clear_current_line (RarTerminal *terminal)
 }
 
 /**
- * vte_terminal_clear_screen
+ * _vte_terminal_clear_screen
  *
  * Clear the entire screen.
  */
 /*static*/ void
-vte_terminal_clear_screen (RarTerminal *terminal)
+_vte_terminal_clear_screen (RarTerminal *terminal)
 {
 	long i, initial, row;
 	RarScreen *screen;
@@ -345,10 +345,10 @@ vte_terminal_find_charcell (RarTerminal *terminal, glong col, glong row)
 }
 
 /**
- * vte_terminal_home_cursor
+ * _vte_terminal_home_cursor
  */
 /*static*/ void
-vte_terminal_home_cursor (RarTerminal *terminal)
+_vte_terminal_home_cursor (RarTerminal *terminal)
 {
 	RarScreen *screen;
 	screen = terminal->screen;
@@ -357,12 +357,12 @@ vte_terminal_home_cursor (RarTerminal *terminal)
 }
 
 /**
- * vte_terminal_scroll_text
+ * _vte_terminal_scroll_text
  *
  * Scroll the text, but don't move the cursor.  Negative = up, positive = down.
  */
 /*static*/ void
-vte_terminal_scroll_text (RarTerminal *terminal, int scroll_amount)
+_vte_terminal_scroll_text (RarTerminal *terminal, int scroll_amount)
 {
 	long start, end, i;
 	RarScreen *screen;
@@ -427,12 +427,12 @@ vte_terminal_termcap_string_same_as_for (RarTerminal *terminal,
 }
 
 /**
- * vte_terminal_clear_above_current
+ * _vte_terminal_clear_above_current
  *
  * Clear above the current line.
  */
 /*static*/ void
-vte_terminal_clear_above_current (RarTerminal *terminal)
+_vte_terminal_clear_above_current (RarTerminal *terminal)
 {
 	VteRowData *rowdata;
 	long i;
@@ -724,8 +724,8 @@ vte_sequence_handler_ch (RarTerminal *terminal, GValueArray *params)
 /*static*/ void
 vte_sequence_handler_cl (RarTerminal *terminal, GValueArray *params)
 {
-	vte_terminal_clear_screen (terminal);
-	vte_terminal_home_cursor (terminal);
+	_vte_terminal_clear_screen (terminal);
+	_vte_terminal_home_cursor (terminal);
 
 	/* We've modified the display.  Make a note of it. */
 	terminal->text_deleted_flag = TRUE;
@@ -796,7 +796,7 @@ vte_sequence_handler_cs (RarTerminal *terminal, GValueArray *params)
 	GValue *value;
 	RarScreen *screen;
 
-	vte_terminal_home_cursor (terminal);
+	_vte_terminal_home_cursor (terminal);
 
 	/* We require two parameters.  Anything less is a reset. */
 	screen = terminal->screen;
@@ -1126,7 +1126,7 @@ vte_sequence_handler_fs (RarTerminal *terminal, GValueArray *params)
 /*static*/ void
 vte_sequence_handler_ho (RarTerminal *terminal, GValueArray *params)
 {
-	vte_terminal_home_cursor (terminal);
+	_vte_terminal_home_cursor (terminal);
 }
 
 /**
@@ -2288,8 +2288,8 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 		/* Clear the alternate screen if we're switching
 		 * to it, and home the cursor. */
 		if (set) {
-			vte_terminal_clear_screen (terminal);
-			vte_terminal_home_cursor (terminal);
+			_vte_terminal_clear_screen (terminal);
+			_vte_terminal_home_cursor (terminal);
 		}
 		/* Reset scrollbars and repaint everything. */
 		terminal->adjustment->value =
@@ -2476,14 +2476,14 @@ vte_sequence_handler_erase_in_display (RarTerminal *terminal, GValueArray *param
 		break;
 	case 1:
 		/* Clear above the current line. */
-		vte_terminal_clear_above_current (terminal);
+		_vte_terminal_clear_above_current (terminal);
 		/* Clear everything to the left of the cursor, too. */
 		/* FIXME: vttest. */
 		vte_sequence_handler_cb (terminal, NULL);
 		break;
 	case 2:
 		/* Clear the entire screen. */
-		vte_terminal_clear_screen (terminal);
+		_vte_terminal_clear_screen (terminal);
 		break;
 	default:
 		break;
@@ -2525,7 +2525,7 @@ vte_sequence_handler_erase_in_line (RarTerminal *terminal, GValueArray *params)
 		break;
 	case 2:
 		/* Clear the entire line. */
-		vte_terminal_clear_current_line (terminal);
+		_vte_terminal_clear_current_line (terminal);
 		break;
 	default:
 		break;
@@ -2773,7 +2773,7 @@ vte_sequence_handler_scroll_down (RarTerminal *terminal, GValueArray *params)
 		}
 	}
 
-	vte_terminal_scroll_text (terminal, val);
+	_vte_terminal_scroll_text (terminal, val);
 }
 
 /**
@@ -2795,7 +2795,7 @@ vte_sequence_handler_scroll_up (RarTerminal *terminal, GValueArray *params)
 		}
 	}
 
-	vte_terminal_scroll_text (terminal, -val);
+	_vte_terminal_scroll_text (terminal, -val);
 }
 
 /**
