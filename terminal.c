@@ -3,9 +3,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <wchar.h>
+#include <errno.h>
+
 #include <glib-object.h>
 #include <glib/gi18n-lib.h>
 #include <gobject/gmarshal.h>
+
+#ifdef RARXXX
+// Not sure these are needed /here/
+#include <unistd.h>
+#include <fcntl.h>
+#endif
 
 #include "debug.h"
 #include "terminal.h"
@@ -13,14 +22,23 @@
 #include "vtepty.h"
 #include "reaper.h"
 #include "iso2022.h"
+
 #ifdef RARXXX
 #include "vtepty-private.h"
+#define VTE_CHILD_INPUT_PRIORITY	G_PRIORITY_DEFAULT_IDLE
 typedef struct _GdkPoint
 {
-  gint x;
-  gint y;
+	gint x;
+	gint y;
 } GdkPoint;
 
+typedef struct _GdkRectangle
+{
+	gint x;
+	gint y;
+	gint width;
+	gint height;
+} GdkRectangle;
 #endif
 
 #ifdef RARXXX // copied from vteseq.c
@@ -41,6 +59,8 @@ G_DEFINE_TYPE(RarTerminal, rar_terminal, G_TYPE_OBJECT)
 #endif
 
 #define GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), RAR_TYPE_TERMINAL, RarTerminalPrivate))
+
+gboolean vte_terminal_fork_command_full(RarTerminal *terminal, VtePtyFlags pty_flags, const char *working_directory, char **argv, char **envv, GSpawnFlags spawn_flags, GSpawnChildSetupFunc child_setup, gpointer child_setup_data, GPid *child_pid, GError **error);
 
 /* Enumerations */
 /**
@@ -69,7 +89,7 @@ enum
  * rar_terminal_new
  */
 GObject *
-rar_terminal_new(void)
+rar_terminal_new (void)
 {
 	return g_object_new(RAR_TYPE_TERMINAL, NULL);
 }
@@ -78,7 +98,7 @@ rar_terminal_new(void)
  * rar_terminal_init
  */
 void
-rar_terminal_init(RarTerminal *terminal)
+rar_terminal_init (RarTerminal *terminal)
 {
 	RarTerminalPrivate *pvt;
 
@@ -120,7 +140,7 @@ rar_terminal_dispose (GObject *gobject)
  * rar_terminal_finalize
  */
 static void
-rar_terminal_finalize(GObject *object)
+rar_terminal_finalize (GObject *object)
 {
 	printf ("%s: %p dying\n", __FUNCTION__, object);
 
@@ -178,7 +198,7 @@ rar_terminal_set_property (GObject *object,
  * rar_terminal_class_init
  */
 void
-rar_terminal_class_init(RarTerminalClass *klass)
+rar_terminal_class_init (RarTerminalClass *klass)
 {
 	GObjectClass *gobject_class;
 
@@ -243,7 +263,14 @@ rar_terminal_set_env (RarTerminal *term, const char **env)
 void
 rar_terminal_run_shell (RarTerminal *term)
 {
-	printf ("%s: running shell\n", __FUNCTION__);
+	const char *command_argv[] = { "/bin/bash", NULL };
+	const char *env_add[] = { "DEBUG_APP=TRUE", NULL };
+	GPid child_pid = 0;
+
+	gboolean result;
+
+	result = vte_terminal_fork_command_full(term, VTE_PTY_DEFAULT, NULL, (char**) command_argv, (char**) env_add, G_SPAWN_SEARCH_PATH, NULL, NULL, &child_pid, NULL);
+	printf ("%s: running shell: %d\n", __FUNCTION__, child_pid);
 }
 
 /**
@@ -263,7 +290,6 @@ rar_terminal_new_view (RarTerminal *term)
 }
 
 
-#if 0
 /* process incoming data without copying */
 static struct _vte_incoming_chunk *free_chunks;
 
@@ -272,11 +298,12 @@ static struct _vte_incoming_chunk *free_chunks;
  * Handle a terminal control sequence and its parameters.
  */
 void
-_vte_terminal_handle_sequence(RarTerminal *terminal,
+_vte_terminal_handle_sequence (RarTerminal *terminal,
 			      const char *match_s,
 			      GQuark match G_GNUC_UNUSED,
 			      GValueArray *params)
 {
+#if 0
 	VteTerminalSequenceHandler handler;
 
 	_VTE_DEBUG_IF(VTE_DEBUG_PARSE)
@@ -293,12 +320,13 @@ _vte_terminal_handle_sequence(RarTerminal *terminal,
 				  "No handler for control sequence `%s' defined.\n",
 				  match_s);
 	}
+#endif
 }
 
 /**
  * _vte_incoming_chunk
  */
-static struct _vte_incoming_chunk *
+/*static*/ struct _vte_incoming_chunk *
 get_chunk (void)
 {
 	struct _vte_incoming_chunk *chunk = NULL;
@@ -327,7 +355,7 @@ release_chunk (struct _vte_incoming_chunk *chunk)
 /**
  * prune_chunks
  */
-static void
+/*static*/ void
 prune_chunks (guint len)
 {
 	struct _vte_incoming_chunk *chunk = NULL;
@@ -396,8 +424,8 @@ _vte_incoming_chunks_count (struct _vte_incoming_chunk *chunk)
 /**
  * _vte_incoming_chunk
  */
-static struct _vte_incoming_chunk *
-_vte_incoming_chunks_reverse(struct _vte_incoming_chunk *chunk)
+/*static*/ struct _vte_incoming_chunk *
+_vte_incoming_chunks_reverse (struct _vte_incoming_chunk *chunk)
 {
 	struct _vte_incoming_chunk *prev = NULL;
 	while (chunk) {
@@ -415,8 +443,9 @@ _vte_incoming_chunks_reverse(struct _vte_incoming_chunk *chunk)
  * processing control sequences.
  */
 static void
-vte_terminal_process_incoming(RarTerminal *terminal)
+vte_terminal_process_incoming (RarTerminal *terminal)
 {
+#if 0
 	RarScreen *screen;
 	VteVisualPosition cursor;
 	gboolean cursor_visible;
@@ -818,13 +847,14 @@ next_match:
 			(long) unichars->len,
 			(long) _vte_incoming_chunks_length(terminal->pvt->incoming),
 			_vte_incoming_chunks_count(terminal->pvt->incoming));
+#endif
 }
 
 /**
  * _vte_terminal_disconnect_pty_read
  */
 static void
-_vte_terminal_disconnect_pty_read(RarTerminal *terminal)
+_vte_terminal_disconnect_pty_read (RarTerminal *terminal)
 {
 	if (terminal->pvt->pty_input_source != 0) {
 		_vte_debug_print (VTE_DEBUG_IO, "disconnecting poll of vte_terminal_io_read\n");
@@ -837,13 +867,253 @@ _vte_terminal_disconnect_pty_read(RarTerminal *terminal)
  * _vte_terminal_disconnect_pty_write
  */
 static void
-_vte_terminal_disconnect_pty_write(RarTerminal *terminal)
+_vte_terminal_disconnect_pty_write (RarTerminal *terminal)
 {
 	if (terminal->pvt->pty_output_source != 0) {
 		_vte_debug_print (VTE_DEBUG_IO, "disconnecting poll of vte_terminal_io_write\n");
 
 		g_source_remove(terminal->pvt->pty_output_source);
 		terminal->pvt->pty_output_source = 0;
+	}
+}
+
+/**
+ * remove_from_active_list
+ */
+static void
+remove_from_active_list (RarTerminal *terminal)
+{
+#if 0
+	if (terminal->pvt->active != NULL
+			&& terminal->pvt->update_regions == NULL) {
+		_vte_debug_print(VTE_DEBUG_TIMEOUT,
+			"Removing terminal from active list\n");
+		active_terminals = g_list_delete_link (active_terminals,
+				terminal->pvt->active);
+		terminal->pvt->active = NULL;
+
+		if (active_terminals == NULL) {
+			if (in_process_timeout == FALSE &&
+					process_timeout_tag != 0) {
+				_vte_debug_print(VTE_DEBUG_TIMEOUT,
+						"Removing process timeout\n");
+				g_source_remove (process_timeout_tag);
+				process_timeout_tag = 0;
+			}
+			if (in_update_timeout == FALSE &&
+					update_timeout_tag != 0) {
+				_vte_debug_print(VTE_DEBUG_TIMEOUT,
+						"Removing update timeout\n");
+				g_source_remove (update_timeout_tag);
+				update_timeout_tag = 0;
+			}
+		}
+	}
+#endif
+}
+/**
+ * vte_terminal_stop_processing
+ */
+static void
+vte_terminal_stop_processing (RarTerminal *terminal)
+{
+	remove_from_active_list (terminal);
+}
+
+/**
+ * _vte_terminal_setup_utf8
+ */
+static void
+_vte_terminal_setup_utf8 (RarTerminal *terminal)
+{
+        RarTerminalPrivate *pvt = terminal->pvt;
+        GError *error = NULL;
+
+        if (!vte_pty_set_utf8(pvt->pty,
+                              strcmp(terminal->pvt->encoding, "UTF-8") == 0,
+                              &error)) {
+                g_warning ("Failed to set UTF8 mode: %s\n", error->message);
+                g_error_free (error);
+        }
+}
+
+/**
+ * _vte_terminal_feed_chunks
+ */
+/*static*/ void
+_vte_terminal_feed_chunks (RarTerminal *terminal, struct _vte_incoming_chunk *chunks)
+{
+	struct _vte_incoming_chunk *last;
+
+	_vte_debug_print(VTE_DEBUG_IO, "Feed %"G_GSIZE_FORMAT" bytes, in %"G_GSIZE_FORMAT" chunks.\n",
+			_vte_incoming_chunks_length(chunks),
+			_vte_incoming_chunks_count(chunks));
+
+	for (last = chunks; last->next != NULL; last = last->next) ;
+	last->next = terminal->pvt->incoming;
+	terminal->pvt->incoming = chunks;
+}
+/**
+ * vte_terminal_io_read:
+ * Read and handle data from the child.
+ */
+static gboolean
+vte_terminal_io_read (GIOChannel *channel,
+		     GIOCondition condition,
+		     RarTerminal *terminal)
+{
+#if 0
+	int err = 0;
+	gboolean eof, again = TRUE;
+
+	_vte_debug_print (VTE_DEBUG_WORK, ".");
+
+	/* Check for end-of-file. */
+	eof = condition & G_IO_HUP;
+
+	/* Read some data in from this channel. */
+	if (condition & G_IO_IN) {
+		struct _vte_incoming_chunk *chunk, *chunks = NULL;
+		const int fd = g_io_channel_unix_get_fd (channel);
+		guchar *bp;
+		int rem, len;
+		guint bytes, max_bytes;
+
+		/* Limit the amount read between updates, so as to
+		 * 1. maintain fairness between multiple terminals;
+		 * 2. prevent reading the entire output of a command in one
+		 *    pass, i.e. we always try to refresh the terminal ~40Hz.
+		 *    See time_process_incoming() where we estimate the
+		 *    maximum number of bytes we can read/process in between
+		 *    updates.
+		 */
+		max_bytes = terminal->pvt->active ?
+		            g_list_length (active_terminals) - 1 : 0;
+		if (max_bytes) {
+			max_bytes = terminal->pvt->max_input_bytes / max_bytes;
+		} else {
+			max_bytes = VTE_MAX_INPUT_READ;
+		}
+		bytes = terminal->pvt->input_bytes;
+
+		chunk = terminal->pvt->incoming;
+		do {
+			if (!chunk || chunk->len >= 3*sizeof (chunk->data)/4) {
+				chunk = get_chunk ();
+				chunk->next = chunks;
+				chunks = chunk;
+			}
+			rem = sizeof (chunk->data) - chunk->len;
+			bp = chunk->data + chunk->len;
+			len = 0;
+			do {
+				int ret = read (fd, bp, rem);
+				switch (ret){
+					case -1:
+						err = errno;
+						goto out;
+					case 0:
+						eof = TRUE;
+						goto out;
+					default:
+						bp += ret;
+						rem -= ret;
+						len += ret;
+						break;
+				}
+			} while (rem);
+out:
+			chunk->len += len;
+			bytes += len;
+		} while (bytes < max_bytes &&
+		         chunk->len == sizeof (chunk->data));
+		if (chunk->len == 0 && chunk == chunks) {
+			chunks = chunks->next;
+			release_chunk (chunk);
+		}
+
+		if (chunks != NULL) {
+			_vte_terminal_feed_chunks (terminal, chunks);
+		}
+		if (!vte_terminal_is_processing (terminal)) {
+			GDK_THREADS_ENTER ();
+			vte_terminal_add_process_timeout (terminal);
+			GDK_THREADS_LEAVE ();
+		}
+		terminal->pvt->pty_input_active = len != 0;
+		terminal->pvt->input_bytes = bytes;
+		again = bytes < max_bytes;
+
+		_vte_debug_print (VTE_DEBUG_IO, "read %d/%d bytes, again? %s, active? %s\n",
+				bytes, max_bytes,
+				again ? "yes" : "no",
+				terminal->pvt->pty_input_active ? "yes" : "no");
+	}
+
+	/* Error? */
+	switch (err) {
+		case 0: /* no error */
+			break;
+		case EIO: /* Fake an EOF. */
+			eof = TRUE;
+			break;
+		case EAGAIN:
+		case EBUSY: /* do nothing */
+			break;
+		default:
+			/* Translators: %s is replaced with error message returned by strerror(). */
+			g_warning (_("Error reading from child: " "%s."),
+					g_strerror (err));
+			break;
+	}
+
+	/* If we detected an eof condition, signal one. */
+	if (eof) {
+		/* potential deadlock ... */
+		if (!vte_terminal_is_processing (terminal)) {
+			GDK_THREADS_ENTER ();
+			vte_terminal_eof (channel, terminal);
+			GDK_THREADS_LEAVE ();
+		} else {
+			vte_terminal_eof (channel, terminal);
+		}
+
+		again = FALSE;
+	}
+
+	return again;
+#endif
+	return FALSE;
+}
+
+/**
+ * mark_input_source_invalid
+ */
+static void
+mark_input_source_invalid (RarTerminal *terminal)
+{
+	_vte_debug_print (VTE_DEBUG_IO, "removed poll of vte_terminal_io_read\n");
+	terminal->pvt->pty_input_source = 0;
+}
+/**
+ * _vte_terminal_connect_pty_read
+ */
+static void
+_vte_terminal_connect_pty_read (RarTerminal *terminal)
+{
+	if (terminal->pvt->pty_channel == NULL) {
+		return;
+	}
+
+	if (terminal->pvt->pty_input_source == 0) {
+		_vte_debug_print (VTE_DEBUG_IO, "polling vte_terminal_io_read\n");
+		terminal->pvt->pty_input_source =
+			g_io_add_watch_full(terminal->pvt->pty_channel,
+					    VTE_CHILD_INPUT_PRIORITY,
+					    G_IO_IN | G_IO_HUP,
+					    (GIOFunc) vte_terminal_io_read,
+					    terminal,
+					    (GDestroyNotify) mark_input_source_invalid);
 	}
 }
 
@@ -858,7 +1128,7 @@ _vte_terminal_disconnect_pty_write(RarTerminal *terminal)
  * Since: 0.26.
  */
 void
-vte_terminal_set_pty_object(RarTerminal *terminal,
+vte_terminal_set_pty_object (RarTerminal *terminal,
                             VtePty *pty)
 {
         RarTerminalPrivate *pvt;
@@ -927,9 +1197,11 @@ vte_terminal_set_pty_object(RarTerminal *terminal,
                 fcntl(pty_master, F_SETFL, flags | O_NONBLOCK);
         }
 
+#ifndef RARXXX
         vte_terminal_set_size(terminal,
                               terminal->column_count,
                               terminal->row_count);
+#endif
 
         _vte_terminal_setup_utf8 (terminal);
 
@@ -943,12 +1215,24 @@ vte_terminal_set_pty_object(RarTerminal *terminal,
 }
 
 /**
+ * vte_terminal_emit_child_exited
+ * Emit a "child-exited" signal.
+ */
+static void
+vte_terminal_emit_child_exited (RarTerminal *terminal)
+{
+	_vte_debug_print(VTE_DEBUG_SIGNALS,
+			"Emitting `child-exited'.\n");
+	g_signal_emit_by_name(terminal, "child-exited");
+}
+
+/**
  * vte_terminal_catch_child_exited
  * Catch a VteReaper child-exited signal, and if it matches the one we're
  * looking for, emit one of our own.
  */
 static void
-vte_terminal_catch_child_exited(VteReaper *reaper, int pid, int status,
+vte_terminal_catch_child_exited (VteReaper *reaper, int pid, int status,
 				RarTerminal *terminal)
 {
 	if (pid == terminal->pvt->pty_pid) {
@@ -1097,7 +1381,7 @@ vte_terminal_watch_child (RarTerminal *terminal,
  * Since: 0.26
  */
 gboolean
-vte_terminal_fork_command_full(RarTerminal *terminal,
+vte_terminal_fork_command_full (RarTerminal *terminal,
                                VtePtyFlags pty_flags,
                                const char *working_directory,
                                char **argv,
@@ -1135,13 +1419,38 @@ vte_terminal_fork_command_full(RarTerminal *terminal,
                 return FALSE;
         }
 
+#ifndef RARXXX
         vte_terminal_set_pty_object(terminal, pty);
         vte_terminal_watch_child(terminal, pid);
+#endif
 
         if (child_pid)
                 *child_pid = pid;
 
+#if 0
+	int fd = vte_pty_get_fd (pty);
+	printf ("bash fd = %d\n", fd);
+	int r;
+	int w;
+	char buffer[4096];
+
+	r = read (fd, buffer, sizeof (buffer));
+	//printf ("r = %d\n", r);
+	printf ("buffer=%s\n", buffer);
+
+	snprintf (buffer, sizeof (buffer), "ls -al --color ~/bin\n");
+	//snprintf (buffer, sizeof (buffer), "set\n");
+	w = write (fd, buffer, strlen (buffer));
+	//printf ("w = %d\n", w);
+
+	r = read (fd, buffer, sizeof (buffer));
+	//printf ("r = %d\n", r);
+	printf ("buffer=%s\n", buffer);
+
+	r = read (fd, buffer, sizeof (buffer));
+	//printf ("r = %d\n", r);
+	printf ("buffer=%s\n", buffer);
+#endif
         return TRUE;
 }
 
-#endif

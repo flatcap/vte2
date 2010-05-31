@@ -3,6 +3,7 @@
 
 #include "vtepty.h"
 #include "reaper.h"
+#include "buffer.h"
 
 #ifdef RARXXX // Copied from vte-private.h
 #define VTE_INPUT_CHUNK_SIZE		0x2000
@@ -32,6 +33,15 @@ struct _RarTerminalPrivate {
 	} *incoming;			/* pending bytestream */
 
 	GArray *pending;		/* pending characters */
+	glong input_bytes;
+	struct _vte_iso2022_state *iso2022;
+	struct _vte_matcher *matcher;	/* control sequence matcher */
+	const char *encoding;		/* the pty's encoding */
+
+	/* Output data queue. */
+	VteBuffer *outgoing;	/* pending input characters */
+
+	RarScreen *screen;
 };
 
 

@@ -118,7 +118,7 @@ distclean: clean
 	$(RM) unitable
 
 tags:	force
-	ctags *.[ch]
+	ctags *.[ch] remnants/*.[ch]
 
 force:
 
