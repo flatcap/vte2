@@ -22,26 +22,40 @@ SORT	= LANG=C sort
 #
 OUT	= app
 
-SRC	= caps.c debug.c iso2022.c main.c matcher.c pty.c reaper.c ring.c \
-	  rseq-vte.c table.c terminal.c trie.c view.c vteconv.c vterowdata.c \
-	  vtestream.c vtetc.c vtetree.c vteunistr.c
+SRC	= caps.c debug.c keymap.c iso2022.c main.c matcher.c pty.c reaper.c \
+	  ring.c rseq-vte.c table.c terminal.c trie.c view.c vteconv.c \
+	  vterowdata.c vtestream.c vtetc.c vtetree.c vteunistr.c
 
-HDR	= buffer.h caps.h config.h debug.h gdk_keysyms.h gnome-pty.h iso2022.h \
+HDR	= buffer.h caps.h config.h debug.h gdk_missing.h gnome-pty.h iso2022.h \
 	  matcher.h pty.h reaper.h ring.h screen.h table.h terminal.h \
 	  terminal-private.h trie.h view.h view-private.h vteconv.h vtepty.h \
 	  vtepty-private.h vterowdata.h vtestream-base.h vtestream-file.h \
 	  vtestream.h vtetc.h vtetree.h vteunistr.h
 
+SRC	+= keymap.c
+HDR	+= keymap.h keysyms.c
+
 # Generated source
 GEN_SRC	= marshal.c vtetypebuiltins.c
-GEN_HDR	= marshal.h vtetypebuiltins.h rperf-vte.c rseq-list.h
+GEN_HDR	= marshal.h vtetypebuiltins.h rseq-list.h
+
+# Other source - not compiled directly
+OTH_SRC	= rperf-vte.c				\
+	  unitable/unitable.JIS0208		\
+	  unitable/unitable.JIS0212		\
+	  unitable/unitable.JIS0201		\
+	  unitable/unitable.GB2312		\
+	  unitable/unitable.CP437		\
+	  unitable/unitable.KSX1001		\
+	  unitable/unitable.GB12345		\
+	  unitable/unitable.CNS11643
 
 SRC	+= $(GEN_SRC)
 HDR	+= $(GEN_HDR)
 
 OBJ	= $(SRC:.c=.o)
 
-LINKS	= gobject gtk src symbols work unitable
+LINKS	= gobject gtk src symbols work
 
 #-------------------------------------------------------------------------------
 # Compilation flags
@@ -94,13 +108,13 @@ CFLAGS	+= -Wwrite-strings
 # Basic include dirs
 CFLAGS	+= -I.
 CFLAGS	+= -Iunitable
-CFLAGS	+= $(shell pkg-config gobject-2.0 gio-unix-2.0 --cflags)
-LDFLAGS	+= $(shell pkg-config gobject-2.0 gio-unix-2.0 --libs)
+CFLAGS	+= $(shell pkg-config gobject-2.0 gio-unix-2.0 ncurses --cflags)
+LDFLAGS	+= $(shell pkg-config gobject-2.0 gio-unix-2.0 ncurses --libs)
 
 #-------------------------------------------------------------------------------
 # Build targets
 #
-all:	gen $(SRC) $(HDR) $(LINKS) tags $(OUT)
+all:	gen $(SRC) $(HDR) $(OTH_SRC) $(LINKS) tags $(OUT)
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -119,7 +133,6 @@ distclean: clean
 	$(RM) tags*
 	$(RM) $(LINKS)
 	$(RM) $(GEN_SRC) $(GEN_HDR)
-	$(RM) unitable
 
 tags:	force
 	ctags *.[ch] remnants/*.[ch]
@@ -145,10 +158,6 @@ src:
 
 work:
 	$(LN) /home/dev/vte $@
-
-unitable:
-	$(MKDIR) $@
-	$(CP) -l /home/dev/git.vte/src/unitable.* $@
 
 #-------------------------------------------------------------------------------
 # Generated files

@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include <glib.h>
 #ifdef RARXXX
-#include "gdk_keysyms.h"
+#include "gdk_missing.h"
 #else
 #include <gdk/gdkkeysyms.h>
 #endif // RARXXX
