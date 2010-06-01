@@ -1,0 +1,115 @@
+%struct-type
+%language=ANSI-C
+%includes
+%enum
+%readonly-tables
+%define slot-name seq
+%define hash-function-name vteseq_n_hash
+%define lookup-function-name vteseq_n_lookup
+
+%compare-lengths
+%pic
+%define string-pool-name vteseq_n_pool
+
+struct vteseq_n_struct {
+	int seq;
+	VteTerminalSequenceHandler handler;
+};
+
+%%
+"al", vte_sequence_handler_al
+"AL", vte_sequence_handler_AL
+"bc", vte_sequence_handler_le
+"bt", vte_sequence_handler_bt
+"cb", vte_sequence_handler_cb
+"cd", vte_sequence_handler_cd
+"ce", vte_sequence_handler_ce
+"ch", vte_sequence_handler_ch
+"cl", vte_sequence_handler_cl
+"cm", vte_sequence_handler_cm
+"cr", vte_sequence_handler_cr
+"cs", vte_sequence_handler_cs
+"cS", vte_sequence_handler_cS
+"cv", vte_sequence_handler_cv
+"dc", vte_sequence_handler_dc
+"DC", vte_sequence_handler_DC
+"dl", vte_sequence_handler_dl
+"DL", vte_sequence_handler_DL
+"do", vte_sequence_handler_do
+"DO", vte_sequence_handler_DO
+"ec", vte_sequence_handler_ec
+"fs", vte_sequence_handler_fs
+"ho", vte_sequence_handler_ho
+"ic", vte_sequence_handler_ic
+"IC", vte_sequence_handler_IC
+"kb", vte_sequence_handler_kb
+"ke", vte_sequence_handler_ke
+"ks", vte_sequence_handler_ks
+"le", vte_sequence_handler_le
+"LE", vte_sequence_handler_LE
+"ll", vte_sequence_handler_ll
+"mb", vte_sequence_handler_mb
+"md", vte_sequence_handler_md
+"me", vte_sequence_handler_me
+"mh", vte_sequence_handler_mh
+"mk", vte_sequence_handler_mk
+"mr", vte_sequence_handler_mr
+"nd", vte_sequence_handler_nd
+"nw", vte_sequence_handler_nw
+"rc", vte_sequence_handler_rc
+"RI", vte_sequence_handler_RI
+"sc", vte_sequence_handler_sc
+"se", vte_sequence_handler_se
+"sf", vte_sequence_handler_sf
+"SF", vte_sequence_handler_SF
+"so", vte_sequence_handler_so
+"sr", vte_sequence_handler_sr
+"SR", vte_sequence_handler_SR
+"ta", vte_sequence_handler_ta
+"ts", vte_sequence_handler_ts
+"uc", vte_sequence_handler_uc
+"ue", vte_sequence_handler_ue
+"up", vte_sequence_handler_up
+"UP", vte_sequence_handler_UP
+"us", vte_sequence_handler_us
+"index", vte_sequence_handler_index
+"decset", vte_sequence_handler_decset
+"decreset", vte_sequence_handler_decreset
+"cursor-up", vte_sequence_handler_UP
+"form-feed", vte_sequence_handler_form_feed
+"next-line", vte_sequence_handler_next_line
+"save-mode", vte_sequence_handler_save_mode
+"scroll-up", vte_sequence_handler_scroll_up
+"full-reset", vte_sequence_handler_full_reset
+"soft-reset", vte_sequence_handler_soft_reset
+"cursor-down", vte_sequence_handler_DO
+"save-cursor", vte_sequence_handler_sc
+"scroll-down", vte_sequence_handler_scroll_down
+"delete-lines", vte_sequence_handler_delete_lines
+"insert-lines", vte_sequence_handler_insert_lines
+"restore-mode", vte_sequence_handler_restore_mode
+"vertical-tab", vte_sequence_handler_vertical_tab
+"erase-in-line", vte_sequence_handler_erase_in_line
+"reverse-index", vte_sequence_handler_reverse_index
+"cursor-forward", vte_sequence_handler_RI
+"restore-cursor", vte_sequence_handler_rc
+"cursor-back-tab", vte_sequence_handler_bt
+"cursor-backward", vte_sequence_handler_LE
+"cursor-position", vte_sequence_handler_cursor_position
+"cursor-next-line", vte_sequence_handler_cursor_next_line
+"erase-characters", vte_sequence_handler_erase_characters
+"erase-in-display", vte_sequence_handler_erase_in_display
+"cursor-lower-left", vte_sequence_handler_cursor_lower_left
+"delete-characters", vte_sequence_handler_DC
+"character-attributes", vte_sequence_handler_character_attributes
+"set-scrolling-region", vte_sequence_handler_set_scrolling_region
+"cursor-preceding-line", vte_sequence_handler_cursor_preceding_line
+"screen-alignment-test", vte_sequence_handler_screen_alignment_test
+"line-position-absolute", vte_sequence_handler_line_position_absolute
+"insert-blank-characters", vte_sequence_handler_insert_blank_characters
+"cursor-character-absolute", vte_sequence_handler_cursor_character_absolute
+"cursor-forward-tabulation", vte_sequence_handler_ta
+"set-scrolling-region-to-end", vte_sequence_handler_set_scrolling_region_to_end
+"character-position-absolute", vte_sequence_handler_character_position_absolute
+"set-scrolling-region-from-start", vte_sequence_handler_set_scrolling_region_from_start
+"horizontal-and-vertical-position", vte_sequence_handler_horizontal_and_vertical_position

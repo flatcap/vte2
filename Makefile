@@ -22,19 +22,19 @@ SORT	= LANG=C sort
 #
 OUT	= app
 
-SRC	= caps.c debug.c iso2022.c main.c marshal.c matcher.c pty.c reaper.c \
-	  ring.c rseq-vte.c table.c terminal.c trie.c view.c vteconv.c \
-	  vterowdata.c vtestream.c vtetc.c vtetree.c vteunistr.c
+SRC	= caps.c debug.c iso2022.c main.c matcher.c pty.c reaper.c ring.c \
+	  rseq-vte.c table.c terminal.c trie.c view.c vteconv.c vterowdata.c \
+	  vtestream.c vtetc.c vtetree.c vteunistr.c
 OBJ	= $(SRC:.c=.o)
 HDR	= buffer.h caps.h config.h debug.h gdk_keysyms.h gnome-pty.h iso2022.h \
-	  marshal.h matcher.h pty.h reaper.h ring.h table.h terminal.h \
+	  matcher.h pty.h reaper.h ring.h screen.h table.h terminal.h \
 	  terminal-private.h trie.h view.h view-private.h vteconv.h vtepty.h \
 	  vtepty-private.h vterowdata.h vtestream-base.h vtestream-file.h \
-	  vtestream.h vtetc.h vtetree.h vtetypebuiltins.h vteunistr.h
+	  vtestream.h vtetc.h vtetree.h vteunistr.h
 
 # Generated source, to be compiled
 GEN_SRC	= marshal.c vtetypebuiltins.c
-GEN_HDR	= marshal.h vtetypebuiltins.h
+GEN_HDR	= marshal.h vtetypebuiltins.h rperf-vte.c
 
 SRC	+= $(GEN_SRC)
 HDR	+= $(GEN_HDR)
@@ -163,4 +163,7 @@ vtetypebuiltins.c: vtepty.h
 
 vtetypebuiltins.h: vtepty.h
 	$(GEN_GME) --template vtetypebuiltins.h.template vtepty.h > $@
+
+rperf-vte.c:
+	$(GPERF) -m 100 --no-strlen rperf-vte.gperf > $@
 

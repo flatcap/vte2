@@ -2863,3 +2863,6 @@ vte_sequence_handler_vertical_tab (RarTerminal *terminal, GValueArray *params)
 	vte_sequence_handler_index (terminal, params);
 }
 
+
+#include "rperf-vte.c"
+
