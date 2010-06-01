@@ -34,7 +34,7 @@ HDR	= buffer.h caps.h config.h debug.h gdk_keysyms.h gnome-pty.h iso2022.h \
 
 # Generated source
 GEN_SRC	= marshal.c vtetypebuiltins.c
-GEN_HDR	= marshal.h vtetypebuiltins.h rperf-vte.c
+GEN_HDR	= marshal.h vtetypebuiltins.h rperf-vte.c rseq-list.h
 
 SRC	+= $(GEN_SRC)
 HDR	+= $(GEN_HDR)
@@ -169,5 +169,5 @@ rperf-vte.c:
 	$(GPERF) -m 100 --no-strlen rperf-vte.gperf > $@
 
 rseq-list.h:
-	$(SED) -n '/\<VTE_SEQUENCE_HANDLER\>/s/.*, //p' $(VTE_SRC_DIR)/rperf-vte.gperf | LANG=C sort -u > $@
+	$(SED) -n '/\<VTE_SEQUENCE_HANDLER\>/s/.*, //p' rperf-vte.gperf | LANG=C sort -u > $@
 
