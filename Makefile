@@ -168,3 +168,6 @@ vtetypebuiltins.h: vtepty.h
 rperf-vte.c:
 	$(GPERF) -m 100 --no-strlen rperf-vte.gperf > $@
 
+rseq-list.h:
+	$(SED) -n '/\<VTE_SEQUENCE_HANDLER\>/s/.*, //p' $(VTE_SRC_DIR)/rperf-vte.gperf | LANG=C sort -u > $@
+
