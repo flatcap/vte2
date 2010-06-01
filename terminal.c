@@ -26,6 +26,7 @@
 #ifdef RARXXX
 #include "vtepty-private.h"
 #define VTE_CHILD_INPUT_PRIORITY	G_PRIORITY_DEFAULT_IDLE
+#define VTE_MAX_PROCESS_TIME		100
 typedef struct _GdkPoint
 {
 	gint x;
@@ -41,7 +42,11 @@ typedef struct _GdkRectangle
 } GdkRectangle;
 #endif
 
+#ifdef RARXXX // copied from vte-private.h
+#define VTE_DISPLAY_TIMEOUT		10
+#endif
 #ifdef RARXXX // copied from vteseq.c
+
 /* Typedef the handle type */
 typedef void (*VteTerminalSequenceHandler) (RarTerminal *terminal, GValueArray *params);
 #endif
@@ -61,6 +66,14 @@ G_DEFINE_TYPE(RarTerminal, rar_terminal, G_TYPE_OBJECT)
 #define GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), RAR_TYPE_TERMINAL, RarTerminalPrivate))
 
 gboolean vte_terminal_fork_command_full(RarTerminal *terminal, VtePtyFlags pty_flags, const char *working_directory, char **argv, char **envv, GSpawnFlags spawn_flags, GSpawnChildSetupFunc child_setup, gpointer child_setup_data, GPid *child_pid, GError **error);
+
+/* these static variables are guarded by the GDK mutex */
+static guint process_timeout_tag = 0;
+static gboolean in_process_timeout;
+static guint update_timeout_tag = 0;
+//static gboolean in_update_timeout;
+static GList *active_terminals;
+static GTimer *process_timer;
 
 /* Enumerations */
 /**
@@ -1431,6 +1444,189 @@ vte_terminal_fork_command_full (RarTerminal *terminal,
 
 
 /**
+ * vte_terminal_is_processing
+ */
+static inline gboolean
+vte_terminal_is_processing (RarTerminal *terminal)
+{
+	return terminal->pvt->active != NULL;
+}
+
+/**
+ * _vte_terminal_enable_input_source
+ */
+static inline void
+_vte_terminal_enable_input_source (RarTerminal *terminal)
+{
+	if (terminal->pvt->pty_channel == NULL) {
+		return;
+	}
+
+	if (terminal->pvt->pty_input_source == 0) {
+		_vte_debug_print (VTE_DEBUG_IO, "polling vte_terminal_io_read\n");
+		terminal->pvt->pty_input_source =
+			g_io_add_watch_full(terminal->pvt->pty_channel,
+					    VTE_CHILD_INPUT_PRIORITY,
+					    G_IO_IN | G_IO_HUP,
+					    (GIOFunc) vte_terminal_io_read,
+					    terminal,
+					    (GDestroyNotify) mark_input_source_invalid);
+	}
+}
+
+/**
+ * need_processing
+ */
+static inline gboolean
+need_processing (RarTerminal *terminal)
+{
+	return _vte_incoming_chunks_length (terminal->pvt->incoming) != 0;
+}
+
+/**
+ * time_process_incoming
+ */
+static void
+time_process_incoming (RarTerminal *terminal)
+{
+	gdouble elapsed;
+	glong target;
+	g_timer_reset (process_timer);
+	vte_terminal_process_incoming (terminal);
+	elapsed = g_timer_elapsed (process_timer, NULL) * 1000;
+	target = VTE_MAX_PROCESS_TIME / elapsed * terminal->pvt->input_bytes;
+	terminal->pvt->max_input_bytes =
+		(terminal->pvt->max_input_bytes + target) / 2;
+}
+
+/**
+ * process_timeout
+ * This function is called after DISPLAY_TIMEOUT ms.
+ * It makes sure initial output is never delayed by more than DISPLAY_TIMEOUT
+ */
+static gboolean
+process_timeout (gpointer data)
+{
+	GList *l, *next;
+	gboolean again;
+
+#ifndef RARXXX
+	GDK_THREADS_ENTER();
+#endif
+
+	in_process_timeout = TRUE;
+
+	_vte_debug_print (VTE_DEBUG_WORK, "<");
+	_vte_debug_print (VTE_DEBUG_TIMEOUT,
+			"Process timeout:  %d active\n",
+			g_list_length (active_terminals));
+
+	for (l = active_terminals; l != NULL; l = next) {
+		RarTerminal *terminal = l->data;
+		gboolean active = FALSE;
+
+		next = g_list_next (l);
+
+		if (l != active_terminals) {
+			_vte_debug_print (VTE_DEBUG_WORK, "T");
+		}
+		if (terminal->pvt->pty_channel != NULL) {
+			if (terminal->pvt->pty_input_active ||
+					terminal->pvt->pty_input_source == 0) {
+				terminal->pvt->pty_input_active = FALSE;
+				vte_terminal_io_read (terminal->pvt->pty_channel,
+						G_IO_IN, terminal);
+			}
+			_vte_terminal_enable_input_source (terminal);
+		}
+		if (need_processing (terminal)) {
+			active = TRUE;
+			if (VTE_MAX_PROCESS_TIME) {
+				time_process_incoming (terminal);
+			} else {
+				vte_terminal_process_incoming(terminal);
+			}
+			terminal->pvt->input_bytes = 0;
+		} else {
+#ifndef RARXXX
+			vte_terminal_emit_pending_signals (terminal);
+#endif
+		}
+		if (!active && terminal->pvt->update_regions == NULL) {
+			if (terminal->pvt->active != NULL) {
+				_vte_debug_print(VTE_DEBUG_TIMEOUT,
+						"Removing terminal from active list [process]\n");
+				active_terminals = g_list_delete_link (
+						active_terminals,
+						terminal->pvt->active);
+				terminal->pvt->active = NULL;
+			}
+		}
+	}
+
+	_vte_debug_print (VTE_DEBUG_WORK, ">");
+
+	if (active_terminals && update_timeout_tag == 0) {
+		again = TRUE;
+	} else {
+		_vte_debug_print(VTE_DEBUG_TIMEOUT,
+				"Stoping process timeout\n");
+		process_timeout_tag = 0;
+		again = FALSE;
+	}
+
+	in_process_timeout = FALSE;
+
+#ifndef RARXXX
+	GDK_THREADS_LEAVE();
+#endif
+
+	if (again) {
+		/* Force us to relinquish the CPU as the child is running
+		 * at full tilt and making us run to keep up...
+		 */
+		g_usleep (0);
+	} else if (update_timeout_tag == 0) {
+		/* otherwise free up memory used to capture incoming data */
+		prune_chunks (10);
+	}
+
+	return again;
+}
+
+/**
+ * vte_terminal_add_process_timeout
+ */
+static void
+vte_terminal_add_process_timeout (RarTerminal *terminal)
+{
+	_vte_debug_print(VTE_DEBUG_TIMEOUT,
+			"Adding terminal to active list\n");
+	terminal->pvt->active = active_terminals =
+		g_list_prepend (active_terminals, terminal);
+	if (update_timeout_tag == 0 &&
+			process_timeout_tag == 0) {
+		_vte_debug_print(VTE_DEBUG_TIMEOUT,
+				"Starting process timeout\n");
+		process_timeout_tag =
+			g_timeout_add (VTE_DISPLAY_TIMEOUT,
+					process_timeout, NULL);
+	}
+}
+
+/**
+ * vte_terminal_start_processing
+ */
+static inline void
+vte_terminal_start_processing (RarTerminal *terminal)
+{
+	if (!vte_terminal_is_processing (terminal)) {
+		vte_terminal_add_process_timeout (terminal);
+	}
+}
+
+
+/**
  * vte_terminal_feed:
  * @terminal: a #VteTerminal
  * @data: (array length=length zero-terminated=0) (element-type uint8): a string in the terminal's current encoding
@@ -1478,93 +1674,3 @@ vte_terminal_feed(RarTerminal *terminal, const char *data, glong length)
 	}
 }
 
-#if 0
-/**
- * process_timeout
- * This function is called after DISPLAY_TIMEOUT ms.
- * It makes sure initial output is never delayed by more than DISPLAY_TIMEOUT
- */
-static gboolean
-process_timeout (gpointer data)
-{
-	GList *l, *next;
-	gboolean again;
-
-	GDK_THREADS_ENTER();
-
-	in_process_timeout = TRUE;
-
-	_vte_debug_print (VTE_DEBUG_WORK, "<");
-	_vte_debug_print (VTE_DEBUG_TIMEOUT,
-			"Process timeout:  %d active\n",
-			g_list_length (active_terminals));
-
-	for (l = active_terminals; l != NULL; l = next) {
-		RarTerminal *terminal = l->data;
-		gboolean active = FALSE;
-
-		next = g_list_next (l);
-
-		if (l != active_terminals) {
-			_vte_debug_print (VTE_DEBUG_WORK, "T");
-		}
-		if (terminal->pvt->pty_channel != NULL) {
-			if (terminal->pvt->pty_input_active ||
-					terminal->pvt->pty_input_source == 0) {
-				terminal->pvt->pty_input_active = FALSE;
-				vte_terminal_io_read (terminal->pvt->pty_channel,
-						G_IO_IN, terminal);
-			}
-			_vte_terminal_enable_input_source (terminal);
-		}
-		if (need_processing (terminal)) {
-			active = TRUE;
-			if (VTE_MAX_PROCESS_TIME) {
-				time_process_incoming (terminal);
-			} else {
-				vte_terminal_process_incoming(terminal);
-			}
-			terminal->pvt->input_bytes = 0;
-		} else
-			vte_terminal_emit_pending_signals (terminal);
-		if (!active && terminal->pvt->update_regions == NULL) {
-			if (terminal->pvt->active != NULL) {
-				_vte_debug_print(VTE_DEBUG_TIMEOUT,
-						"Removing terminal from active list [process]\n");
-				active_terminals = g_list_delete_link (
-						active_terminals,
-						terminal->pvt->active);
-				terminal->pvt->active = NULL;
-			}
-		}
-	}
-
-	_vte_debug_print (VTE_DEBUG_WORK, ">");
-
-	if (active_terminals && update_timeout_tag == 0) {
-		again = TRUE;
-	} else {
-		_vte_debug_print(VTE_DEBUG_TIMEOUT,
-				"Stoping process timeout\n");
-		process_timeout_tag = 0;
-		again = FALSE;
-	}
-
-	in_process_timeout = FALSE;
-
-	GDK_THREADS_LEAVE();
-
-	if (again) {
-		/* Force us to relinquish the CPU as the child is running
-		 * at full tilt and making us run to keep up...
-		 */
-		g_usleep (0);
-	} else if (update_timeout_tag == 0) {
-		/* otherwise free up memory used to capture incoming data */
-		prune_chunks (10);
-	}
-
-	return again;
-}
-
-#endif

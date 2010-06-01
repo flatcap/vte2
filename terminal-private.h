@@ -37,6 +37,9 @@ struct _RarTerminalPrivate {
 	struct _vte_iso2022_state *iso2022;
 	struct _vte_matcher *matcher;	/* control sequence matcher */
 	const char *encoding;		/* the pty's encoding */
+	GList *active;                  /* is the terminal processing data */
+	glong max_input_bytes;
+	GSList *update_regions;
 
 	/* Output data queue. */
 	VteBuffer *outgoing;	/* pending input characters */
