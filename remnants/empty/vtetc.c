@@ -1,1 +1,1 @@
-//moved:all:unitable/vtetc.c
+//moved:all:vtetc.c

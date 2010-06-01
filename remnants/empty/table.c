@@ -1,1 +1,1 @@
-//moved:all:unitable/table.c
+//moved:all:table.c

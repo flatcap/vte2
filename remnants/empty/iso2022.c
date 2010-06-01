@@ -1,1 +1,1 @@
-//moved:all:unitable/iso2022.c
+//moved:all:iso2022.c

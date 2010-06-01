@@ -1,1 +1,1 @@
-//moved:all:unitable/ring.h
+//moved:all:ring.h
