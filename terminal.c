@@ -290,38 +290,6 @@ rar_terminal_new_view (RarTerminal *term)
 }
 
 
-// VTESEQ
-/**
- * _vte_terminal_handle_sequence
- * Handle a terminal control sequence and its parameters.
- */
-void
-_vte_terminal_handle_sequence (RarTerminal *terminal,
-			      const char *match_s,
-			      GQuark match G_GNUC_UNUSED,
-			      GValueArray *params)
-{
-#if 0
-	VteTerminalSequenceHandler handler;
-
-	_VTE_DEBUG_IF(VTE_DEBUG_PARSE)
-		display_control_sequence(match_s, params);
-
-	/* Find the handler for this control sequence. */
-	handler = _vte_sequence_get_handler (match_s);
-
-	if (handler != NULL) {
-		/* Let the handler handle it. */
-		handler (terminal, params);
-	} else {
-		_vte_debug_print (VTE_DEBUG_MISC,
-				  "No handler for control sequence `%s' defined.\n",
-				  match_s);
-	}
-#endif
-}
-
-
 // VTE
 /* process incoming data without copying */
 static struct _vte_incoming_chunk *free_chunks;
@@ -1461,3 +1429,142 @@ vte_terminal_fork_command_full (RarTerminal *terminal,
         return TRUE;
 }
 
+
+/**
+ * vte_terminal_feed:
+ * @terminal: a #VteTerminal
+ * @data: (array length=length zero-terminated=0) (element-type uint8): a string in the terminal's current encoding
+ * @length: the length of the string
+ *
+ * Interprets @data as if it were data received from a child process.  This
+ * can either be used to drive the terminal without a child process, or just
+ * to mess with your users.
+ */
+void
+vte_terminal_feed(RarTerminal *terminal, const char *data, glong length)
+{
+	/* If length == -1, use the length of the data string. */
+	if (length == ((gssize)-1)) {
+		length = strlen(data);
+	}
+
+	/* If we have data, modify the incoming buffer. */
+	if (length > 0) {
+		struct _vte_incoming_chunk *chunk;
+		if (terminal->pvt->incoming &&
+				(gsize)length < sizeof (terminal->pvt->incoming->data) - terminal->pvt->incoming->len) {
+			chunk = terminal->pvt->incoming;
+		} else {
+			chunk = get_chunk ();
+			_vte_terminal_feed_chunks (terminal, chunk);
+		}
+		do { /* break the incoming data into chunks */
+			gsize rem = sizeof (chunk->data) - chunk->len;
+			gsize len = (gsize) length < rem ? (gsize) length : rem;
+			memcpy (chunk->data + chunk->len, data, len);
+			chunk->len += len;
+			length -= len;
+			if (length == 0) {
+				break;
+			}
+			data += len;
+
+			chunk = get_chunk ();
+			_vte_terminal_feed_chunks (terminal, chunk);
+		} while (1);
+#ifndef RARXXX
+		vte_terminal_start_processing (terminal);
+#endif
+	}
+}
+
+#if 0
+/**
+ * process_timeout
+ * This function is called after DISPLAY_TIMEOUT ms.
+ * It makes sure initial output is never delayed by more than DISPLAY_TIMEOUT
+ */
+static gboolean
+process_timeout (gpointer data)
+{
+	GList *l, *next;
+	gboolean again;
+
+	GDK_THREADS_ENTER();
+
+	in_process_timeout = TRUE;
+
+	_vte_debug_print (VTE_DEBUG_WORK, "<");
+	_vte_debug_print (VTE_DEBUG_TIMEOUT,
+			"Process timeout:  %d active\n",
+			g_list_length (active_terminals));
+
+	for (l = active_terminals; l != NULL; l = next) {
+		RarTerminal *terminal = l->data;
+		gboolean active = FALSE;
+
+		next = g_list_next (l);
+
+		if (l != active_terminals) {
+			_vte_debug_print (VTE_DEBUG_WORK, "T");
+		}
+		if (terminal->pvt->pty_channel != NULL) {
+			if (terminal->pvt->pty_input_active ||
+					terminal->pvt->pty_input_source == 0) {
+				terminal->pvt->pty_input_active = FALSE;
+				vte_terminal_io_read (terminal->pvt->pty_channel,
+						G_IO_IN, terminal);
+			}
+			_vte_terminal_enable_input_source (terminal);
+		}
+		if (need_processing (terminal)) {
+			active = TRUE;
+			if (VTE_MAX_PROCESS_TIME) {
+				time_process_incoming (terminal);
+			} else {
+				vte_terminal_process_incoming(terminal);
+			}
+			terminal->pvt->input_bytes = 0;
+		} else
+			vte_terminal_emit_pending_signals (terminal);
+		if (!active && terminal->pvt->update_regions == NULL) {
+			if (terminal->pvt->active != NULL) {
+				_vte_debug_print(VTE_DEBUG_TIMEOUT,
+						"Removing terminal from active list [process]\n");
+				active_terminals = g_list_delete_link (
+						active_terminals,
+						terminal->pvt->active);
+				terminal->pvt->active = NULL;
+			}
+		}
+	}
+
+	_vte_debug_print (VTE_DEBUG_WORK, ">");
+
+	if (active_terminals && update_timeout_tag == 0) {
+		again = TRUE;
+	} else {
+		_vte_debug_print(VTE_DEBUG_TIMEOUT,
+				"Stoping process timeout\n");
+		process_timeout_tag = 0;
+		again = FALSE;
+	}
+
+	in_process_timeout = FALSE;
+
+	GDK_THREADS_LEAVE();
+
+	if (again) {
+		/* Force us to relinquish the CPU as the child is running
+		 * at full tilt and making us run to keep up...
+		 */
+		g_usleep (0);
+	} else if (update_timeout_tag == 0) {
+		/* otherwise free up memory used to capture incoming data */
+		prune_chunks (10);
+	}
+
+	return again;
+}
+
+#endif

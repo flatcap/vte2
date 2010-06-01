@@ -5,6 +5,33 @@
 #include "view.h"
 
 /**
+ * app_close
+ */
+static gboolean
+app_close (gpointer loop)
+{
+	printf ("quitting app_close\n");
+	g_main_loop_quit (loop);
+	return FALSE;
+}
+
+/**
+ * term_work
+ */
+static gboolean
+term_work (gpointer data)
+{
+	static int count = 0;
+
+	//RarTerminal *term = RAR_TERMINAL (data);
+
+	count++;
+	printf ("\e[32m%s %d\e[0m\n", __FUNCTION__, count);
+
+	return TRUE;
+}
+
+/**
  * main
  */
 int
@@ -15,9 +42,13 @@ main (int argc, char *argv[])
 	RarView *view1 = NULL;
 	RarView *view2 = NULL;
 	const char *env[] = { "ONE=apple", "TWO=banana", NULL };
+#if 0
 	int h1, h2;
 	int t1, t2;
 	char *str1, *str2;
+#endif
+	GMainContext *context = NULL;
+	GMainLoop *loop = NULL;
 
 	g_type_init();
 
@@ -33,6 +64,7 @@ main (int argc, char *argv[])
 	view1 = rar_terminal_new_view (term);
 	view2 = rar_terminal_new_view (term);
 
+#if 0
 	rar_view_set_follow_cursor (view1, TRUE);
 	rar_view_set_follow_cursor (view2, FALSE);
 
@@ -50,6 +82,12 @@ main (int argc, char *argv[])
 
 	free (str1);
 	free (str2);
+#endif
+
+	loop = g_main_loop_new(context, TRUE);
+	g_timeout_add_seconds (5, app_close, (gpointer) loop);
+	g_timeout_add (100,  term_work, (gpointer) term);
+	g_main_loop_run(loop);
 
 	g_object_unref (view1);
 	g_object_unref (view2);

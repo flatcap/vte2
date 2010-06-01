@@ -2866,3 +2866,47 @@ vte_sequence_handler_vertical_tab (RarTerminal *terminal, GValueArray *params)
 #include "rperf-vte.c"
 #undef VTE_SEQUENCE_HANDLER
 
+/**
+ * _vte_sequence_get_handler
+ */
+static VteTerminalSequenceHandler
+_vte_sequence_get_handler (const char *name)
+{
+	int len = strlen (name);
+
+	const struct vteseq_n_struct *seqhandler;
+	seqhandler = vteseq_n_lookup (name, len);
+	return seqhandler ? seqhandler->handler : NULL;
+}
+
+/**
+ * _vte_terminal_handle_sequence
+ * Handle a terminal control sequence and its parameters.
+ */
+void
+_vte_terminal_handle_sequence (RarTerminal *terminal,
+			      const char *match_s,
+			      GQuark match G_GNUC_UNUSED,
+			      GValueArray *params)
+{
+	VteTerminalSequenceHandler handler;
+
+#if 0
+	_VTE_DEBUG_IF(VTE_DEBUG_PARSE)
+		display_control_sequence(match_s, params);
+#endif
+
+	/* Find the handler for this control sequence. */
+	handler = _vte_sequence_get_handler (match_s);
+
+	if (handler != NULL) {
+		/* Let the handler handle it. */
+		handler (terminal, params);
+	} else {
+		_vte_debug_print (VTE_DEBUG_MISC,
+				  "No handler for control sequence `%s' defined.\n",
+				  match_s);
+	}
+}
+
+
