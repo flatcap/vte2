@@ -37,11 +37,10 @@ HDR	+= keymap.h keysyms.c
 
 # Generated source
 GEN_SRC	= marshal.c vtetypebuiltins.c
-GEN_HDR	= marshal.h vtetypebuiltins.h rseq-list.h
+GEN_HDR	= marshal.h vtetypebuiltins.h rseq-list.h rperf-vte.c
 
 # Other source - not compiled directly
-OTH_SRC	= rperf-vte.c				\
-	  unitable/unitable.JIS0208		\
+OTH_SRC	= unitable/unitable.JIS0208		\
 	  unitable/unitable.JIS0212		\
 	  unitable/unitable.JIS0201		\
 	  unitable/unitable.GB2312		\
