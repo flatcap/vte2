@@ -1028,7 +1028,7 @@ vteseq_n_lookup (register const char *str, register unsigned int len);
 #undef VTE_SEQUENCE_HANDLER
 
 static VteTerminalSequenceHandler
-_vte_sequence_get_handler (const char *name)
+_vte_sequence_get_handler_x (const char *name)
 {
 	int len = strlen (name);
 
@@ -1048,7 +1048,7 @@ _vte_sequence_get_handler (const char *name)
 
 /* Handle a terminal control sequence and its parameters. */
 void
-_vte_terminal_handle_sequence(VteTerminal *terminal,
+_vte_terminal_handle_sequence_x(VteTerminal *terminal,
 			      const char *match_s,
 			      GQuark match G_GNUC_UNUSED,
 			      GValueArray *params)

@@ -30,7 +30,7 @@
 #include <cairo-xlib.h>
 #endif
 
-G_DEFINE_TYPE(VteBg, vte_bg, G_TYPE_OBJECT)
+G_DEFINE_TYPE_X(VteBg, vte_bg, G_TYPE_OBJECT)
 
 struct _VteBgPrivate {
 	GList *cache;
