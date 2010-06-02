@@ -10,8 +10,7 @@
 #include <glib/gi18n-lib.h>
 #include <gobject/gmarshal.h>
 
-#ifdef RARXXX
-// Not sure these are needed /here/
+#ifdef RARXXX // Not sure these are needed /here/
 #include <unistd.h>
 #include <fcntl.h>
 #endif
@@ -46,8 +45,8 @@ typedef struct _GdkRectangle
 #define VTE_DISPLAY_TIMEOUT		10
 #define VTE_MAX_INPUT_READ		0x1000
 #endif
-#ifdef RARXXX // copied from vteseq.c
 
+#ifdef RARXXX // copied from vteseq.c
 /* Typedef the handle type */
 typedef void (*VteTerminalSequenceHandler) (RarTerminal *terminal, GValueArray *params);
 #endif
@@ -1005,9 +1004,7 @@ process_timeout (gpointer data)
 			}
 			terminal->pvt->input_bytes = 0;
 		} else {
-#ifndef RARXXX
-			vte_terminal_emit_pending_signals (terminal);
-#endif
+			//RARXXX vte_terminal_emit_pending_signals (terminal);
 		}
 		if (!active && terminal->pvt->update_regions == NULL) {
 			if (terminal->pvt->active != NULL) {
@@ -1582,10 +1579,8 @@ vte_terminal_fork_command_full (RarTerminal *terminal,
                 return FALSE;
         }
 
-#ifndef RARXXX
         vte_terminal_set_pty_object(terminal, pty);
         vte_terminal_watch_child(terminal, pid);
-#endif
 
         if (child_pid)
                 *child_pid = pid;
@@ -1719,9 +1714,7 @@ vte_terminal_feed(RarTerminal *terminal, const char *data, glong length)
 			chunk = get_chunk ();
 			_vte_terminal_feed_chunks (terminal, chunk);
 		} while (1);
-#ifndef RARXXX
 		vte_terminal_start_processing (terminal);
-#endif
 	}
 }
 
