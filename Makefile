@@ -129,7 +129,7 @@ clean:
 	$(RM) $(OBJ) $(OUT)
 
 distclean: clean
-	$(RM) tags*
+	$(RM) tags* typescript
 	$(RM) $(LINKS)
 	$(RM) $(GEN_SRC) $(GEN_HDR)
 
