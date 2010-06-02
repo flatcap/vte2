@@ -233,6 +233,8 @@ rar_terminal_class_init (RarTerminalClass *klass)
         gobject_class->set_property = rar_terminal_set_property;
 
 	/* Register some signals of our own. */
+
+	process_timer = g_timer_new ();
 }
 
 
@@ -946,6 +948,7 @@ static void
 _vte_terminal_setup_utf8 (RarTerminal *terminal)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
+#ifndef RARXXX
         RarTerminalPrivate *pvt = terminal->pvt;
         GError *error = NULL;
 
@@ -955,6 +958,7 @@ _vte_terminal_setup_utf8 (RarTerminal *terminal)
                 g_warning ("Failed to set UTF8 mode: %s\n", error->message);
                 g_error_free (error);
         }
+#endif
 }
 
 /**
@@ -1702,6 +1706,7 @@ time_process_incoming (RarTerminal *terminal)
 	target = VTE_MAX_PROCESS_TIME / elapsed * terminal->pvt->input_bytes;
 	terminal->pvt->max_input_bytes =
 		(terminal->pvt->max_input_bytes + target) / 2;
+	printf ("Leaving: %s\n", __FUNCTION__);
 }
 
 /**
