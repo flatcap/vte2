@@ -49,6 +49,7 @@ struct _VteConv {
 static glong
 _vte_conv_utf8_strlen(const gchar *p, gssize max)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	const gchar *q = p + max;
 	glong length = -1;
 	do {
@@ -67,6 +68,7 @@ _vte_conv_utf8_utf8(GIConv converter,
 		    gchar **outbuf,
 		    gsize *outbytes_left)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gboolean validated;
 	const gchar *endptr;
 	size_t bytes;
@@ -130,6 +132,7 @@ _vte_conv_utf8_utf8(GIConv converter,
 VteConv
 _vte_conv_open(const char *target, const char *source)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteConv ret;
 	GIConv conv;
 	gboolean in_unichar, out_unichar, utf8;
@@ -205,6 +208,7 @@ _vte_conv_open(const char *target, const char *source)
 gint
 _vte_conv_close(VteConv converter)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	g_assert(converter != NULL);
 	g_assert(converter != VTE_INVALID_CONV);
 
@@ -229,6 +233,7 @@ _vte_conv(VteConv converter,
 	  const guchar **inbuf, gsize *inbytes_left,
 	  guchar **outbuf, gsize *outbytes_left)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	size_t ret, tmp;
 	const guchar *work_inbuf_start, *work_inbuf_working;
 	guchar *work_outbuf_start, *work_outbuf_working;
@@ -361,6 +366,7 @@ _vte_conv_cu(VteConv converter,
 	     const guchar **inbuf, gsize *inbytes_left,
 	     gunichar **outbuf, gsize *outbytes_left)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	return _vte_conv(converter,
 			 inbuf, inbytes_left,
 			 (guchar**)outbuf, outbytes_left);
@@ -371,6 +377,7 @@ _vte_conv_uu(VteConv converter,
 	     const gunichar **inbuf, gsize *inbytes_left,
 	     gunichar **outbuf, gsize *outbytes_left)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	return _vte_conv(converter,
 			 (const guchar**)inbuf, inbytes_left,
 			 (guchar**)outbuf, outbytes_left);
@@ -381,6 +388,7 @@ _vte_conv_uc(VteConv converter,
 	     const gunichar **inbuf, gsize *inbytes_left,
 	     guchar **outbuf, gsize *outbytes_left)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	return _vte_conv(converter,
 			 (const guchar**)inbuf, inbytes_left,
 			 outbuf, outbytes_left);

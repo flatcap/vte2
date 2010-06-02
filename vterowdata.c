@@ -39,6 +39,7 @@ struct _VteCells {
 static inline VteCells *
 _vte_cells_for_cell_array (VteCell *cells)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	if (G_UNLIKELY (!cells))
 		return NULL;
 
@@ -48,6 +49,7 @@ _vte_cells_for_cell_array (VteCell *cells)
 static VteCells *
 _vte_cells_realloc (VteCells *cells, guint32 len)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	guint32 alloc_len = (1 << g_bit_storage (MAX (len, 80))) - 1;
 
 	_vte_debug_print(VTE_DEBUG_RING, "Enlarging cell array of %d cells to %d cells\n", cells ? cells->alloc_len : 0, alloc_len);
@@ -60,6 +62,7 @@ _vte_cells_realloc (VteCells *cells, guint32 len)
 static void
 _vte_cells_free (VteCells *cells)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	_vte_debug_print(VTE_DEBUG_RING, "Freeing cell array of %d cells\n", cells->alloc_len);
 	g_free (cells);
 }
@@ -72,12 +75,14 @@ _vte_cells_free (VteCells *cells)
 void
 _vte_row_data_init (VteRowData *row)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	memset (row, 0, sizeof (*row));
 }
 
 void
 _vte_row_data_clear (VteRowData *row)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteCell *cells = row->cells;
 	_vte_row_data_init (row);
 	row->cells = cells;
@@ -86,6 +91,7 @@ _vte_row_data_clear (VteRowData *row)
 void
 _vte_row_data_fini (VteRowData *row)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	if (row->cells)
 		_vte_cells_free (_vte_cells_for_cell_array (row->cells));
 	row->cells = NULL;
@@ -94,6 +100,7 @@ _vte_row_data_fini (VteRowData *row)
 static inline gboolean
 _vte_row_data_ensure (VteRowData *row, gulong len)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteCells *cells = _vte_cells_for_cell_array (row->cells);
 	if (G_LIKELY (cells && len <= cells->alloc_len))
 		return TRUE;
@@ -109,6 +116,7 @@ _vte_row_data_ensure (VteRowData *row, gulong len)
 void
 _vte_row_data_insert (VteRowData *row, gulong col, const VteCell *cell)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gulong i;
 
 	if (G_UNLIKELY (!_vte_row_data_ensure (row, row->len + 1)))
@@ -123,6 +131,7 @@ _vte_row_data_insert (VteRowData *row, gulong col, const VteCell *cell)
 
 void _vte_row_data_append (VteRowData *row, const VteCell *cell)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	if (G_UNLIKELY (!_vte_row_data_ensure (row, row->len + 1)))
 		return;
 
@@ -132,6 +141,7 @@ void _vte_row_data_append (VteRowData *row, const VteCell *cell)
 
 void _vte_row_data_remove (VteRowData *row, gulong col)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gulong i;
 
 	for (i = col + 1; i < row->len; i++)
@@ -143,6 +153,7 @@ void _vte_row_data_remove (VteRowData *row, gulong col)
 
 void _vte_row_data_fill (VteRowData *row, const VteCell *cell, gulong len)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	if (row->len < len) {
 		gulong i = len - row->len;
 
@@ -158,6 +169,7 @@ void _vte_row_data_fill (VteRowData *row, const VteCell *cell, gulong len)
 
 void _vte_row_data_shrink (VteRowData *row, gulong max_len)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	if (max_len < row->len)
 		row->len = max_len;
 }

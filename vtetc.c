@@ -75,6 +75,7 @@ _vte_termcap_strcmp (const char *a,
                      const char *b,
                      const char *enders)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   /* note: strchr on '\0' returns the
    * end of the string (not NULL)
    */
@@ -114,6 +115,7 @@ _vte_termcap_find_start (VteTermcap *termcap,
                          const char *tname,
                          const char *cap)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   const char *contents;
   const char *start;
   char *chain;
@@ -165,6 +167,7 @@ _vte_termcap_find_start (VteTermcap *termcap,
 static int
 _vte_termcap_unescape_string(const char *string, char *result)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   int value = -1;
   int length = 0;
 
@@ -265,6 +268,7 @@ _vte_termcap_find_string_length (VteTermcap *termcap,
                                  const char *cap,
                                  gssize *length)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   const char *result = _vte_termcap_find_start (termcap, tname, cap);
   char *string;
 
@@ -290,6 +294,7 @@ _vte_termcap_find_string (VteTermcap *termcap,
                           const char *tname,
                           const char *cap)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   gssize length;
 
   return _vte_termcap_find_string_length (termcap, tname, cap, &length);
@@ -300,6 +305,7 @@ _vte_termcap_find_numeric (VteTermcap *termcap,
                            const char *tname,
                            const char *cap)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   const char *result = _vte_termcap_find_start (termcap, tname, cap);
   long value;
   char *end;
@@ -321,6 +327,7 @@ _vte_termcap_find_boolean (VteTermcap *termcap,
                            const char *tname,
                            const char *cap)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   const char *result = _vte_termcap_find_start (termcap, tname, cap);
 
   if (result == NULL)
@@ -340,6 +347,7 @@ _vte_termcap_find_boolean (VteTermcap *termcap,
 static void
 _vte_termcap_parse_entry (GTree *termcap, const char **cnt, const char *end)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   gboolean seen_content;
   const char *contents;
   const char *start;
@@ -431,6 +439,7 @@ _vte_termcap_parse_entry (GTree *termcap, const char **cnt, const char *end)
 static GTree *
 _vte_termcap_parse_file (const char *contents, int length)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   const char *end = contents + length;
   GTree *termcap;
 
@@ -473,6 +482,7 @@ _vte_termcap_parse_file (const char *contents, int length)
 static VteTermcap *
 _vte_termcap_create (const char *filename)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   const char *contents;
   VteTermcap *termcap;
   GMappedFile *file;
@@ -496,6 +506,7 @@ _vte_termcap_create (const char *filename)
 static void
 _vte_termcap_destroy (VteTermcap *termcap)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   if (!termcap)
     return;
   g_tree_destroy (termcap->tree);
@@ -512,6 +523,7 @@ static GCache *_vte_termcap_cache = NULL;
 VteTermcap *
 _vte_termcap_new(const char *filename)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   VteTermcap *result;
 
   g_static_mutex_lock (&_vte_termcap_mutex);
@@ -533,6 +545,7 @@ _vte_termcap_new(const char *filename)
 void
 _vte_termcap_free (VteTermcap *termcap)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   g_static_mutex_lock (&_vte_termcap_mutex);
   g_cache_remove (_vte_termcap_cache, termcap);
   g_static_mutex_unlock (&_vte_termcap_mutex);

@@ -90,6 +90,7 @@ static int _vte_pty_helper_tunnel = -1;
 static void
 _vte_pty_reset_signal_handlers(void)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 #ifdef SIGHUP
 	signal(SIGHUP,  SIG_DFL);
 #endif
@@ -239,6 +240,7 @@ struct _VtePtyClass {
 void
 vte_pty_child_setup (VtePty *pty)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePtyPrivate *priv = pty->priv;
 	VtePtyChildSetupData *data = &priv->child_setup_data;
 	int fd = -1;
@@ -366,6 +368,7 @@ __vte_pty_get_argv (const char *command,
                     char **argv,
                     GSpawnFlags *flags /* inout */)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	char **argv2;
 	int i, argc;
 
@@ -400,6 +403,7 @@ __vte_pty_get_argv (const char *command,
 static gchar **
 __vte_pty_merge_environ (char **envp)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GHashTable *table;
         GHashTableIter iter;
         char *name, *value;
@@ -457,6 +461,7 @@ __vte_pty_get_pty_flags(gboolean lastlog,
                         gboolean utmp,
                         gboolean wtmp)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePtyFlags flags = VTE_PTY_DEFAULT;
 
         if (!lastlog)
@@ -509,6 +514,7 @@ __vte_pty_spawn (VtePty *pty,
                  GPid *child_pid /* out */,
                  GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gboolean ret = TRUE;
         char **envp2;
         gint i;
@@ -585,6 +591,7 @@ __vte_pty_fork(VtePty *pty,
                GPid *pid,
                GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 #ifdef HAVE_FORK
         gboolean ret = TRUE;
 
@@ -634,6 +641,7 @@ vte_pty_set_size(VtePty *pty,
                  int columns,
                  GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePtyPrivate *priv;
 	struct winsize size;
         int master;
@@ -693,6 +701,7 @@ vte_pty_get_size(VtePty *pty,
                  int *columns,
                  GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePtyPrivate *priv;
 	struct winsize size;
         int master;
@@ -747,6 +756,7 @@ static char *
 _vte_pty_ptsname(int master,
                  GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 #if defined(HAVE_PTSNAME_R)
 	gsize len = 1024;
 	char *buf = NULL;
@@ -812,6 +822,7 @@ _vte_pty_ptsname(int master,
 static int
 _vte_pty_getpt(GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int fd, flags, rv;
 #ifdef HAVE_GETPT
 	/* Call the system's function for allocating a pty. */
@@ -862,6 +873,7 @@ static gboolean
 _vte_pty_grantpt(int master,
                  GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 #ifdef HAVE_GRANTPT
         int rv;
 
@@ -881,6 +893,7 @@ static gboolean
 _vte_pty_unlockpt(int fd,
                   GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         int rv;
 #ifdef HAVE_UNLOCKPT
 	rv = unlockpt(fd);
@@ -921,6 +934,7 @@ static gboolean
 _vte_pty_open_unix98(VtePty *pty,
                      GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePtyPrivate *priv = pty->priv;
 	int fd;
 	char *buf;
@@ -957,6 +971,7 @@ _vte_pty_open_unix98(VtePty *pty,
 static void
 _vte_pty_read_ptypair(int tunnel, int *parentfd, int *childfd)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int i, ret;
 	char control[LINE_MAX], iobuf[LINE_MAX];
 	struct cmsghdr *cmsg;
@@ -1016,6 +1031,7 @@ _vte_pty_read_ptypair(int tunnel, int *parentfd, int *childfd)
 static int
 _vte_pty_pipe_open(int *a, int *b)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int p[2], ret = -1;
 #ifdef PF_UNIX
 #ifdef SOCK_STREAM
@@ -1053,6 +1069,7 @@ _vte_pty_pipe_open(int *a, int *b)
 static ssize_t
 n_read(int fd, void *buffer, size_t count)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	size_t n = 0;
 	char *buf = buffer;
 	int i;
@@ -1085,6 +1102,7 @@ n_read(int fd, void *buffer, size_t count)
 static ssize_t
 n_write(int fd, const void *buffer, size_t count)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	size_t n = 0;
 	const char *buf = buffer;
 	int i;
@@ -1121,6 +1139,7 @@ n_write(int fd, const void *buffer, size_t count)
 static void
 _vte_pty_stop_helper(void)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	if (_vte_pty_helper_started) {
 		close(_vte_pty_helper_tunnel);
 		_vte_pty_helper_tunnel = -1;
@@ -1142,6 +1161,7 @@ _vte_pty_stop_helper(void)
 static gboolean
 _vte_pty_start_helper(GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int i, errsv;
         int tunnel = -1;
         int tmp[2] = { -1, -1 };
@@ -1229,6 +1249,7 @@ failure:
 static int
 _vte_pty_helper_ops_from_flags (VtePtyFlags flags)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int op = 0;
 	static const int opmap[8] = {
 		GNOME_PTY_OPEN_NO_DB_UPDATE,		/* 0 0 0 */
@@ -1268,6 +1289,7 @@ static gboolean
 _vte_pty_open_with_helper(VtePty *pty,
                           GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePtyPrivate *priv = pty->priv;
 	GnomePtyOps ops;
 	int ret;
@@ -1372,6 +1394,7 @@ vte_pty_set_utf8(VtePty *pty,
                  gboolean utf8,
                  GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 #if defined(HAVE_TCSETATTR) && defined(IUTF8)
         VtePtyPrivate *priv;
 	struct termios tio;
@@ -1423,6 +1446,7 @@ vte_pty_set_utf8(VtePty *pty,
 void
 vte_pty_close (VtePty *pty)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 #ifdef VTE_USE_GNOME_PTY_HELPER
         VtePtyPrivate *priv = pty->priv;
 	gpointer tag;
@@ -1472,6 +1496,7 @@ vte_pty_initable_init (GInitable *initable,
                        GCancellable *cancellable,
                        GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePty *pty = VTE_PTY (initable);
         VtePtyPrivate *priv = pty->priv;
         gboolean ret = FALSE;
@@ -1535,6 +1560,7 @@ vte_pty_initable_init (GInitable *initable,
 static void
 vte_pty_initable_iface_init (GInitableIface  *iface)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         iface->init = vte_pty_initable_init;
 }
 
@@ -1546,6 +1572,7 @@ G_DEFINE_TYPE_WITH_CODE (VtePty, vte_pty, G_TYPE_OBJECT,
 static void
 vte_pty_init (VtePty *pty)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePtyPrivate *priv;
 
         priv = pty->priv = G_TYPE_INSTANCE_GET_PRIVATE (pty, VTE_TYPE_PTY, VtePtyPrivate);
@@ -1565,6 +1592,7 @@ vte_pty_init (VtePty *pty)
 static void
 vte_pty_finalize (GObject *object)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePty *pty = VTE_PTY (object);
         VtePtyPrivate *priv = pty->priv;
 
@@ -1590,6 +1618,7 @@ vte_pty_get_property (GObject    *object,
                        GValue     *value,
                        GParamSpec *pspec)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePty *pty = VTE_PTY (object);
         VtePtyPrivate *priv = pty->priv;
 
@@ -1617,6 +1646,7 @@ vte_pty_set_property (GObject      *object,
                        const GValue *value,
                        GParamSpec   *pspec)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePty *pty = VTE_PTY (object);
         VtePtyPrivate *priv = pty->priv;
 
@@ -1642,6 +1672,7 @@ vte_pty_set_property (GObject      *object,
 static void
 vte_pty_class_init (VtePtyClass *klass)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
         g_type_class_add_private(object_class, sizeof(VtePtyPrivate));
@@ -1716,6 +1747,7 @@ vte_pty_class_init (VtePtyClass *klass)
 GQuark
 vte_pty_error_quark(void)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   static GQuark quark = 0;
 
   if (G_UNLIKELY (quark == 0))
@@ -1763,6 +1795,7 @@ VtePty *
 vte_pty_new (VtePtyFlags flags,
              GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         return g_initable_new (VTE_TYPE_PTY,
                                NULL /* cancellable */,
                                error,
@@ -1790,6 +1823,7 @@ VtePty *
 vte_pty_new_foreign (int fd,
                      GError **error)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         g_return_val_if_fail(fd >= 0, NULL);
 
         return g_initable_new (VTE_TYPE_PTY,
@@ -1809,6 +1843,7 @@ vte_pty_new_foreign (int fd,
 int
 vte_pty_get_fd (VtePty *pty)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePtyPrivate *priv;
 
         g_return_val_if_fail(VTE_IS_PTY(pty), -1);
@@ -1833,6 +1868,7 @@ void
 vte_pty_set_term (VtePty *pty,
                   const char *emulation)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePtyPrivate *priv;
 
         g_return_if_fail(VTE_IS_PTY(pty));
@@ -1856,6 +1892,7 @@ static GHashTable *fd_to_pty_hash = NULL;
 static VtePty *
 get_vte_pty_for_fd (int fd)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePty *pty;
 
         if (fd_to_pty_hash != NULL &&
@@ -1901,6 +1938,7 @@ _vte_pty_open(pid_t *child,
               gboolean utmp,
               gboolean wtmp)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePty *pty;
         GPid pid;
         gboolean ret;
@@ -1969,6 +2007,7 @@ _vte_pty_get_size(int master,
                   int *columns,
                   int *rows)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePty *pty;
 
         if ((pty = get_vte_pty_for_fd(master)) == NULL)
@@ -1998,6 +2037,7 @@ _vte_pty_set_size(int master,
                   int columns,
                   int rows)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePty *pty;
 
         if ((pty = get_vte_pty_for_fd(master)) == NULL)
@@ -2023,6 +2063,7 @@ _vte_pty_set_size(int master,
 void _vte_pty_set_utf8(int master,
                        gboolean utf8)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePty *pty;
 
         if ((pty = get_vte_pty_for_fd(master)) == NULL)
@@ -2042,6 +2083,7 @@ void _vte_pty_set_utf8(int master,
  */
 void _vte_pty_close(int master)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
         VtePty *pty;
 
         if ((pty = get_vte_pty_for_fd(master)) == NULL)

@@ -38,6 +38,7 @@ typedef enum _VteKeymode {
 /*static*/ void
 _vte_invalidate_all(RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -47,6 +48,7 @@ _vte_invalidate_all(RarTerminal *terminal)
 /*static*/ void
 _vte_invalidate_cells(RarTerminal *terminal, glong column_start, gint column_count, glong row_start, gint row_count)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -56,6 +58,7 @@ _vte_invalidate_cells(RarTerminal *terminal, glong column_start, gint column_cou
 /*static*/ void
 _vte_terminal_adjust_adjustments(RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -65,6 +68,7 @@ _vte_terminal_adjust_adjustments(RarTerminal *terminal)
 /*static*/ void
 _vte_terminal_cleanup_tab_fragments_at_cursor (RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -74,6 +78,7 @@ _vte_terminal_cleanup_tab_fragments_at_cursor (RarTerminal *terminal)
 /*static*/ void
 _vte_terminal_cursor_down (RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -83,6 +88,7 @@ _vte_terminal_cursor_down (RarTerminal *terminal)
 /*static*/ void
 _vte_terminal_emit_text_deleted(RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -92,6 +98,7 @@ _vte_terminal_emit_text_deleted(RarTerminal *terminal)
 /*static*/ void
 _vte_terminal_emit_text_inserted(RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -101,6 +108,7 @@ _vte_terminal_emit_text_inserted(RarTerminal *terminal)
 /*static*/ VteRowData *
 _vte_terminal_ensure_row (RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 	return NULL;
 }
@@ -111,6 +119,7 @@ _vte_terminal_ensure_row (RarTerminal *terminal)
 /*static*/ gboolean
 _vte_terminal_get_tabstop(RarTerminal *terminal, int column)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 	return FALSE;
 }
@@ -121,6 +130,7 @@ _vte_terminal_get_tabstop(RarTerminal *terminal, int column)
 /*static*/ gboolean
 _vte_terminal_insert_char(RarTerminal *terminal, gunichar c, gboolean insert, gboolean invalidate_now)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 	return FALSE;
 }
@@ -131,6 +141,7 @@ _vte_terminal_insert_char(RarTerminal *terminal, gunichar c, gboolean insert, gb
 /*static*/ void
 _vte_terminal_queue_contents_changed(RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -140,6 +151,7 @@ _vte_terminal_queue_contents_changed(RarTerminal *terminal)
 /*static*/ void
 vte_terminal_reset(RarTerminal *terminal, gboolean clear_tabstops, gboolean clear_history)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -149,6 +161,7 @@ vte_terminal_reset(RarTerminal *terminal, gboolean clear_tabstops, gboolean clea
 /*static*/ VteRowData *
 _vte_terminal_ring_append (RarTerminal *terminal, gboolean fill)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 	return NULL;
 }
@@ -159,6 +172,7 @@ _vte_terminal_ring_append (RarTerminal *terminal, gboolean fill)
 /*static*/ VteRowData *
 _vte_terminal_ring_insert (RarTerminal *terminal, glong position, gboolean fill)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 	return NULL;
 }
@@ -169,6 +183,7 @@ _vte_terminal_ring_insert (RarTerminal *terminal, glong position, gboolean fill)
 /*static*/ void
 _vte_terminal_ring_remove (RarTerminal *terminal, glong position)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -178,6 +193,7 @@ _vte_terminal_ring_remove (RarTerminal *terminal, glong position)
 /*static*/ void
 _vte_terminal_scroll_region (RarTerminal *terminal, long row, glong count, glong delta)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -187,6 +203,7 @@ _vte_terminal_scroll_region (RarTerminal *terminal, long row, glong count, glong
 /*static*/ void
 _vte_terminal_set_default_attributes(RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -196,6 +213,7 @@ _vte_terminal_set_default_attributes(RarTerminal *terminal)
 /*static*/ void
 _vte_terminal_set_pointer_visible(RarTerminal *terminal, gboolean visible)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -205,6 +223,7 @@ _vte_terminal_set_pointer_visible(RarTerminal *terminal, gboolean visible)
 /*static*/ void
 vte_terminal_set_scrollback_lines(RarTerminal *terminal, glong lines)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
 
@@ -219,6 +238,7 @@ vte_sequence_handler_multiple(RarTerminal *terminal,
 			      GValueArray *params,
 			      VteTerminalSequenceHandler handler)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long val = 1;
 	int i;
 	GValue *value;
@@ -246,6 +266,7 @@ vte_sequence_handler_offset(RarTerminal *terminal,
 			    int increment,
 			    VteTerminalSequenceHandler handler)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	guint i;
 	long val;
 	GValue *value;
@@ -269,6 +290,7 @@ vte_sequence_handler_offset(RarTerminal *terminal,
 /*static*/ void
 _vte_terminal_clear_current_line (RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteRowData *rowdata;
 	RarScreen *screen;
 
@@ -303,6 +325,7 @@ _vte_terminal_clear_current_line (RarTerminal *terminal)
 /*static*/ void
 _vte_terminal_clear_screen (RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long i, initial, row;
 	RarScreen *screen;
 	screen = terminal->screen;
@@ -331,6 +354,7 @@ _vte_terminal_clear_screen (RarTerminal *terminal)
 /*static*/ VteCell *
 vte_terminal_find_charcell (RarTerminal *terminal, glong col, glong row)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteRowData *rowdata;
 	VteCell *ret = NULL;
 	RarScreen *screen;
@@ -349,6 +373,7 @@ vte_terminal_find_charcell (RarTerminal *terminal, glong col, glong row)
 /*static*/ void
 _vte_terminal_home_cursor (RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	screen = terminal->screen;
 	screen->cursor_current.row = screen->insert_delta;
@@ -363,6 +388,7 @@ _vte_terminal_home_cursor (RarTerminal *terminal)
 /*static*/ void
 _vte_terminal_scroll_text (RarTerminal *terminal, int scroll_amount)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long start, end, i;
 	RarScreen *screen;
 
@@ -411,6 +437,7 @@ vte_terminal_termcap_string_same_as_for (RarTerminal *terminal,
 					 const char  *cap_str,
 					 const char  *cap_other)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	char *other_str;
 	gboolean ret;
 
@@ -433,6 +460,7 @@ vte_terminal_termcap_string_same_as_for (RarTerminal *terminal,
 /*static*/ void
 _vte_terminal_clear_above_current (RarTerminal *terminal)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteRowData *rowdata;
 	long i;
 	RarScreen *screen;
@@ -472,6 +500,7 @@ _vte_terminal_clear_above_current (RarTerminal *terminal)
 static void
 vte_sequence_handler_al (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	long start, end, param, i;
 	GValue *value;
@@ -519,6 +548,7 @@ vte_sequence_handler_al (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_AL (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_al (terminal, params);
 }
 
@@ -530,6 +560,7 @@ vte_sequence_handler_AL (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_bt (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long newcol;
 
 	/* Calculate which column is the previous tab stop. */
@@ -565,6 +596,7 @@ vte_sequence_handler_bt (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_cb (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteRowData *rowdata;
 	long i;
 	RarScreen *screen;
@@ -603,6 +635,7 @@ vte_sequence_handler_cb (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_cd (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteRowData *rowdata;
 	glong i;
 	RarScreen *screen;
@@ -660,6 +693,7 @@ vte_sequence_handler_cd (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ce (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteRowData *rowdata;
 	RarScreen *screen;
 
@@ -695,6 +729,7 @@ vte_sequence_handler_ce (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ch (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	GValue *value;
 	long val;
@@ -722,6 +757,7 @@ vte_sequence_handler_ch (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_cl (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	_vte_terminal_clear_screen (terminal);
 	_vte_terminal_home_cursor (terminal);
 
@@ -737,6 +773,7 @@ vte_sequence_handler_cl (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_cm (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *row, *col;
 	long rowval, colval, origin;
 	RarScreen *screen;
@@ -779,6 +816,7 @@ vte_sequence_handler_cm (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_cr (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->cursor_current.col = 0;
 }
 
@@ -790,6 +828,7 @@ vte_sequence_handler_cr (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_cs (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long start=-1, end=-1, rows;
 	GValue *value;
 	RarScreen *screen;
@@ -839,6 +878,7 @@ vte_sequence_handler_cs (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_cS (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long start=0, end=terminal->row_count-1, rows;
 	GValue *value;
 	RarScreen *screen;
@@ -883,6 +923,7 @@ vte_sequence_handler_cS (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_cv (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	GValue *value;
 	long val, origin;
@@ -913,6 +954,7 @@ vte_sequence_handler_cv (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_dc (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	VteRowData *rowdata;
 	long col;
@@ -952,6 +994,7 @@ vte_sequence_handler_dc (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_DC (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_dc);
 }
 
@@ -963,6 +1006,7 @@ vte_sequence_handler_DC (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_dl (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	long start, end, param, i;
 	GValue *value;
@@ -1010,6 +1054,7 @@ vte_sequence_handler_dl (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_DL (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_dl (terminal, params);
 }
 
@@ -1021,6 +1066,7 @@ vte_sequence_handler_DL (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_do (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long start, end;
 	RarScreen *screen;
 
@@ -1046,6 +1092,7 @@ vte_sequence_handler_do (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_DO (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_do);
 }
 
@@ -1058,6 +1105,7 @@ vte_sequence_handler_DO (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ec (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	VteRowData *rowdata;
 	GValue *value;
@@ -1113,6 +1161,7 @@ vte_sequence_handler_ec (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_fs (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->status_line = FALSE;
 }
 
@@ -1124,6 +1173,7 @@ vte_sequence_handler_fs (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ho (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	_vte_terminal_home_cursor (terminal);
 }
 
@@ -1135,6 +1185,7 @@ vte_sequence_handler_ho (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ic (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteVisualPosition save;
 	RarScreen *screen;
 
@@ -1155,6 +1206,7 @@ vte_sequence_handler_ic (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_IC (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_ic);
 }
 
@@ -1167,6 +1219,7 @@ vte_sequence_handler_IC (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_kb (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	/* Move the cursor left. */
 	vte_sequence_handler_le (terminal, params);
 }
@@ -1179,6 +1232,7 @@ vte_sequence_handler_kb (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ke (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->keypad_mode = VTE_KEYMODE_NORMAL;
 }
 
@@ -1190,6 +1244,7 @@ vte_sequence_handler_ke (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ks (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->keypad_mode = VTE_KEYMODE_APPLICATION;
 }
 
@@ -1201,6 +1256,7 @@ vte_sequence_handler_ks (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_le (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 
 	screen = terminal->screen;
@@ -1233,6 +1289,7 @@ vte_sequence_handler_le (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_LE (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_le);
 }
 
@@ -1244,6 +1301,7 @@ vte_sequence_handler_LE (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ll (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	screen = terminal->screen;
 	screen->cursor_current.row = MAX(screen->insert_delta,
@@ -1260,6 +1318,7 @@ vte_sequence_handler_ll (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_mb (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->defaults.attr.blink = 1;
 }
 
@@ -1271,6 +1330,7 @@ vte_sequence_handler_mb (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_md (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->defaults.attr.bold = 1;
 	terminal->screen->defaults.attr.half = 0;
 }
@@ -1283,6 +1343,7 @@ vte_sequence_handler_md (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_me (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	_vte_terminal_set_default_attributes(terminal);
 }
 
@@ -1294,6 +1355,7 @@ vte_sequence_handler_me (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_mh (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->defaults.attr.half = 1;
 	terminal->screen->defaults.attr.bold = 0;
 }
@@ -1306,6 +1368,7 @@ vte_sequence_handler_mh (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_mk (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->defaults.attr.invisible = 1;
 }
 
@@ -1317,6 +1380,7 @@ vte_sequence_handler_mk (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_mr (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->defaults.attr.reverse = 1;
 }
 
@@ -1328,6 +1392,7 @@ vte_sequence_handler_mr (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_nd (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	screen = terminal->screen;
 	if ((screen->cursor_current.col + 1) < terminal->column_count) {
@@ -1344,6 +1409,7 @@ vte_sequence_handler_nd (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_nw (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_cr (terminal, params);
 }
 
@@ -1355,6 +1421,7 @@ vte_sequence_handler_nw (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_rc (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	screen = terminal->screen;
 	screen->cursor_current.col = screen->cursor_saved.col;
@@ -1373,6 +1440,7 @@ vte_sequence_handler_rc (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_RI (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_nd);
 }
 
@@ -1384,6 +1452,7 @@ vte_sequence_handler_RI (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_sc (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	screen = terminal->screen;
 	screen->cursor_saved.col = screen->cursor_current.col;
@@ -1400,6 +1469,7 @@ vte_sequence_handler_sc (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_se (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	char *standout;
 
 	/* Standout may be mapped to another attribute, so attempt to do
@@ -1436,6 +1506,7 @@ vte_sequence_handler_se (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_sf (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	_vte_terminal_cursor_down (terminal);
 }
 
@@ -1447,6 +1518,7 @@ vte_sequence_handler_sf (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_SF (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	/* XXX implement this directly in _vte_terminal_cursor_down */
 	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_sf);
 }
@@ -1459,6 +1531,7 @@ vte_sequence_handler_SF (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_so (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	char *standout;
 
 	/* Standout may be mapped to another attribute, so attempt to do
@@ -1498,6 +1571,7 @@ vte_sequence_handler_so (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_sr (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long start, end;
 	RarScreen *screen;
 
@@ -1539,6 +1613,7 @@ vte_sequence_handler_sr (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_SR (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_sr);
 }
 
@@ -1550,6 +1625,7 @@ vte_sequence_handler_SR (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ta (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	long old_len, newcol, col;
 
@@ -1645,6 +1721,7 @@ vte_sequence_handler_ta (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ts (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->status_line = TRUE;
 	terminal->screen->status_line_changed = TRUE;
 	g_string_truncate(terminal->screen->status_line_contents, 0);
@@ -1658,6 +1735,7 @@ vte_sequence_handler_ts (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_uc (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteCell *cell;
 	int column;
 	RarScreen *screen;
@@ -1693,6 +1771,7 @@ vte_sequence_handler_uc (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_ue (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->defaults.attr.underline = 0;
 }
 
@@ -1704,6 +1783,7 @@ vte_sequence_handler_ue (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_up (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	long start, end;
 
@@ -1728,6 +1808,7 @@ vte_sequence_handler_up (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_UP (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_up);
 }
 
@@ -1739,6 +1820,7 @@ vte_sequence_handler_UP (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_us (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->defaults.attr.underline = 1;
 }
 
@@ -1751,6 +1833,7 @@ vte_sequence_handler_us (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	unsigned int i;
 	GValue *value;
 	long param;
@@ -1922,6 +2005,7 @@ vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *p
 static void
 vte_sequence_handler_character_position_absolute (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_ch);
 }
 
@@ -1933,6 +2017,7 @@ vte_sequence_handler_character_position_absolute (RarTerminal *terminal, GValueA
 static void
 vte_sequence_handler_cursor_character_absolute (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	GValue *value;
 	long val;
@@ -1960,6 +2045,7 @@ vte_sequence_handler_cursor_character_absolute (RarTerminal *terminal, GValueArr
 static void
 vte_sequence_handler_cursor_lower_left (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	RarScreen *screen;
 	long row;
 	screen = terminal->screen;
@@ -1976,6 +2062,7 @@ vte_sequence_handler_cursor_lower_left (RarTerminal *terminal, GValueArray *para
 static void
 vte_sequence_handler_cursor_next_line (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->cursor_current.col = 0;
 	vte_sequence_handler_DO (terminal, params);
 }
@@ -1988,6 +2075,7 @@ vte_sequence_handler_cursor_next_line (RarTerminal *terminal, GValueArray *param
 static void
 vte_sequence_handler_cursor_position (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_cm);
 }
 
@@ -1999,6 +2087,7 @@ vte_sequence_handler_cursor_position (RarTerminal *terminal, GValueArray *params
 static void
 vte_sequence_handler_cursor_preceding_line (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->cursor_current.col = 0;
 	vte_sequence_handler_UP (terminal, params);
 }
@@ -2015,6 +2104,7 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 				     gboolean save,
 				     gboolean set)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gboolean recognized = FALSE;
 	gpointer p;
 	guint i;
@@ -2349,6 +2439,7 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 static void
 vte_sequence_handler_decset (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
 	long setting;
 	guint i;
@@ -2373,6 +2464,7 @@ vte_sequence_handler_decset (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_decreset (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
 	long setting;
 	guint i;
@@ -2397,6 +2489,7 @@ vte_sequence_handler_decreset (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_delete_lines (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
 	RarScreen *screen;
 	long param, end, row;
@@ -2442,6 +2535,7 @@ vte_sequence_handler_delete_lines (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_erase_characters (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_ec (terminal, params);
 }
 
@@ -2453,6 +2547,7 @@ vte_sequence_handler_erase_characters (RarTerminal *terminal, GValueArray *param
 static void
 vte_sequence_handler_erase_in_display (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
 	long param;
 	guint i;
@@ -2498,6 +2593,7 @@ vte_sequence_handler_erase_in_display (RarTerminal *terminal, GValueArray *param
 static void
 vte_sequence_handler_erase_in_line (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
 	long param;
 	guint i;
@@ -2540,6 +2636,7 @@ vte_sequence_handler_erase_in_line (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_form_feed (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_index (terminal, params);
 }
 
@@ -2551,6 +2648,7 @@ vte_sequence_handler_form_feed (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_full_reset (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_terminal_reset(terminal, TRUE, TRUE);
 }
 
@@ -2562,6 +2660,7 @@ vte_sequence_handler_full_reset (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_horizontal_and_vertical_position (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_cm);
 }
 
@@ -2573,6 +2672,7 @@ vte_sequence_handler_horizontal_and_vertical_position (RarTerminal *terminal, GV
 static void
 vte_sequence_handler_index (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_sf (terminal, params);
 }
 
@@ -2584,6 +2684,7 @@ vte_sequence_handler_index (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_insert_blank_characters (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_IC (terminal, params);
 }
 
@@ -2595,6 +2696,7 @@ vte_sequence_handler_insert_blank_characters (RarTerminal *terminal, GValueArray
 static void
 vte_sequence_handler_insert_lines (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
 	RarScreen *screen;
 	long param, end, row;
@@ -2637,6 +2739,7 @@ vte_sequence_handler_insert_lines (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_line_position_absolute (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_cv);
 }
 
@@ -2648,6 +2751,7 @@ vte_sequence_handler_line_position_absolute (RarTerminal *terminal, GValueArray 
 static void
 vte_sequence_handler_next_line (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	terminal->screen->cursor_current.col = 0;
 	vte_sequence_handler_DO (terminal, params);
 }
@@ -2660,6 +2764,7 @@ vte_sequence_handler_next_line (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_restore_mode (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
 	long setting;
 	guint i;
@@ -2684,6 +2789,7 @@ vte_sequence_handler_restore_mode (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_reverse_index (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_sr (terminal, params);
 }
 
@@ -2695,6 +2801,7 @@ vte_sequence_handler_reverse_index (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_save_mode (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
 	long setting;
 	guint i;
@@ -2719,6 +2826,7 @@ vte_sequence_handler_save_mode (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_screen_alignment_test (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long row;
 	VteRowData *rowdata;
 	RarScreen *screen;
@@ -2760,6 +2868,7 @@ vte_sequence_handler_screen_alignment_test (RarTerminal *terminal, GValueArray *
 static void
 vte_sequence_handler_scroll_down (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long val = 1;
 	GValue *value;
 
@@ -2782,6 +2891,7 @@ vte_sequence_handler_scroll_down (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_scroll_up (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long val = 1;
 	GValue *value;
 
@@ -2804,6 +2914,7 @@ vte_sequence_handler_scroll_up (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_set_scrolling_region (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_cs);
 }
 
@@ -2813,6 +2924,7 @@ vte_sequence_handler_set_scrolling_region (RarTerminal *terminal, GValueArray *p
 static void
 vte_sequence_handler_set_scrolling_region_from_start (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue value = {0};
 
 	g_value_init (&value, G_TYPE_LONG);
@@ -2829,6 +2941,7 @@ vte_sequence_handler_set_scrolling_region_from_start (RarTerminal *terminal, GVa
 static void
 vte_sequence_handler_set_scrolling_region_to_end (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue value = {0};
 
 	g_value_init (&value, G_TYPE_LONG);
@@ -2847,6 +2960,7 @@ vte_sequence_handler_set_scrolling_region_to_end (RarTerminal *terminal, GValueA
 static void
 vte_sequence_handler_soft_reset (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_terminal_reset(terminal, FALSE, FALSE);
 }
 
@@ -2858,6 +2972,7 @@ vte_sequence_handler_soft_reset (RarTerminal *terminal, GValueArray *params)
 static void
 vte_sequence_handler_vertical_tab (RarTerminal *terminal, GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	vte_sequence_handler_index (terminal, params);
 }
 
@@ -2872,6 +2987,7 @@ vte_sequence_handler_vertical_tab (RarTerminal *terminal, GValueArray *params)
 static VteTerminalSequenceHandler
 _vte_sequence_get_handler (const char *name)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int len = strlen (name);
 
 	const struct vteseq_n_struct *seqhandler;
@@ -2889,6 +3005,7 @@ _vte_terminal_handle_sequence (RarTerminal *terminal,
 			      GQuark match G_GNUC_UNUSED,
 			      GValueArray *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteTerminalSequenceHandler handler;
 
 #if 0

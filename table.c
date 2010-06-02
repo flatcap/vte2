@@ -74,12 +74,14 @@ struct _vte_table_arginfo_head {
 static void
 _vte_table_arginfo_head_init(struct _vte_table_arginfo_head *head)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	head->list = NULL;
 	head->stack_allocated = 0;
 }
 static inline struct _vte_table_arginfo*
 _vte_table_arginfo_alloc(struct _vte_table_arginfo_head *head)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	struct _vte_table_arginfo *info;
 	if (G_LIKELY (head->stack_allocated < G_N_ELEMENTS(head->stack))) {
 		info = &head->stack[head->stack_allocated++];
@@ -93,6 +95,7 @@ _vte_table_arginfo_alloc(struct _vte_table_arginfo_head *head)
 static void
 _vte_table_arginfo_head_revert(struct _vte_table_arginfo_head *head, struct _vte_table_arginfo *last)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	struct _vte_table_arginfo *info;
 	info = head->list;
 	head->list = last->next;
@@ -116,6 +119,7 @@ _vte_table_arginfo_head_revert(struct _vte_table_arginfo_head *head, struct _vte
 static struct _vte_table_arginfo *
 _vte_table_arginfo_head_reverse(struct _vte_table_arginfo_head *head)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	struct _vte_table_arginfo *prev = NULL;
 	while (head->list) {
 		struct _vte_table_arginfo *next = head->list->next;
@@ -130,6 +134,7 @@ _vte_table_arginfo_head_reverse(struct _vte_table_arginfo_head *head)
 static void
 _vte_table_arginfo_head_finalize(struct _vte_table_arginfo_head *head)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	struct _vte_table_arginfo *info, *next;
 	for (info = head->list; info != NULL; info = next) {
 		next = info->next;
@@ -145,6 +150,7 @@ _vte_table_arginfo_head_finalize(struct _vte_table_arginfo_head *head)
 struct _vte_table *
 _vte_table_new(void)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	struct _vte_table * ret;
 	ret = g_slice_new0(struct _vte_table);
 	ret->impl.klass = &_vte_matcher_table;
@@ -154,6 +160,7 @@ _vte_table_new(void)
 static struct _vte_table **
 _vte_table_literal_new(void)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	return g_new0(struct _vte_table *, VTE_TABLE_MAX_LITERAL);
 }
 
@@ -161,6 +168,7 @@ _vte_table_literal_new(void)
 void
 _vte_table_free(struct _vte_table *table)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	unsigned int i;
 	if (table->table != NULL) {
 		for (i = 0; i < VTE_TABLE_MAX_LITERAL; i++) {
@@ -197,6 +205,7 @@ _vte_table_addi(struct _vte_table *table,
 		const char *pattern, gssize length,
 		const char *result, GQuark quark, int inc)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int i;
 	guint8 check;
 	struct _vte_table *subtable;
@@ -402,6 +411,7 @@ _vte_table_add(struct _vte_table *table,
 	       const char *pattern, gssize length,
 	       const char *result, GQuark quark)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	_vte_table_addi(table,
 			(const unsigned char *) pattern, length,
 			pattern, length,
@@ -416,6 +426,7 @@ _vte_table_matchi(struct _vte_table *table,
 		  unsigned char **original, gssize *original_length,
 		  struct _vte_table_arginfo_head *params)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int i = 0;
 	struct _vte_table *subtable = NULL;
 	struct _vte_table_arginfo *arginfo;
@@ -536,6 +547,7 @@ static void
 _vte_table_extract_numbers(GValueArray **array,
 			   struct _vte_table_arginfo *arginfo, long increment)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue value = {0,};
 	gssize i;
 
@@ -561,6 +573,7 @@ static void
 _vte_table_extract_string(GValueArray **array,
 			  struct _vte_table_arginfo *arginfo)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue value = {0,};
 	gunichar *ptr;
 	guint i;
@@ -584,6 +597,7 @@ static void
 _vte_table_extract_char(GValueArray **array,
 			struct _vte_table_arginfo *arginfo, long increment)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GValue value = {0,};
 
 	g_value_init(&value, G_TYPE_LONG);
@@ -603,6 +617,7 @@ _vte_table_match(struct _vte_table *table,
 		 const char **res, const gunichar **consumed,
 		 GQuark *quark, GValueArray **array)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	struct _vte_table *head;
 	const gunichar *dummy_consumed;
 	const char *dummy_res;
@@ -740,6 +755,7 @@ _vte_table_match(struct _vte_table *table,
 static void
 _vte_table_printi(struct _vte_table *table, const char *lead, int *count)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	unsigned int i;
 	char *newlead = NULL;
 
@@ -786,6 +802,7 @@ _vte_table_printi(struct _vte_table *table, const char *lead, int *count)
 void
 _vte_table_print(struct _vte_table *table)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int count = 0;
 	_vte_table_printi(table, "", &count);
 	g_printerr("%d nodes = %ld bytes.\n",

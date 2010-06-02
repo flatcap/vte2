@@ -18,11 +18,13 @@
 
 /* The interfaces in this file are subject to change at any time. */
 
+#include "config.h"
 #include "vtetree.h"
 
 VteTree *
 _vte_tree_new(GCompareFunc key_compare_func)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   VteTree *tree = g_slice_new0 (VteTree);
   tree->tree = g_tree_new (key_compare_func);
   return tree;
@@ -31,6 +33,7 @@ _vte_tree_new(GCompareFunc key_compare_func)
 void 
 _vte_tree_destroy(VteTree *tree)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   g_tree_destroy (tree->tree);
   g_slice_free (VteTree, tree);
 }
@@ -38,6 +41,7 @@ _vte_tree_destroy(VteTree *tree)
 void 
 _vte_tree_insert(VteTree *tree, gpointer key, gpointer value)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   guint index = GPOINTER_TO_UINT (key);
   
   if (index < VTE_TREE_ARRAY_SIZE) {
@@ -50,6 +54,7 @@ _vte_tree_insert(VteTree *tree, gpointer key, gpointer value)
 gpointer
 _vte_tree_lookup(VteTree *tree, gconstpointer key)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
   const guint index = GPOINTER_TO_UINT (key);
   
   if (index < VTE_TREE_ARRAY_SIZE)

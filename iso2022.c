@@ -288,6 +288,7 @@ static const struct _vte_iso2022_map32 _vte_iso2022_map_wide_G[] = {
 static gint
 _vte_direct_compare(gconstpointer a, gconstpointer b)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	return GPOINTER_TO_INT(a) - GPOINTER_TO_INT(b);
 }
 
@@ -297,6 +298,7 @@ _vte_direct_compare(gconstpointer a, gconstpointer b)
 static int
 _vte_iso2022_ambiguous_width(struct _vte_iso2022_state *state)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	const char wide_codelist[][10] = {
 		"big5",
 		"big5hkscs",
@@ -353,6 +355,7 @@ _vte_iso2022_ambiguous_width(struct _vte_iso2022_state *state)
 static inline gboolean
 _vte_iso2022_is_ambiguous(gunichar c)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	if (G_LIKELY (c < 0x80))
 		return FALSE;
 	if (G_UNLIKELY (g_unichar_iszerowidth (c)))
@@ -364,6 +367,7 @@ int
 _vte_iso2022_unichar_width(struct _vte_iso2022_state *state,
 			   gunichar c)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	if (G_LIKELY (c < 0x80))
 		return 1;
 	if (G_UNLIKELY (g_unichar_iszerowidth (c)))
@@ -380,6 +384,7 @@ _vte_iso2022_unichar_width(struct _vte_iso2022_state *state,
 static GHashTable *
 _vte_iso2022_map_init16(const struct _vte_iso2022_map16 *map, gssize length)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GHashTable *ret;
 	int i;
 	if (length == 0) {
@@ -397,6 +402,7 @@ _vte_iso2022_map_init16(const struct _vte_iso2022_map16 *map, gssize length)
 static GHashTable *
 _vte_iso2022_map_init32(const struct _vte_iso2022_map32 *map, gssize length)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GHashTable *ret;
 	int i;
 	if (length == 0) {
@@ -416,6 +422,7 @@ _vte_iso2022_map_get(gunichar mapname,
 		     GHashTable **_map, guint *bytes_per_char, guint *force_width,
 		     gulong *or_mask, gulong *and_mask)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	static VteTree *maps = NULL;
 	gint bytes = 0, width = 0;
 	GHashTable *map = NULL;
@@ -728,6 +735,7 @@ _vte_iso2022_map_get(gunichar mapname,
 int
 _vte_iso2022_get_encoded_width(gunichar c)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int width;
 	width = (c & VTE_ISO2022_ENCODED_WIDTH_MASK) >> VTE_ISO2022_ENCODED_WIDTH_BIT_OFFSET;
 	return CLAMP(width, 0, 2);
@@ -736,6 +744,7 @@ _vte_iso2022_get_encoded_width(gunichar c)
 static gunichar
 _vte_iso2022_set_encoded_width(gunichar c, int width)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	width = CLAMP(width, 0, 2);
 	c &= ~(VTE_ISO2022_ENCODED_WIDTH_MASK);
 	c |= (width << VTE_ISO2022_ENCODED_WIDTH_BIT_OFFSET);
@@ -747,6 +756,7 @@ _vte_iso2022_state_new(const char *native_codeset,
 		       _vte_iso2022_codeset_changed_cb_fn fn,
 		       gpointer data)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	struct _vte_iso2022_state *state;
 	state = g_slice_new0(struct _vte_iso2022_state);
 	state->nrc_enabled = TRUE;
@@ -791,6 +801,7 @@ _vte_iso2022_state_new(const char *native_codeset,
 void
 _vte_iso2022_state_free(struct _vte_iso2022_state *state)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	_vte_buffer_free(state->buffer);
 	if (state->conv != VTE_INVALID_CONV) {
 		_vte_conv_close(state->conv);
@@ -802,6 +813,7 @@ void
 _vte_iso2022_state_set_codeset(struct _vte_iso2022_state *state,
 			       const char *codeset)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	VteConv conv;
 
 	g_return_if_fail(state != NULL);
@@ -826,12 +838,14 @@ _vte_iso2022_state_set_codeset(struct _vte_iso2022_state *state,
 const char *
 _vte_iso2022_state_get_codeset(struct _vte_iso2022_state *state)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	return state->codeset;
 }
 
 static const guchar *
 _vte_iso2022_find_nextctl(const guchar *p, const guchar * const q)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	do {
 		switch (*p) {
 			case '\033':
@@ -855,6 +869,7 @@ _vte_iso2022_find_nextctl(const guchar *p, const guchar * const q)
 static long
 _vte_iso2022_sequence_length(const unsigned char *nextctl, gsize length)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long sequence_length = -1;
 	gsize i;
 
@@ -1061,6 +1076,7 @@ process_8_bit_sequence(struct _vte_iso2022_state *state,
 		       const guchar **inbuf, gsize *inbytes,
 		       gunichar **outbuf, gsize *outbytes)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	guint i, width;
 	gpointer p;
 	gunichar c, *outptr;
@@ -1138,6 +1154,7 @@ static glong
 process_cdata(struct _vte_iso2022_state *state, const guchar *cdata, gsize length,
 	      GArray *gunichars)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	int ambiguous_width;
 	glong processed = 0;
 	GHashTable *map;
@@ -1304,6 +1321,7 @@ gunichar
 _vte_iso2022_process_single(struct _vte_iso2022_state *state,
 			    gunichar c, gunichar map)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	GHashTable *hash;
 	gunichar ret = c;
 	gpointer p;
@@ -1331,6 +1349,7 @@ static void
 process_control(struct _vte_iso2022_state *state, guchar *ctl, gsize length,
 		GArray *gunichars)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gunichar c;
 	gsize i;
 	if (length >= 1) {
@@ -1609,6 +1628,7 @@ process_block (struct _vte_iso2022_state *state,
 	       gboolean last,
 	       GArray *gunichars)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	guint preserve_last = -1;
 	guint initial;
 
@@ -1678,6 +1698,7 @@ _vte_iso2022_process(struct _vte_iso2022_state *state,
 		     guchar *input, gsize length,
 		     GArray *gunichars)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	struct _vte_iso2022_block block;
 	guint preserve_last = -1;
 	const guchar *nextctl, *p, *q;

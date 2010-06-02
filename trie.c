@@ -106,11 +106,13 @@ struct _vte_trie {
 static gboolean
 char_class_exact_check(gunichar c, struct char_class_data *data)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	return (c == data->c) ? TRUE : FALSE;
 }
 static void
 char_class_exact_setup(const gunichar *s, struct char_class_data *data, int inc)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	data->c = s[0];
 	return;
 }
@@ -118,6 +120,7 @@ static void
 char_class_percent_setup(const gunichar *s, struct char_class_data *data,
 			 int inc)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	data->c = '%';
 	return;
 }
@@ -125,12 +128,14 @@ static gboolean
 char_class_none_extract(const gunichar *s, gsize length,
 			struct char_class_data *data, GValueArray *array)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	return FALSE;
 }
 
 static gboolean
 char_class_digit_check(gunichar c, struct char_class_data *data)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	switch (c) {
 		case '0':
 		case '1':
@@ -150,6 +155,7 @@ char_class_digit_check(gunichar c, struct char_class_data *data)
 static void
 char_class_digit_setup(const gunichar *s, struct char_class_data *data, int inc)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	data->inc = inc;
 	return;
 }
@@ -157,6 +163,7 @@ static gboolean
 char_class_digit_extract(const gunichar *s, gsize length,
 			 struct char_class_data *data, GValueArray *array)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long ret = 0;
 	gsize i;
 	GValue value;
@@ -176,6 +183,7 @@ char_class_digit_extract(const gunichar *s, gsize length,
 static gboolean
 char_class_multi_check(gunichar c, struct char_class_data *data)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	switch (c) {
 		case '0':
 		case '1':
@@ -196,6 +204,7 @@ char_class_multi_check(gunichar c, struct char_class_data *data)
 static void
 char_class_multi_setup(const gunichar *s, struct char_class_data *data, int inc)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	data->inc = inc;
 	return;
 }
@@ -203,6 +212,7 @@ static gboolean
 char_class_multi_extract(const gunichar *s, gsize length,
 			 struct char_class_data *data, GValueArray *array)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long ret = 0;
 	gsize i;
 	GValue value;
@@ -227,11 +237,13 @@ char_class_multi_extract(const gunichar *s, gsize length,
 static gboolean
 char_class_any_check(gunichar c, struct char_class_data *data)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	return (c >= data->c) ? TRUE : FALSE;
 }
 static void
 char_class_any_setup(const gunichar *s, struct char_class_data *data, int inc)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	data->c = s[0] + inc;
 	return;
 }
@@ -239,6 +251,7 @@ static gboolean
 char_class_any_extract(const gunichar *s, gsize length,
 		       struct char_class_data *data, GValueArray *array)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	long ret = 0;
 	GValue value;
 	ret = s[0] - data->c;
@@ -253,17 +266,20 @@ char_class_any_extract(const gunichar *s, gsize length,
 static gboolean
 char_class_string_check(gunichar c, struct char_class_data *data)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	return (c != data->c) ? TRUE : FALSE;
 }
 static void
 char_class_string_setup(const gunichar *s, struct char_class_data *data, int inc)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	data->c = s[0];
 	return;
 }
 static gsize
 unichar_snlen(const gunichar *s, gsize length)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gsize i;
 	for (i = 0; i < length; i++) {
 		if (s[i] == '\0') {
@@ -275,6 +291,7 @@ unichar_snlen(const gunichar *s, gsize length)
 static void
 unichar_sncpy(gunichar *d, const gunichar *s, gsize length)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	unsigned int i;
 	for (i = 0; i < length; i++) {
 		d[i] = s[i];
@@ -286,6 +303,7 @@ unichar_sncpy(gunichar *d, const gunichar *s, gsize length)
 static int
 unichar_sncmp(const gunichar *a, const gunichar *b, gsize length)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gsize i;
 	for (i = 0; i < length; i++) {
 		if (a[i] != b[i]) {
@@ -301,6 +319,7 @@ static gboolean
 char_class_string_extract(const gunichar *s, gsize length,
 			  struct char_class_data *data, GValueArray *array)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gunichar *ret = NULL;
 	gsize len;
 	gsize i;
@@ -367,6 +386,7 @@ static struct char_class char_classes[] = {
 TRIE_MAYBE_STATIC struct _vte_trie *
 _vte_trie_new(void)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	struct _vte_trie *ret;
 	ret = g_slice_new0(struct _vte_trie);
 	ret->impl.klass = &_vte_matcher_trie;
@@ -376,6 +396,7 @@ _vte_trie_new(void)
 TRIE_MAYBE_STATIC void
 _vte_trie_free(struct _vte_trie *trie)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	unsigned int i;
 	for (i = 0; i < trie->trie_path_count; i++) {
 		_vte_trie_free(trie->trie_paths[i].trie);
@@ -392,6 +413,7 @@ static void
 _vte_trie_addx(struct _vte_trie *trie, gunichar *pattern, gsize length,
 	       const char *result, GQuark quark, int inc)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gsize i;
 	struct char_class *cclass = NULL;
 	struct char_class_data data;
@@ -480,6 +502,7 @@ TRIE_MAYBE_STATIC void
 _vte_trie_add(struct _vte_trie *trie, const char *pattern, gsize length,
 	      const char *result, GQuark quark)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	const guchar *tpattern;
 	guchar *wpattern, *wpattern_end;
 	VteConv conv;
@@ -520,6 +543,7 @@ _vte_trie_matchx(struct _vte_trie *trie, const gunichar *pattern, gsize length,
 		 const char **res, const gunichar **consumed,
 		 GQuark *quark, GValueArray *array)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	unsigned int i;
 	const char *hres;
 	enum cclass cc;
@@ -672,6 +696,7 @@ _vte_trie_match(struct _vte_trie *trie, const gunichar *pattern, gsize length,
 		const char **res, const gunichar **consumed,
 		GQuark *quark, GValueArray **array)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	const char *ret = NULL;
 	GQuark tmpquark;
 	GValueArray *valuearray;
@@ -725,6 +750,7 @@ static void
 _vte_trie_printx(struct _vte_trie *trie, const char *previous,
 		 gsize *nodecount)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	unsigned int i;
 	char buf[LINE_MAX];
 
@@ -801,6 +827,7 @@ _vte_trie_printx(struct _vte_trie *trie, const char *previous,
 TRIE_MAYBE_STATIC void
 _vte_trie_print(struct _vte_trie *trie)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	gsize nodecount = 0;
 	_vte_trie_printx(trie, "", &nodecount);
 	printf("Trie has %ld nodes.\n", (long) nodecount);

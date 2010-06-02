@@ -21,6 +21,7 @@
 #ifndef vterowdata_h_included
 #define vterowdata_h_included
 
+#include "config.h"
 #include "vteunistr.h"
 
 G_BEGIN_DECLS
@@ -144,6 +145,7 @@ typedef struct _VteRowData {
 static inline const VteCell *
 _vte_row_data_get (const VteRowData *row, gulong col)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	if (G_UNLIKELY (row->len <= col))
 		return NULL;
 
@@ -153,6 +155,7 @@ _vte_row_data_get (const VteRowData *row, gulong col)
 static inline VteCell *
 _vte_row_data_get_writable (VteRowData *row, gulong col)
 {
+	printf ("Entering: %s\n", __FUNCTION__);
 	if (G_UNLIKELY (row->len <= col))
 		return NULL;
 
