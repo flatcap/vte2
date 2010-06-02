@@ -65,7 +65,18 @@ G_DEFINE_TYPE(RarTerminal, rar_terminal, G_TYPE_OBJECT)
 
 #define GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), RAR_TYPE_TERMINAL, RarTerminalPrivate))
 
+/* Forward Declarations */
 gboolean vte_terminal_fork_command_full(RarTerminal *terminal, VtePtyFlags pty_flags, const char *working_directory, char **argv, char **envv, GSpawnFlags spawn_flags, GSpawnChildSetupFunc child_setup, gpointer child_setup_data, GPid *child_pid, GError **error);
+void vte_terminal_set_pty(RarTerminal *terminal, int pty_master);
+int vte_terminal_get_pty(RarTerminal *terminal);
+VtePty * vte_terminal_get_pty_object(RarTerminal *terminal);
+static gboolean vte_terminal_io_read(GIOChannel *channel, GIOCondition condition, RarTerminal *terminal);
+static inline void _vte_terminal_enable_input_source (RarTerminal *terminal);
+static inline gboolean need_processing (RarTerminal *terminal);
+static void time_process_incoming (RarTerminal *terminal);
+void vte_terminal_set_pty_object (RarTerminal *terminal, VtePty *pty);
+static void vte_terminal_eof(GIOChannel *channel, RarTerminal *terminal);
+static void vte_terminal_queue_eof(RarTerminal *terminal);
 
 /* these static variables are guarded by the GDK mutex */
 static guint process_timeout_tag = 0;
@@ -81,6 +92,8 @@ static GTimer *process_timer;
  */
 enum {
         PROP_0,
+        PROP_PTY,
+        PROP_PTY_OBJECT,
 };
 
 /**
@@ -182,11 +195,17 @@ rar_terminal_get_property (GObject *object,
                            GParamSpec *pspec)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-        //RarTerminal *terminal = RAR_TERMINAL (object);
-        //RarTerminalPrivate *pvt = terminal->pvt;
+        RarTerminal *terminal = RAR_TERMINAL (object);
+        RarTerminalPrivate *pvt = terminal->pvt;
 
 	switch (prop_id)
 	{
+                case PROP_PTY:
+                        g_value_set_int (value, pvt->pty != NULL ? vte_pty_get_fd(pvt->pty) : -1);
+                        break;
+                case PROP_PTY_OBJECT:
+                        g_value_set_object (value, vte_terminal_get_pty_object(terminal));
+                        break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			return;
@@ -203,10 +222,16 @@ rar_terminal_set_property (GObject *object,
                            GParamSpec *pspec)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-        //RarTerminal *terminal = RAR_TERMINAL (object);
+        RarTerminal *terminal = RAR_TERMINAL (object);
 
 	switch (prop_id)
 	{
+                case PROP_PTY:
+                        vte_terminal_set_pty (terminal, g_value_get_int (value));
+                        break;
+                case PROP_PTY_OBJECT:
+                        vte_terminal_set_pty_object (terminal, g_value_get_object (value));
+                        break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			return;
@@ -233,6 +258,38 @@ rar_terminal_class_init (RarTerminalClass *klass)
         gobject_class->set_property = rar_terminal_set_property;
 
 	/* Register some signals of our own. */
+
+        /**
+         * RarTerminal:pty:
+         *
+         * The file descriptor of the master end of the terminal's PTY.
+         * 
+         * Since: 0.20
+         *
+         * Deprecated: 0.26: Use the #RarTerminal:pty-object property instead
+         */
+        g_object_class_install_property
+                (gobject_class,
+                 PROP_PTY,
+                 g_param_spec_int ("pty", NULL, NULL,
+                                   -1, G_MAXINT,
+                                   -1,
+                                   G_PARAM_READWRITE | STATIC_PARAMS));
+
+        /**
+         * RarTerminal:pty-object:
+         *
+         * The PTY object for the terminal.
+         *
+         * Since: 0.26
+         */
+        g_object_class_install_property
+                (gobject_class,
+                 PROP_PTY_OBJECT,
+                 g_param_spec_object ("pty-object", NULL, NULL,
+                                      VTE_TYPE_PTY,
+                                      G_PARAM_READWRITE |
+                                      G_PARAM_STATIC_STRINGS));
 
 	process_timer = g_timer_new ();
 }
@@ -322,13 +379,79 @@ rar_terminal_new_view (RarTerminal *term)
 /* process incoming data without copying */
 static struct _vte_incoming_chunk *free_chunks;
 
-static gboolean vte_terminal_io_read(GIOChannel *channel, GIOCondition condition, RarTerminal *terminal);
-static inline void _vte_terminal_enable_input_source (RarTerminal *terminal);
-static inline gboolean need_processing (RarTerminal *terminal);
-static void time_process_incoming (RarTerminal *terminal);
-void vte_terminal_set_pty_object (RarTerminal *terminal, VtePty *pty);
-static void vte_terminal_eof(GIOChannel *channel, RarTerminal *terminal);
-static void vte_terminal_queue_eof(RarTerminal *terminal);
+/**
+ * vte_terminal_set_pty:
+ * @terminal: a #RarTerminal
+ * @pty_master: a file descriptor of the master end of a PTY, or %-1
+ *
+ * Attach an existing PTY master side to the terminal widget.  Use
+ * instead of vte_terminal_fork_command() or vte_terminal_forkpty().
+ *
+ * Since: 0.12.1
+ *
+ * Deprecated: 0.26: Use vte_pty_new_foreign() and vte_terminal_set_pty_object()
+ */
+void
+vte_terminal_set_pty(RarTerminal *terminal, int pty_master)
+{
+        VtePty *pty;
+
+        if (pty_master == -1) {
+                vte_terminal_set_pty_object(terminal, NULL);
+                return;
+        }
+
+        pty = vte_pty_new_foreign(pty_master, NULL);
+        if (pty == NULL)
+                return;
+
+        vte_terminal_set_pty_object(terminal, pty);
+        g_object_unref(pty);
+}
+
+/**
+ * vte_terminal_get_pty:
+ * @terminal: a #RarTerminal
+ *
+ * Returns the file descriptor of the master end of @terminal's PTY.
+ *
+ * Return value: the file descriptor, or -1 if the terminal has no PTY.
+ *
+ * Since: 0.20
+ *
+ * Deprecated: 0.26: Use vte_terminal_get_pty_object() and vte_pty_get_fd()
+ */
+int
+vte_terminal_get_pty(RarTerminal *terminal)
+{
+        RarTerminalPrivate *pvt;
+
+        g_return_val_if_fail (RAR_IS_TERMINAL (terminal), -1);
+
+        pvt = terminal->pvt;
+        if (pvt->pty != NULL)
+                return vte_pty_get_fd(pvt->pty);
+
+        return -1;
+}
+
+/**
+ * vte_terminal_get_pty_object:
+ * @terminal: a #RarTerminal
+ *
+ * Returns the #VtePty of @terminal.
+ *
+ * Returns: (transfer none): a #VtePty, or %NULL
+ *
+ * Since: 0.26
+ */
+VtePty *
+vte_terminal_get_pty_object(RarTerminal *terminal)
+{
+        g_return_val_if_fail (RAR_IS_TERMINAL (terminal), NULL);
+
+        return terminal->pvt->pty;
+}
 
 /**
  * get_chunk
@@ -1724,7 +1847,7 @@ vte_terminal_start_processing (RarTerminal *terminal)
 
 /**
  * vte_terminal_feed:
- * @terminal: a #VteTerminal
+ * @terminal: a #RarTerminal
  * @data: (array length=length zero-terminated=0) (element-type uint8): a string in the terminal's current encoding
  * @length: the length of the string
  *

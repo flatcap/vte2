@@ -10808,6 +10808,7 @@ vte_terminal_class_init(VteTerminalClass *klass)
          *
          * Since: 0.17.1
          */
+
 	widget_class->set_scroll_adjustments_signal =
 		g_signal_new(I_("set-scroll-adjustments"),
 			     G_TYPE_FROM_CLASS (klass),
@@ -13250,80 +13251,6 @@ vte_terminal_get_icon_title(VteTerminal *terminal)
 }
 
 /**
- * vte_terminal_set_pty:
- * @terminal: a #VteTerminal
- * @pty_master: a file descriptor of the master end of a PTY, or %-1
- *
- * Attach an existing PTY master side to the terminal widget.  Use
- * instead of vte_terminal_fork_command() or vte_terminal_forkpty().
- *
- * Since: 0.12.1
- *
- * Deprecated: 0.26: Use vte_pty_new_foreign() and vte_terminal_set_pty_object()
- */
-void
-vte_terminal_set_pty(VteTerminal *terminal, int pty_master)
-{
-        VtePty *pty;
-
-        if (pty_master == -1) {
-                vte_terminal_set_pty_object(terminal, NULL);
-                return;
-        }
-
-        pty = vte_pty_new_foreign(pty_master, NULL);
-        if (pty == NULL)
-                return;
-
-        vte_terminal_set_pty_object(terminal, pty);
-        g_object_unref(pty);
-}
-
-/**
- * vte_terminal_get_pty:
- * @terminal: a #VteTerminal
- *
- * Returns the file descriptor of the master end of @terminal's PTY.
- *
- * Return value: the file descriptor, or -1 if the terminal has no PTY.
- *
- * Since: 0.20
- *
- * Deprecated: 0.26: Use vte_terminal_get_pty_object() and vte_pty_get_fd()
- */
-int
-vte_terminal_get_pty(VteTerminal *terminal)
-{
-        VteTerminalPrivate *pvt;
-
-        g_return_val_if_fail (VTE_IS_TERMINAL (terminal), -1);
-
-        pvt = terminal->pvt;
-        if (pvt->pty != NULL)
-                return vte_pty_get_fd(pvt->pty);
-
-        return -1;
-}
-
-/**
- * vte_terminal_get_pty_object:
- * @terminal: a #VteTerminal
- *
- * Returns the #VtePty of @terminal.
- *
- * Returns: (transfer none): a #VtePty, or %NULL
- *
- * Since: 0.26
- */
-VtePty *
-vte_terminal_get_pty_object(VteTerminal *terminal)
-{
-        g_return_val_if_fail (VTE_IS_TERMINAL (terminal), NULL);
-
-        return terminal->pvt->pty;
-}
-
-/**
  * vte_terminal_get_child_exit_status:
  * @terminal: a #VteTerminal
  *
@@ -13856,7 +13783,6 @@ vte_terminal_write_contents (VteTerminal *terminal,
  */
 
 /* TODO Add properties & signals */
-
 /**
  * vte_terminal_search_set_gregex 
  */
@@ -14125,6 +14051,10 @@ vte_terminal_search_find_next (VteTerminal *terminal)
 	return vte_terminal_search_find (terminal, FALSE);
 }
 
+
+//moved:vte_terminal_set_pty:terminal.c
+//moved:vte_terminal_get_pty:terminal.c
+//moved:vte_terminal_get_pty_object:terminal.c
 //moved:get_chunk:terminal.c
 //moved:mark_input_source_invalid:terminal.c
 //moved:need_processing:terminal.c
