@@ -886,7 +886,7 @@ skip_chunk:
 #endif
 
 			/* Insert the character. */
-			if (G_UNLIKELY (_vte_terminal_insert_char(terminal, c,
+			if (G_UNLIKELY (_vte_terminal_insert_char(outer, c,
 						 FALSE, FALSE))) {
 #ifndef RARXXX
 				/* line wrapped, correct bbox */
@@ -2093,7 +2093,7 @@ vte_terminal_send(RarTerminal *terminal, const char *encoding,
 				int len;
 				len = g_utf8_strlen(cooked, cooked_length);
 				for (i = 0; i < len; i++) {
-					_vte_terminal_insert_char(terminal,
+					_vte_terminal_insert_char(terminal->pvt->outer,
 								 ucs4[i],
 								 FALSE,
 								 TRUE);

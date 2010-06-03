@@ -9,9 +9,9 @@ _vte_terminal_handle_sequence (RarOuter *outer,
 
 gboolean
 
-_vte_terminal_insert_char(RarTerminal *terminal, gunichar c, gboolean insert, gboolean invalidate_now);
+_vte_terminal_insert_char(RarOuter *outer, gunichar c, gboolean insert, gboolean invalidate_now);
 
-void _vte_terminal_queue_contents_changed(RarTerminal *terminal);
+void _vte_terminal_queue_contents_changed(RarOuter *outer);
 
 #endif // __RSEQ_VTE_H__
 

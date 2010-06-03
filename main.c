@@ -13,7 +13,6 @@
 static gboolean
 app_close (gpointer loop)
 {
-	printf ("\n");
 	//printf ("quitting app_close\n");
 	g_main_loop_quit (loop);
 	return FALSE;
@@ -35,7 +34,7 @@ term_work (gpointer data)
 
 	if (count == 12) {
 		char buffer[20];
-		sprintf (buffer, "ls -la\n");
+		sprintf (buffer, "ls -la --color ~/bin\n");
 
 		vte_terminal_feed_child (term, buffer, strlen (buffer));
 	}

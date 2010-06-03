@@ -6,6 +6,7 @@
 #include "debug.h"
 #include "vtetc.h"
 #include "screen.h"
+#include "iso2022.h"
 
 #ifdef RARXXX // copied from vteseq.c
 /* Typedef the handle type */
@@ -33,6 +34,355 @@ typedef enum _VteKeymode {
 
 /* Missing functions */
 /**
+ * _vte_terminal_ring_insert 
+ */
+VteRowData *
+_vte_terminal_ring_insert (RarOuter *outer, glong position, gboolean fill)
+{
+	VteRowData *row;
+	VteRing *ring = outer->screen->row_data;
+	while (G_UNLIKELY (_vte_ring_next (ring) < position)) {
+		row = _vte_ring_append (ring);
+		_vte_row_data_fill (row, &outer->screen->fill_defaults, outer->column_count);
+	}
+	row = _vte_ring_insert (ring, position);
+	if (fill)
+		_vte_row_data_fill (row, &outer->screen->fill_defaults, outer->column_count);
+	return row;
+}
+
+/**
+ * _vte_terminal_ring_remove 
+ */
+void
+_vte_terminal_ring_remove (RarOuter *outer, glong position)
+{
+	_vte_ring_remove (outer->screen->row_data, position);
+}
+
+/**
+ * _vte_terminal_ring_append 
+ */
+VteRowData *
+_vte_terminal_ring_append (RarOuter *outer, gboolean fill)
+{
+	return _vte_terminal_ring_insert (outer, _vte_ring_next (outer->screen->row_data), fill);
+}
+
+/**
+ * _vte_invalidate_cells
+ * Cause certain cells to be repainted.
+ */
+void
+_vte_invalidate_cells(RarOuter *outer,
+		      glong column_start, gint column_count,
+		      glong row_start, gint row_count)
+{
+	//printf ("Entering: %s\n", __FUNCTION__);
+#if 0
+	GdkRectangle rect;
+	glong i;
+
+	if (!column_count || !row_count) {
+		return;
+	}
+
+	if (G_UNLIKELY (!GTK_WIDGET_DRAWABLE(terminal) ||
+				terminal->pvt->invalidated_all)) {
+		return;
+	}
+
+	_vte_debug_print (VTE_DEBUG_UPDATES,
+			"Invalidating cells at (%ld,%ld+%ld)x(%d,%d).\n",
+			column_start, row_start,
+			(long)terminal->pvt->screen->scroll_delta,
+			column_count, row_count);
+	_vte_debug_print (VTE_DEBUG_WORK, "?");
+
+	/* Subtract the scrolling offset from the row start so that the
+	 * resulting rectangle is relative to the visible portion of the
+	 * buffer. */
+	row_start -= terminal->pvt->screen->scroll_delta;
+
+	/* Ensure the start of region is on screen */
+	if (column_start > terminal->column_count ||
+			row_start > terminal->row_count) {
+		return;
+	}
+
+	/* Clamp the start values to reasonable numbers. */
+	i = row_start + row_count;
+	row_start = MAX (0, row_start);
+	row_count = CLAMP (i - row_start, 0, terminal->row_count);
+
+	i = column_start + column_count;
+	column_start = MAX (0, column_start);
+	column_count = CLAMP (i - column_start, 0 , terminal->column_count);
+
+	if (!column_count || !row_count) {
+		return;
+	}
+	if (column_count == terminal->column_count &&
+			row_count == terminal->row_count) {
+		_vte_invalidate_all (terminal);
+		return;
+	}
+
+	/* Convert the column and row start and end to pixel values
+	 * by multiplying by the size of a character cell.
+	 * Always include the extra pixel border and overlap pixel.
+	 */
+	rect.x = column_start * terminal->char_width - 1;
+	if (column_start != 0) {
+		rect.x += terminal->pvt->inner_border.left;
+	}
+	rect.width = (column_start + column_count) * terminal->char_width + 3 + terminal->pvt->inner_border.left;
+	if (column_start + column_count == terminal->column_count) {
+		rect.width += terminal->pvt->inner_border.right;
+	}
+	rect.width -= rect.x;
+
+	rect.y = row_start * terminal->char_height - 1;
+	if (row_start != 0) {
+		rect.y += terminal->pvt->inner_border.top;
+	}
+	rect.height = (row_start + row_count) * terminal->char_height + 2 + terminal->pvt->inner_border.top;
+	if (row_start + row_count == terminal->row_count) {
+		rect.height += terminal->pvt->inner_border.bottom;
+	}
+	rect.height -= rect.y;
+
+	_vte_debug_print (VTE_DEBUG_UPDATES,
+			"Invalidating pixels at (%d,%d)x(%d,%d).\n",
+			rect.x, rect.y, rect.width, rect.height);
+
+	if (terminal->pvt->active != NULL) {
+		terminal->pvt->update_regions = g_slist_prepend (
+				terminal->pvt->update_regions,
+				gdk_region_rectangle (&rect));
+		/* Wait a bit before doing any invalidation, just in
+		 * case updates are coming in really soon. */
+		add_update_timeout (terminal);
+	} else {
+		gdk_window_invalidate_rect (terminal->widget.window,
+				&rect, FALSE);
+	}
+
+	_vte_debug_print (VTE_DEBUG_WORK, "!");
+#endif
+}
+
+/**
+ * _vte_terminal_find_row_data_writable 
+ * Find the row in the given position in the backscroll buffer.
+ */
+static inline VteRowData *
+_vte_terminal_find_row_data_writable (RarOuter *outer, glong row)
+{
+	//printf ("Entering: %s\n", __FUNCTION__);
+	VteRowData *rowdata = NULL;
+	RarScreen *screen = outer->screen;
+	if (G_LIKELY (_vte_ring_contains (screen->row_data, row))) {
+		rowdata = _vte_ring_index_writable (screen->row_data, row);
+	}
+	return rowdata;
+}
+
+/**
+ * vte_terminal_insert_rows 
+ */
+static inline VteRowData *
+vte_terminal_insert_rows (RarOuter *outer, guint cnt)
+{
+	VteRowData *row;
+	do {
+		row = _vte_terminal_ring_append (outer, FALSE);
+	} while(--cnt);
+	return row;
+}
+
+/**
+ * _vte_terminal_adjust_adjustments
+ */
+/*static*/ void
+_vte_terminal_adjust_adjustments(RarOuter *outer)
+{
+	//RARXXX printf ("NOT IMPL: %s\n", __FUNCTION__);
+}
+
+/**
+ * _vte_terminal_ensure_row 
+ * Make sure we have enough rows and columns to hold data at the current
+ * cursor position.
+ */
+VteRowData *
+_vte_terminal_ensure_row (RarOuter *outer)
+{
+	//printf ("Entering: %s\n", __FUNCTION__);
+	VteRowData *row;
+	RarScreen *screen;
+	gint delta;
+	glong v;
+
+	/* Must make sure we're in a sane area. */
+	screen = outer->screen;
+	v = screen->cursor_current.row;
+
+	/* Figure out how many rows we need to add. */
+	delta = v - _vte_ring_next(screen->row_data) + 1;
+	if (delta > 0) {
+		row = vte_terminal_insert_rows (outer, delta);
+		_vte_terminal_adjust_adjustments(outer);
+	} else {
+		/* Find the row the cursor is in. */
+		row = _vte_ring_index_writable (screen->row_data, v);
+	}
+	g_assert(row != NULL);
+
+	return row;
+}
+
+/**
+ * vte_terminal_ensure_cursor
+ */
+static VteRowData *
+vte_terminal_ensure_cursor(RarOuter *outer)
+{
+	//printf ("Entering: %s\n", __FUNCTION__);
+	VteRowData *row;
+
+	row = _vte_terminal_ensure_row (outer);
+	_vte_row_data_fill (row, &basic_cell.cell, outer->screen->cursor_current.col);
+
+	return row;
+}
+
+/**
+ * _vte_terminal_scroll_region 
+ */
+/*static*/ void
+_vte_terminal_scroll_region (RarOuter *outer, long row, glong count, glong delta)
+{
+	printf ("NOT IMPL: %s\n", __FUNCTION__);
+}
+
+/**
+ * _vte_terminal_update_insert_delta
+ * Update the insert delta so that the screen which includes it also
+ * includes the end of the buffer.
+ */
+void
+_vte_terminal_update_insert_delta(RarOuter *outer)
+{
+	long delta, rows;
+	RarScreen *screen;
+
+	screen = outer->screen;
+
+	/* The total number of lines.  Add one to the cursor offset
+	 * because it's zero-based. */
+	rows = _vte_ring_next (screen->row_data);
+	delta = screen->cursor_current.row - rows + 1;
+	if (G_UNLIKELY (delta > 0)) {
+		vte_terminal_insert_rows (outer, delta);
+		rows = _vte_ring_next (screen->row_data);
+	}
+
+	/* Make sure that the bottom row is visible, and that it's in
+	 * the buffer (even if it's empty).  This usually causes the
+	 * top row to become a history-only row. */
+	delta = screen->insert_delta;
+	delta = MIN(delta, rows - outer->row_count);
+	delta = MAX(delta,
+		    screen->cursor_current.row - (outer->row_count - 1));
+	delta = MAX(delta, _vte_ring_delta(screen->row_data));
+
+	/* Adjust the insert delta and scroll if needed. */
+	if (delta != screen->insert_delta) {
+		screen->insert_delta = delta;
+		_vte_terminal_adjust_adjustments(outer);
+	}
+}
+
+/**
+ * _vte_terminal_cursor_down 
+ * Cursor down, with scrolling.
+ */
+void
+_vte_terminal_cursor_down (RarOuter *outer)
+{
+	//printf ("Entering: %s\n", __FUNCTION__);
+	long start, end;
+	RarScreen *screen;
+
+	screen = outer->screen;
+
+	if (screen->scrolling_restricted) {
+		start = screen->insert_delta + screen->scrolling_region.start;
+		end = screen->insert_delta + screen->scrolling_region.end;
+	} else {
+		start = screen->insert_delta;
+		end = start + outer->row_count - 1;
+	}
+	if (screen->cursor_current.row == end) {
+		/* Match xterm and fill to the end of row when scrolling. */
+		if (screen->fill_defaults.attr.back != VTE_DEF_BG) {
+			VteRowData *rowdata;
+			rowdata = _vte_terminal_ensure_row (outer);
+			_vte_row_data_fill (rowdata, &screen->fill_defaults, outer->column_count);
+		}
+
+		if (screen->scrolling_restricted) {
+			if (start == screen->insert_delta) {
+				/* Scroll this line into the scrollback
+				 * buffer by inserting a line at the next
+				 * line and scrolling the area up. */
+				screen->insert_delta++;
+				screen->scroll_delta++;
+				screen->cursor_current.row++;
+				/* update start and end, as they are relative
+				 * to insert_delta. */
+				start++;
+				end++;
+				_vte_terminal_ring_insert (outer, screen->cursor_current.row, FALSE);
+				/* Force the areas below the region to be
+				 * redrawn -- they've moved. */
+				_vte_terminal_scroll_region(outer, start,
+							    end - start + 1, 1);
+				/* Force scroll. */
+				_vte_terminal_adjust_adjustments(outer);
+			} else {
+				/* If we're at the bottom of the scrolling
+				 * region, add a line at the top to scroll the
+				 * bottom off. */
+				_vte_terminal_ring_remove (outer, start);
+				_vte_terminal_ring_insert (outer, end, TRUE);
+				/* Update the display. */
+				_vte_terminal_scroll_region(outer, start,
+							   end - start + 1, -1);
+				_vte_invalidate_cells(outer,
+						      0, outer->column_count,
+						      end - 2, 2);
+			}
+		} else {
+			/* Scroll up with history. */
+			screen->cursor_current.row++;
+			_vte_terminal_update_insert_delta(outer);
+		}
+
+		/* Match xterm and fill the new row when scrolling. */
+		if (screen->fill_defaults.attr.back != VTE_DEF_BG) {
+			VteRowData *rowdata;
+			rowdata = _vte_terminal_ensure_row (outer);
+			_vte_row_data_fill (rowdata, &screen->fill_defaults, outer->column_count);
+		}
+	} else {
+		/* Otherwise, just move the cursor down. */
+		screen->cursor_current.row++;
+	}
+}
+
+/**
  * _vte_invalidate_all
  */
 /*static*/ void
@@ -42,40 +392,37 @@ _vte_invalidate_all(RarOuter *outer)
 }
 
 /**
- * _vte_invalidate_cells
- */
-/*static*/ void
-_vte_invalidate_cells(RarOuter *outer, glong column_start, gint column_count, glong row_start, gint row_count)
-{
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
-}
-
-/**
- * _vte_terminal_adjust_adjustments
- */
-/*static*/ void
-_vte_terminal_adjust_adjustments(RarOuter *outer)
-{
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
-}
-
-/**
  * _vte_terminal_cleanup_tab_fragments_at_cursor 
+ * Cleanup smart-tabs.  See vte_sequence_handler_ta()
  */
-/*static*/ void
+void
 _vte_terminal_cleanup_tab_fragments_at_cursor (RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
-}
+	VteRowData *row = _vte_terminal_ensure_row (outer);
+	RarScreen *screen = outer->screen;
+	long col = screen->cursor_current.col;
+	const VteCell *pcell = _vte_row_data_get (row, col);
 
-/**
- * _vte_terminal_cursor_down 
- */
-/*static*/ void
-_vte_terminal_cursor_down (RarOuter *outer)
-{
-	//printf ("NOT IMPL: %s\n", __FUNCTION__);
-	printf ("\n");
+	if (G_UNLIKELY (pcell != NULL && pcell->c == '\t')) {
+		long i, num_columns;
+		VteCell *cell = _vte_row_data_get_writable (row, col);
+		
+		_vte_debug_print(VTE_DEBUG_MISC,
+				 "Cleaning tab fragments at %ld",
+				 col);
+
+		/* go back to the beginning of the tab */
+		while (cell->attr.fragment && col > 0)
+			cell = _vte_row_data_get_writable (row, --col);
+
+		num_columns = cell->attr.columns;
+		for (i = 0; i < num_columns; i++) {
+			cell = _vte_row_data_get_writable (row, col++);
+			if (G_UNLIKELY (!cell))
+			  break;
+			*cell = screen->fill_defaults;
+		}
+	}
 }
 
 /**
@@ -97,16 +444,6 @@ _vte_terminal_emit_text_inserted(RarOuter *outer)
 }
 
 /**
- * _vte_terminal_ensure_row 
- */
-/*static*/ VteRowData *
-_vte_terminal_ensure_row (RarOuter *outer)
-{
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
-	return NULL;
-}
-
-/**
  * _vte_terminal_get_tabstop
  */
 /*static*/ gboolean
@@ -118,13 +455,242 @@ _vte_terminal_get_tabstop(RarOuter *outer, int column)
 
 /**
  * _vte_terminal_insert_char
+ * Insert a single character into the stored data array.
  */
 /*static*/ gboolean
-_vte_terminal_insert_char(RarOuter *outer, gunichar c, gboolean insert, gboolean invalidate_now)
+_vte_terminal_insert_char(RarOuter *outer, gunichar c,
+			 gboolean insert, gboolean invalidate_now)
 {
-	//printf ("NOT IMPL: %s\n", __FUNCTION__);
-	printf ("%c", c);
-	return FALSE;
+	VteCellAttr attr;
+	VteRowData *row;
+	long col;
+	int columns, i;
+	RarScreen *screen;
+	gboolean line_wrapped = FALSE; /* cursor moved before char inserted */
+
+	screen = outer->screen;
+	insert |= screen->insert_mode;
+	invalidate_now |= insert;
+
+	/* If we've enabled the special drawing set, map the characters to
+	 * Unicode. */
+	if (G_UNLIKELY (screen->alternate_charset)) {
+		_vte_debug_print(VTE_DEBUG_SUBSTITUTION,
+				"Attempting charset substitution"
+				"for U+%04X.\n", c);
+		/* See if there's a mapping for it. */
+		//RARXXX c = _vte_iso2022_process_single(terminal->pvt->iso2022, c, '0');
+	}
+
+	/* If this character is destined for the status line, save it. */
+	if (G_UNLIKELY (screen->status_line)) {
+		g_string_append_unichar(screen->status_line_contents, c);
+		screen->status_line_changed = TRUE;
+		return FALSE;
+	}
+
+	/* Figure out how many columns this character should occupy. */
+	if (G_UNLIKELY (VTE_ISO2022_HAS_ENCODED_WIDTH(c))) {
+		columns = _vte_iso2022_get_encoded_width(c);
+		c &= ~VTE_ISO2022_ENCODED_WIDTH_MASK;
+	} else {
+#ifdef RARXXX
+		columns = 1;
+#else
+		columns = _vte_iso2022_unichar_width(terminal->pvt->iso2022, c);
+#endif
+	}
+
+	/* If we're autowrapping here, do it. */
+	col = screen->cursor_current.col;
+	if (G_UNLIKELY (columns && col + columns > outer->column_count)) {
+		if (outer->flags.am) {
+			_vte_debug_print(VTE_DEBUG_ADJ,
+					"Autowrapping before character\n");
+			/* Wrap. */
+			/* XXX clear to the end of line */
+			col = screen->cursor_current.col = 0;
+			/* Mark this line as soft-wrapped. */
+			row = _vte_terminal_ensure_row (outer);
+			row->attr.soft_wrapped = 1;
+			_vte_terminal_cursor_down (outer);
+		} else {
+			/* Don't wrap, stay at the rightmost column. */
+			col = screen->cursor_current.col =
+				outer->column_count - columns;
+		}
+		line_wrapped = TRUE;
+	}
+
+	_vte_debug_print(VTE_DEBUG_PARSE,
+			"Inserting %ld '%c' (%d/%d) (%ld+%d, %ld), delta = %ld; ",
+			(long)c, c < 256 ? c : ' ',
+			screen->defaults.attr.fore,
+			screen->defaults.attr.back,
+			col, columns, (long)screen->cursor_current.row,
+			(long)screen->insert_delta);
+
+	if (G_UNLIKELY (columns == 0)) {
+
+		/* It's a combining mark */
+
+		long row_num;
+		VteCell *cell;
+
+		_vte_debug_print(VTE_DEBUG_PARSE, "combining U+%04X", c);
+
+		row_num = screen->cursor_current.row;
+		row = NULL;
+		if (G_UNLIKELY (col == 0)) {
+			/* We are at first column.  See if the previous line softwrapped.
+			 * If it did, move there.  Otherwise skip inserting. */
+
+			if (G_LIKELY (row_num > 0)) {
+				row_num--;
+				row = _vte_terminal_find_row_data_writable (outer, row_num);
+
+				if (row) {
+					if (!row->attr.soft_wrapped)
+						row = NULL;
+					else
+						col = _vte_row_data_length (row);
+				}
+			}
+		} else {
+			row = _vte_terminal_find_row_data_writable (outer, row_num);
+		}
+
+		if (G_UNLIKELY (!row || !col))
+			goto not_inserted;
+
+		/* Combine it on the previous cell */
+
+		col--;
+		cell = _vte_row_data_get_writable (row, col);
+
+		if (G_UNLIKELY (!cell))
+			goto not_inserted;
+
+		/* Find the previous cell */
+		while (cell && cell->attr.fragment && col > 0)
+			cell = _vte_row_data_get_writable (row, --col);
+		if (G_UNLIKELY (!cell || cell->c == '\t'))
+			goto not_inserted;
+
+		/* Combine the new character on top of the cell string */
+		c = _vte_unistr_append_unichar (cell->c, c);
+
+		/* And set it */
+		columns = cell->attr.columns;
+		for (i = 0; i < columns; i++) {
+			cell = _vte_row_data_get_writable (row, col++);
+			cell->c = c;
+		}
+
+		/* Always invalidate since we put the mark on the *previous* cell
+		 * and the higher level code doesn't know this. */
+		_vte_invalidate_cells(outer,
+				      col - columns,
+				      columns,
+				      row_num, 1);
+
+		goto done;
+	}
+
+	/* Make sure we have enough rows to hold this data. */
+	row = vte_terminal_ensure_cursor (outer);
+	g_assert(row != NULL);
+
+	_vte_terminal_cleanup_tab_fragments_at_cursor (outer);
+
+	if (insert) {
+		for (i = 0; i < columns; i++)
+			_vte_row_data_insert (row, col + i, &screen->color_defaults);
+	} else {
+		_vte_row_data_fill (row, &basic_cell.cell, col + columns);
+	}
+
+	/* Convert any wide characters we may have broken into single
+	 * cells. (#514632) */
+	if (G_LIKELY (col > 0)) {
+		glong col2 = col - 1;
+		VteCell *cell = _vte_row_data_get_writable (row, col2);
+		while (col2 > 0 && cell != NULL && cell->attr.fragment)
+			cell = _vte_row_data_get_writable (row, --col2);
+		cell->attr.columns = col - col2;
+	}
+	{
+		glong col2 = col + columns;
+		VteCell *cell = _vte_row_data_get_writable (row, col2);
+		while (cell != NULL && cell->attr.fragment) {
+			cell->attr.columns = 1;
+			cell->c = 0;
+			cell = _vte_row_data_get_writable (row, ++col2);
+		}
+	}
+
+	attr = screen->defaults.attr;
+	attr.columns = columns;
+
+	if (G_UNLIKELY (c == '_' && outer->flags.ul)) {
+		const VteCell *pcell = _vte_row_data_get (row, col);
+		/* Handle overstrike-style underlining. */
+		if (pcell->c != 0) {
+			/* restore previous contents */
+			c = pcell->c;
+			attr.columns = pcell->attr.columns;
+			attr.fragment = pcell->attr.fragment;
+
+			attr.underline = 1;
+		}
+	}
+
+	{
+		VteCell *pcell = _vte_row_data_get_writable (row, col);
+		pcell->c = c;
+		pcell->attr = attr;
+		col++;
+	}
+
+	/* insert wide-char fragments */
+	attr.fragment = 1;
+	for (i = 1; i < columns; i++) {
+		VteCell *pcell = _vte_row_data_get_writable (row, col);
+		pcell->c = c;
+		pcell->attr = attr;
+		col++;
+	}
+	_vte_row_data_shrink (row, outer->column_count);
+
+	/* Signal that this part of the window needs drawing. */
+	if (G_UNLIKELY (invalidate_now)) {
+		_vte_invalidate_cells(outer,
+				col - columns,
+				insert ? outer->column_count : columns,
+				screen->cursor_current.row, 1);
+	}
+
+	/* If we're autowrapping *here*, do it. */
+	screen->cursor_current.col = col;
+	if (G_UNLIKELY (col >= outer->column_count)) {
+		if (outer->flags.am && !outer->flags.xn) {
+			/* Wrap. */
+			screen->cursor_current.col = 0;
+			/* Mark this line as soft-wrapped. */
+			row->attr.soft_wrapped = 1;
+			_vte_terminal_cursor_down (outer);
+		}
+	}
+
+done:
+	/* We added text, so make a note of it. */
+	outer->text_inserted_flag = TRUE;
+
+not_inserted:
+	_vte_debug_print(VTE_DEBUG_ADJ|VTE_DEBUG_PARSE,
+			"insertion delta => %ld.\n",
+			(long)screen->insert_delta);
+	return line_wrapped;
 }
 
 /**
@@ -146,50 +712,19 @@ vte_terminal_reset(RarOuter *outer, gboolean clear_tabstops, gboolean clear_hist
 }
 
 /**
- * _vte_terminal_ring_append 
- */
-/*static*/ VteRowData *
-_vte_terminal_ring_append (RarOuter *outer, gboolean fill)
-{
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
-	return NULL;
-}
-
-/**
- * _vte_terminal_ring_insert 
- */
-/*static*/ VteRowData *
-_vte_terminal_ring_insert (RarOuter *outer, glong position, gboolean fill)
-{
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
-	return NULL;
-}
-
-/**
- * _vte_terminal_ring_remove 
- */
-/*static*/ void
-_vte_terminal_ring_remove (RarOuter *outer, glong position)
-{
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
-}
-
-/**
- * _vte_terminal_scroll_region 
- */
-/*static*/ void
-_vte_terminal_scroll_region (RarOuter *outer, long row, glong count, glong delta)
-{
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
-}
-
-/**
  * _vte_terminal_set_default_attributes
+ * Reset defaults for character insertion.
  */
-/*static*/ void
+void
 _vte_terminal_set_default_attributes(RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	RarScreen *screen;
+
+	screen = outer->screen;
+
+	screen->defaults = basic_cell.cell;
+	screen->color_defaults = screen->defaults;
+	screen->fill_defaults = screen->defaults;
 }
 
 /**
