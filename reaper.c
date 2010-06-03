@@ -44,7 +44,7 @@ G_DEFINE_TYPE(VteReaper, vte_reaper, G_TYPE_OBJECT)
 static void
 vte_reaper_child_watch_cb(GPid pid, gint status, gpointer data)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	_vte_debug_print(VTE_DEBUG_SIGNALS,
 			"Reaper emitting child-exited signal.\n");
 	g_signal_emit_by_name(data, "child-exited", pid, status);
@@ -65,7 +65,7 @@ vte_reaper_child_watch_cb(GPid pid, gint status, gpointer data)
 int
 vte_reaper_add_child(GPid pid)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	return g_child_watch_add_full(G_PRIORITY_LOW,
 				      pid,
 				      vte_reaper_child_watch_cb,
@@ -76,7 +76,7 @@ vte_reaper_add_child(GPid pid)
 static void
 vte_reaper_init(VteReaper *reaper)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 }
 
 static GObject*
@@ -84,7 +84,7 @@ vte_reaper_constructor (GType                  type,
                         guint                  n_construct_properties,
                         GObjectConstructParam *construct_properties)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
   if (singleton_reaper) {
 	  return g_object_ref (singleton_reaper);
   } else {
@@ -99,7 +99,7 @@ vte_reaper_constructor (GType                  type,
 static void
 vte_reaper_finalize(GObject *reaper)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	G_OBJECT_CLASS(vte_reaper_parent_class)->finalize(reaper);
 	singleton_reaper = NULL;
 }
@@ -107,7 +107,7 @@ vte_reaper_finalize(GObject *reaper)
 static void
 vte_reaper_class_init(VteReaperClass *klass)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	GObjectClass *gobject_class;
 
         /**
@@ -147,7 +147,7 @@ vte_reaper_class_init(VteReaperClass *klass)
 VteReaper *
 vte_reaper_get(void)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	return g_object_new(VTE_TYPE_REAPER, NULL);
 }
 

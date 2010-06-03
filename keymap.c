@@ -55,7 +55,7 @@
 static const char *
 _vte_keysym_name(guint keyval)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	switch (keyval) {
 #include "keysyms.c"
 		default:
@@ -71,7 +71,7 @@ _vte_keysym_print(guint keyval,
 		gboolean legacy_mode,
 		gboolean vt220_mode)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	g_printerr("Mapping ");
 	if (modifiers & GDK_CONTROL_MASK) {
 		g_printerr("Control+");
@@ -1007,7 +1007,7 @@ _vte_keymap_map(guint keyval,
 		gssize *normal_length,
 		const char **special)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	gsize i;
 	const struct _vte_keymap_entry *entries;
 	enum _vte_cursor_mode cursor_mode;
@@ -1218,7 +1218,7 @@ _vte_keymap_map(guint keyval,
 gboolean
 _vte_keymap_key_is_modifier(guint keyval)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	gboolean modifier = FALSE;
 	/* Determine if this is just a modifier key. */
 	switch (keyval) {
@@ -1262,7 +1262,7 @@ _vte_keymap_key_is_modifier(guint keyval)
 static gboolean
 _vte_keymap_key_gets_modifiers(guint keyval)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	gboolean fkey = FALSE;
 	/* Determine if this key gets modifiers. */
 	switch (keyval) {
@@ -1330,7 +1330,7 @@ _vte_keymap_key_gets_modifiers(guint keyval)
 static gboolean
 is_cursor_key(guint keyval)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	switch (keyval) {
 	case GDK_Home:
 	case GDK_Left:
@@ -1363,7 +1363,7 @@ _vte_keymap_key_add_key_modifiers(guint keyval,
 				  char **normal,
 				  gssize *normal_length)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	int modifier, offset;
 	char *nnormal;
 	GdkModifierType significant_modifiers;

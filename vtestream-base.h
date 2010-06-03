@@ -52,54 +52,54 @@ G_DEFINE_ABSTRACT_TYPE (VteStream, _vte_stream, G_TYPE_OBJECT)
 static void
 _vte_stream_class_init (VteStreamClass *klass G_GNUC_UNUSED)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 }
 
 static void
 _vte_stream_init (VteStream *stream G_GNUC_UNUSED)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 }
 
 void
 _vte_stream_reset (VteStream *stream, gsize offset)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	VTE_STREAM_GET_CLASS (stream)->reset (stream, offset);
 }
 
 gsize
 _vte_stream_append (VteStream *stream, const char *data, gsize len)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	return VTE_STREAM_GET_CLASS (stream)->append (stream, data, len);
 }
 
 gboolean
 _vte_stream_read (VteStream *stream, gsize offset, char *data, gsize len)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	return VTE_STREAM_GET_CLASS (stream)->read (stream, offset, data, len);
 }
 
 void
 _vte_stream_truncate (VteStream *stream, gsize offset)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	VTE_STREAM_GET_CLASS (stream)->truncate (stream, offset);
 }
 
 void
 _vte_stream_new_page (VteStream *stream)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	VTE_STREAM_GET_CLASS (stream)->new_page (stream);
 }
 
 gsize
 _vte_stream_head (VteStream *stream)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	return VTE_STREAM_GET_CLASS (stream)->head (stream);
 }
 
@@ -108,7 +108,7 @@ _vte_stream_write_contents (VteStream *stream, GOutputStream *output,
 			    gsize start_offset,
 			    GCancellable *cancellable, GError **error)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	return VTE_STREAM_GET_CLASS (stream)->write_contents (stream, output,
 							      start_offset,
 							      cancellable, error);

@@ -53,7 +53,7 @@ enum
 GObject *
 rar_view_new(void)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	return g_object_new(RAR_TYPE_VIEW, NULL);
 }
 
@@ -63,7 +63,7 @@ rar_view_new(void)
 void
 rar_view_init(RarView *view)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	RarViewPrivate *pvt;
 
 	/* Initialize private data. */
@@ -77,7 +77,7 @@ rar_view_init(RarView *view)
 static void
 rar_view_dispose (GObject *gobject)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 #if 0
 	/* 
 	 * In dispose, you are supposed to free all types referenced from this
@@ -107,8 +107,7 @@ rar_view_dispose (GObject *gobject)
 static void
 rar_view_finalize(GObject *object)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
-	printf ("%s: %p dying\n", __FUNCTION__, object);
+	//printf ("%s: %p dying\n", __FUNCTION__, object);
 
 	/*
 	RarView *view = RAR_VIEW (object);
@@ -130,7 +129,7 @@ rar_view_get_property (GObject *object,
                            GValue *value,
                            GParamSpec *pspec)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
         //RarView *view = RAR_VIEW (object);
         //RarViewPrivate *pvt = view->pvt;
 
@@ -151,7 +150,7 @@ rar_view_set_property (GObject *object,
                            const GValue *value,
                            GParamSpec *pspec)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
         //RarView *view = RAR_VIEW (object);
 
 	switch (prop_id)
@@ -168,7 +167,7 @@ rar_view_set_property (GObject *object,
 void
 rar_view_class_init(RarViewClass *klass)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	GObjectClass *gobject_class;
 
 	g_type_class_add_private(klass, sizeof (RarViewPrivate));
@@ -192,8 +191,7 @@ rar_view_class_init(RarViewClass *klass)
 void
 rar_view_set_follow_cursor (RarView *view, gboolean follow)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
-	printf ("%s: %s\n", __FUNCTION__, follow ? "TRUE" : "FALSE");
+	//printf ("%s: %s\n", __FUNCTION__, follow ? "TRUE" : "FALSE");
 }
 
 /**
@@ -202,8 +200,7 @@ rar_view_set_follow_cursor (RarView *view, gboolean follow)
 void
 rar_view_send_text (RarView *view, const char *text)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
-	printf ("%s: %s", __FUNCTION__, text);
+	//printf ("%s: %s", __FUNCTION__, text);
 }
 
 /**
@@ -212,10 +209,9 @@ rar_view_send_text (RarView *view, const char *text)
 int
 rar_view_get_height (RarView *view)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
 	int height = 24;
 
-	printf ("%s: height %d\n", __FUNCTION__, height);
+	//printf ("%s: height %d\n", __FUNCTION__, height);
 	return height;
 }
 
@@ -225,10 +221,9 @@ rar_view_get_height (RarView *view)
 int
 rar_view_get_top_row (RarView *view)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
 	int top_row = 42;
 
-	printf ("%s: top row %d\n", __FUNCTION__, top_row);
+	//printf ("%s: top row %d\n", __FUNCTION__, top_row);
 	return top_row;
 }
 
@@ -238,10 +233,9 @@ rar_view_get_top_row (RarView *view)
 char *
 rar_view_get_text_row (RarView *view, int row)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
 	const char *text = "-rw-r-----. 1   434 2010-05-20 17:35 Makefile";
 
-	printf ("%s: row %d: %s\n", __FUNCTION__, row, text);
+	//printf ("%s: row %d: %s\n", __FUNCTION__, row, text);
 	return strdup (text);
 }
 

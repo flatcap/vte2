@@ -94,7 +94,7 @@ GHashTable *unistr_comp;
 static guint
 unistr_comp_hash (gconstpointer key)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	struct VteUnistrDecomp *decomp;
 	decomp = &DECOMP_FROM_INDEX (GPOINTER_TO_UINT (key));
 	return decomp->prefix ^ decomp->suffix;
@@ -103,7 +103,7 @@ unistr_comp_hash (gconstpointer key)
 static gboolean
 unistr_comp_equal (gconstpointer a, gconstpointer b)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	return 0 == memcmp (&DECOMP_FROM_INDEX (GPOINTER_TO_UINT (a)),
 			    &DECOMP_FROM_INDEX (GPOINTER_TO_UINT (b)),
 			    sizeof (struct VteUnistrDecomp));
@@ -112,7 +112,7 @@ unistr_comp_equal (gconstpointer a, gconstpointer b)
 vteunistr
 _vte_unistr_append_unichar (vteunistr s, gunichar c)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	struct VteUnistrDecomp decomp;
 	vteunistr ret = 0;
 
@@ -146,7 +146,7 @@ _vte_unistr_append_unichar (vteunistr s, gunichar c)
 gunichar
 _vte_unistr_get_base (vteunistr s)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	g_return_val_if_fail (s < unistr_next, s);
 	while (G_UNLIKELY (s >= VTE_UNISTR_START))
 		s = DECOMP_FROM_UNISTR (s).prefix;
@@ -156,7 +156,7 @@ _vte_unistr_get_base (vteunistr s)
 void
 _vte_unistr_append_to_string (vteunistr s, GString *gs)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	g_return_if_fail (s < unistr_next);
 	if (G_UNLIKELY (s >= VTE_UNISTR_START)) {
 		struct VteUnistrDecomp *decomp;
@@ -170,7 +170,7 @@ _vte_unistr_append_to_string (vteunistr s, GString *gs)
 int
 _vte_unistr_strlen (vteunistr s)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);e
+	//printf ("Entering: %s\n", __FUNCTION__);
 	int len = 1;
 	g_return_val_if_fail (s < unistr_next, len);
 	while (G_UNLIKELY (s >= VTE_UNISTR_START)) {
