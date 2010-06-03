@@ -2523,7 +2523,7 @@ vte_terminal_set_termcap(RarTerminal *terminal, const char *path,
 static void
 vte_terminal_emit_emulation_changed(RarTerminal *terminal)
 {
-#ifndef RAR
+#ifndef RARXXX
 	_vte_debug_print(VTE_DEBUG_SIGNALS,
 			"Emitting `emulation-changed'.\n");
 	g_signal_emit_by_name(terminal, "emulation-changed");

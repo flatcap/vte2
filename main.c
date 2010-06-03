@@ -31,7 +31,7 @@ term_work (gpointer data)
 	RarTerminal *term = RAR_TERMINAL (data);
 
 	count++;
-	printf ("\e[32m%s %d\e[0m\n", __FUNCTION__, count);
+	printf ("%s %d\n", __FUNCTION__, count);
 
 	if (count == 12) {
 		char buffer[20];
