@@ -32,6 +32,9 @@
 #define VTE_ROWS			24
 #define VTE_COLUMNS			80
 #define VTE_SCROLLBACK_INIT		100
+#define VTE_UTF8_BPC                    (6) /* Maximum number of bytes used per UTF-8 character */
+#define VTE_CHILD_OUTPUT_PRIORITY	G_PRIORITY_HIGH
+
 typedef struct _GdkPoint
 {
 	gint x;
@@ -783,7 +786,7 @@ skip_chunk:
 		if ((match != NULL) && (match[0] != '\0')) {
 			/* Call the right sequence handler for the requested
 			 * behavior. */
-			_vte_terminal_handle_sequence(terminal,
+			_vte_terminal_handle_sequence(terminal->pvt->outer,
 						      match,
 						      quark,
 						      params);
@@ -1929,6 +1932,212 @@ vte_terminal_start_processing (RarTerminal *terminal)
 
 
 /**
+ * vte_terminal_io_write
+ * Send locally-encoded characters to the child.
+ */
+static gboolean
+vte_terminal_io_write(GIOChannel *channel,
+		      GIOCondition condition,
+		      RarTerminal *terminal)
+{
+	gssize count;
+	int fd;
+	gboolean leave_open;
+
+	fd = g_io_channel_unix_get_fd(channel);
+
+	count = write(fd, terminal->pvt->outgoing->data,
+		      _vte_buffer_length(terminal->pvt->outgoing));
+	if (count != -1) {
+		_VTE_DEBUG_IF (VTE_DEBUG_IO) {
+			gssize i;
+			for (i = 0; i < count; i++) {
+				g_printerr("Wrote %c%c\n",
+					((guint8)terminal->pvt->outgoing->data[i]) >= 32 ?
+					' ' : '^',
+					((guint8)terminal->pvt->outgoing->data[i]) >= 32 ?
+					terminal->pvt->outgoing->data[i] :
+					((guint8)terminal->pvt->outgoing->data[i])  + 64);
+			}
+		}
+		_vte_buffer_consume(terminal->pvt->outgoing, count);
+	}
+
+	if (_vte_buffer_length(terminal->pvt->outgoing) == 0) {
+		leave_open = FALSE;
+	} else {
+		leave_open = TRUE;
+	}
+
+	return leave_open;
+}
+
+/**
+ * mark_output_source_invalid
+ */
+static void
+mark_output_source_invalid(RarTerminal *terminal)
+{
+	_vte_debug_print (VTE_DEBUG_IO, "removed poll of vte_terminal_io_write\n");
+	terminal->pvt->pty_output_source = 0;
+}
+
+/**
+ * _vte_terminal_connect_pty_write
+ */
+static void
+_vte_terminal_connect_pty_write(RarTerminal *terminal)
+{
+        RarTerminalPrivate *pvt = terminal->pvt;
+
+        g_assert(pvt->pty != NULL);
+	if (terminal->pvt->pty_channel == NULL) {
+		pvt->pty_channel =
+			g_io_channel_unix_new(vte_pty_get_fd(pvt->pty));
+	}
+
+	if (terminal->pvt->pty_output_source == 0) {
+		if (vte_terminal_io_write (terminal->pvt->pty_channel,
+					     G_IO_OUT,
+					     terminal))
+		{
+			_vte_debug_print (VTE_DEBUG_IO, "polling vte_terminal_io_write\n");
+			terminal->pvt->pty_output_source =
+				g_io_add_watch_full(terminal->pvt->pty_channel,
+						    VTE_CHILD_OUTPUT_PRIORITY,
+						    G_IO_OUT,
+						    (GIOFunc) vte_terminal_io_write,
+						    terminal,
+						    (GDestroyNotify) mark_output_source_invalid);
+		}
+	}
+}
+
+/**
+ * vte_terminal_send
+ * Convert some arbitrarily-encoded data to send to the child.
+ */
+static void
+vte_terminal_send(RarTerminal *terminal, const char *encoding,
+		  const void *data, gssize length,
+		  gboolean local_echo, gboolean newline_stuff)
+{
+	gsize icount, ocount;
+	const guchar *ibuf;
+	guchar *obuf, *obufptr;
+	gchar *cooked;
+	VteConv conv;
+	long crcount, cooked_length, i;
+
+	g_assert(RAR_IS_TERMINAL(terminal));
+	g_assert(encoding && strcmp(encoding, "UTF-8") == 0);
+
+	conv = VTE_INVALID_CONV;
+	if (strcmp(encoding, "UTF-8") == 0) {
+		conv = terminal->pvt->outgoing_conv;
+	}
+	if (conv == VTE_INVALID_CONV) {
+		g_warning (_("Unable to send data to child, invalid charset convertor"));
+		return;
+	}
+
+	icount = length;
+	ibuf =  data;
+	ocount = ((length + 1) * VTE_UTF8_BPC) + 1;
+	_vte_buffer_set_minimum_size(terminal->pvt->conv_buffer, ocount);
+	obuf = obufptr = terminal->pvt->conv_buffer->data;
+
+	if (_vte_conv(conv, &ibuf, &icount, &obuf, &ocount) == (gsize)-1) {
+		g_warning(_("Error (%s) converting data for child, dropping."),
+			  g_strerror(errno));
+	} else {
+		crcount = 0;
+		if (newline_stuff) {
+			for (i = 0; i < obuf - obufptr; i++) {
+				switch (obufptr[i]) {
+				case '\015':
+					crcount++;
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		if (crcount > 0) {
+			cooked = g_malloc(obuf - obufptr + crcount);
+			cooked_length = 0;
+			for (i = 0; i < obuf - obufptr; i++) {
+				switch (obufptr[i]) {
+				case '\015':
+					cooked[cooked_length++] = '\015';
+					cooked[cooked_length++] = '\012';
+					break;
+				default:
+					cooked[cooked_length++] = obufptr[i];
+					break;
+				}
+			}
+		} else {
+			cooked = (gchar *)obufptr;
+			cooked_length = obuf - obufptr;
+		}
+		/* Tell observers that we're sending this to the child. */
+		if (cooked_length > 0) {
+#ifndef RARXXX
+			vte_terminal_emit_commit(terminal,
+						 cooked, cooked_length);
+#endif
+		}
+		/* Echo the text if we've been asked to do so. */
+		if ((cooked_length > 0) && local_echo) {
+			gunichar *ucs4;
+			ucs4 = g_utf8_to_ucs4(cooked, cooked_length,
+					      NULL, NULL, NULL);
+			if (ucs4 != NULL) {
+				int len;
+				len = g_utf8_strlen(cooked, cooked_length);
+				for (i = 0; i < len; i++) {
+					_vte_terminal_insert_char(terminal,
+								 ucs4[i],
+								 FALSE,
+								 TRUE);
+				}
+				g_free(ucs4);
+			}
+		}
+		/* If there's a place for it to go, add the data to the
+		 * outgoing buffer. */
+		if ((cooked_length > 0) && (terminal->pvt->pty != NULL)) {
+			_vte_buffer_append(terminal->pvt->outgoing,
+					   cooked, cooked_length);
+			_VTE_DEBUG_IF(VTE_DEBUG_KEYBOARD) {
+				for (i = 0; i < cooked_length; i++) {
+					if ((((guint8) cooked[i]) < 32) ||
+					    (((guint8) cooked[i]) > 127)) {
+						g_printerr(
+							"Sending <%02x> "
+							"to child.\n",
+							cooked[i]);
+					} else {
+						g_printerr(
+							"Sending '%c' "
+							"to child.\n",
+							cooked[i]);
+					}
+				}
+			}
+			/* If we need to start waiting for the child pty to
+			 * become available for writing, set that up here. */
+			_vte_terminal_connect_pty_write(terminal);
+		}
+		if (crcount > 0) {
+			g_free(cooked);
+		}
+	}
+	return;
+}
+
+/**
  * vte_terminal_feed:
  * @terminal: a #RarTerminal
  * @data: (array length=length zero-terminated=0) (element-type uint8): a string in the terminal's current encoding
@@ -1972,6 +2181,28 @@ vte_terminal_feed(RarTerminal *terminal, const char *data, glong length)
 			_vte_terminal_feed_chunks (terminal, chunk);
 		} while (1);
 		vte_terminal_start_processing (terminal);
+	}
+}
+
+/**
+ * vte_terminal_feed_child:
+ * @terminal: a #RarTerminal
+ * @text: (array length=length zero-terminated=maybe) (element-type uint8): data to send to the child
+ * @length: length of @text in bytes, or -1 if @text is NUL-terminated
+ *
+ * Sends a block of UTF-8 text to the child as if it were entered by the user
+ * at the keyboard.
+ */
+void
+vte_terminal_feed_child(RarTerminal *terminal, const char *text, glong length)
+{
+	g_return_if_fail(RAR_IS_TERMINAL(terminal));
+	if (length == ((gssize)-1)) {
+		length = strlen(text);
+	}
+	if (length > 0) {
+		vte_terminal_send(terminal, "UTF-8", text, length,
+				  FALSE, FALSE);
 	}
 }
 

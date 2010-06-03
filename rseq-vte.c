@@ -74,7 +74,8 @@ _vte_terminal_cleanup_tab_fragments_at_cursor (RarOuter *outer)
 /*static*/ void
 _vte_terminal_cursor_down (RarOuter *outer)
 {
-	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
+	//printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
+	printf ("\n");
 }
 
 /**
@@ -121,7 +122,8 @@ _vte_terminal_get_tabstop(RarOuter *outer, int column)
 /*static*/ gboolean
 _vte_terminal_insert_char(RarOuter *outer, gunichar c, gboolean insert, gboolean invalidate_now)
 {
-	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
+	//printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
+	printf ("[31m%c[0m", c);
 	return FALSE;
 }
 
@@ -776,9 +778,7 @@ vte_sequence_handler_cm (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_cr
- *
- * Carriage return.
+ * vte_sequence_handler_cr - Carriage return
  */
 static void
 vte_sequence_handler_cr (RarOuter *outer, GValueArray *params)

@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include <glib.h>
+
 #include "terminal.h"
 #include "view.h"
 
@@ -25,10 +28,17 @@ term_work (gpointer data)
 	//printf ("Entering: %s\n", __FUNCTION__);
 	static int count = 0;
 
-	//RarTerminal *term = RAR_TERMINAL (data);
+	RarTerminal *term = RAR_TERMINAL (data);
 
 	count++;
 	printf ("\e[32m%s %d\e[0m\n", __FUNCTION__, count);
+
+	if (count == 12) {
+		char buffer[1024];
+		sprintf (buffer, "ls -la\n");
+
+		vte_terminal_feed_child (term, buffer, strlen (buffer));
+	}
 
 	return TRUE;
 }

@@ -63,5 +63,7 @@ void rar_terminal_run_shell      (RarTerminal *term);
 
 RarView * rar_terminal_new_view  (RarTerminal *term);
 
+void vte_terminal_feed_child(RarTerminal *terminal, const char *text, glong length);
+
 #endif // __TERMINAL_H__
 

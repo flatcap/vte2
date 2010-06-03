@@ -2,7 +2,7 @@
 #define __RSEQ_VTE_H__
 
 void
-_vte_terminal_handle_sequence (RarTerminal *terminal,
+_vte_terminal_handle_sequence (RarOuter *outer,
 			      const char *match_s,
 			      GQuark match G_GNUC_UNUSED,
 			      GValueArray *params);
