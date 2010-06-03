@@ -38,7 +38,7 @@ typedef enum _VteKeymode {
 /*static*/ void
 _vte_invalidate_all(RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -47,7 +47,7 @@ _vte_invalidate_all(RarOuter *outer)
 /*static*/ void
 _vte_invalidate_cells(RarOuter *outer, glong column_start, gint column_count, glong row_start, gint row_count)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -56,7 +56,7 @@ _vte_invalidate_cells(RarOuter *outer, glong column_start, gint column_count, gl
 /*static*/ void
 _vte_terminal_adjust_adjustments(RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -65,7 +65,7 @@ _vte_terminal_adjust_adjustments(RarOuter *outer)
 /*static*/ void
 _vte_terminal_cleanup_tab_fragments_at_cursor (RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -74,7 +74,7 @@ _vte_terminal_cleanup_tab_fragments_at_cursor (RarOuter *outer)
 /*static*/ void
 _vte_terminal_cursor_down (RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -83,7 +83,7 @@ _vte_terminal_cursor_down (RarOuter *outer)
 /*static*/ void
 _vte_terminal_emit_text_deleted(RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -92,7 +92,7 @@ _vte_terminal_emit_text_deleted(RarOuter *outer)
 /*static*/ void
 _vte_terminal_emit_text_inserted(RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -101,7 +101,7 @@ _vte_terminal_emit_text_inserted(RarOuter *outer)
 /*static*/ VteRowData *
 _vte_terminal_ensure_row (RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 	return NULL;
 }
 
@@ -111,7 +111,7 @@ _vte_terminal_ensure_row (RarOuter *outer)
 /*static*/ gboolean
 _vte_terminal_get_tabstop(RarOuter *outer, int column)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 	return FALSE;
 }
 
@@ -121,7 +121,7 @@ _vte_terminal_get_tabstop(RarOuter *outer, int column)
 /*static*/ gboolean
 _vte_terminal_insert_char(RarOuter *outer, gunichar c, gboolean insert, gboolean invalidate_now)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 	return FALSE;
 }
 
@@ -131,7 +131,7 @@ _vte_terminal_insert_char(RarOuter *outer, gunichar c, gboolean insert, gboolean
 /*static*/ void
 _vte_terminal_queue_contents_changed(RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -140,7 +140,7 @@ _vte_terminal_queue_contents_changed(RarOuter *outer)
 /*static*/ void
 vte_terminal_reset(RarOuter *outer, gboolean clear_tabstops, gboolean clear_history)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -149,7 +149,7 @@ vte_terminal_reset(RarOuter *outer, gboolean clear_tabstops, gboolean clear_hist
 /*static*/ VteRowData *
 _vte_terminal_ring_append (RarOuter *outer, gboolean fill)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 	return NULL;
 }
 
@@ -159,7 +159,7 @@ _vte_terminal_ring_append (RarOuter *outer, gboolean fill)
 /*static*/ VteRowData *
 _vte_terminal_ring_insert (RarOuter *outer, glong position, gboolean fill)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 	return NULL;
 }
 
@@ -169,7 +169,7 @@ _vte_terminal_ring_insert (RarOuter *outer, glong position, gboolean fill)
 /*static*/ void
 _vte_terminal_ring_remove (RarOuter *outer, glong position)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -178,7 +178,7 @@ _vte_terminal_ring_remove (RarOuter *outer, glong position)
 /*static*/ void
 _vte_terminal_scroll_region (RarOuter *outer, long row, glong count, glong delta)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -187,7 +187,7 @@ _vte_terminal_scroll_region (RarOuter *outer, long row, glong count, glong delta
 /*static*/ void
 _vte_terminal_set_default_attributes(RarOuter *outer)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -196,7 +196,7 @@ _vte_terminal_set_default_attributes(RarOuter *outer)
 /*static*/ void
 _vte_terminal_set_pointer_visible(RarOuter *outer, gboolean visible)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 /**
@@ -205,7 +205,7 @@ _vte_terminal_set_pointer_visible(RarOuter *outer, gboolean visible)
 /*static*/ void
 vte_terminal_set_scrollback_lines(RarOuter *outer, glong lines)
 {
-	printf ("NOT IMPL: %s\n", __FUNCTION__);
+	printf ("[31mNOT IMPL[0m: %s\n", __FUNCTION__);
 }
 
 

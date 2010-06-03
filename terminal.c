@@ -651,7 +651,7 @@ static void
 vte_terminal_process_incoming (RarTerminal *terminal)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	//RARXXX RarOuter *outer;
+	RarOuter *outer;
 	//RARXXX VteVisualPosition cursor;
 	//RARXXX gboolean cursor_visible;
 	GdkPoint bbox_topleft, bbox_bottomright;
@@ -671,9 +671,9 @@ vte_terminal_process_incoming (RarTerminal *terminal)
 			terminal->pvt->pending->len);
 	_vte_debug_print (VTE_DEBUG_WORK, "(");
 
-#ifndef RARXXX
-	screen = terminal->pvt->screen;
+	outer = terminal->pvt->outer;
 
+#ifndef RARXXX
 	delta = outer->screen->scroll_delta;
 	bottom = outer->screen->insert_delta == delta;
 
@@ -772,7 +772,7 @@ skip_chunk:
 		const gunichar *next;
 		GValueArray *params = NULL;
 
-#ifndef RARXX
+#ifndef RARXXX
 		/* Try to match any control sequences. */
 		_vte_matcher_match(terminal->pvt->matcher,
 				   &wbuf[start],
