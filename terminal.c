@@ -6,14 +6,16 @@
 #include <wchar.h>
 #include <errno.h>
 
-#include <glib-object.h>
-#include <glib/gi18n-lib.h>
-#include <gobject/gmarshal.h>
-
 #ifdef RARXXX // Not sure these are needed /here/
 #include <unistd.h>
 #include <fcntl.h>
 #endif
+
+#include <glib.h>
+#include <glib/gstdio.h>
+#include <glib-object.h>
+#include <glib/gi18n-lib.h>
+#include <gobject/gmarshal.h>
 
 #include "debug.h"
 #include "terminal.h"
@@ -21,11 +23,14 @@
 #include "vtepty.h"
 #include "reaper.h"
 #include "iso2022.h"
+#include "rseq-vte.h"
 
 #ifdef RARXXX
 #include "vtepty-private.h"
 #define VTE_CHILD_INPUT_PRIORITY	G_PRIORITY_DEFAULT_IDLE
 #define VTE_MAX_PROCESS_TIME		100
+#define VTE_ROWS			24
+#define VTE_COLUMNS			80
 typedef struct _GdkPoint
 {
 	gint x;
@@ -77,6 +82,16 @@ static void time_process_incoming (RarTerminal *terminal);
 void vte_terminal_set_pty_object (RarTerminal *terminal, VtePty *pty);
 static void vte_terminal_eof(GIOChannel *channel, RarTerminal *terminal);
 static void vte_terminal_queue_eof(RarTerminal *terminal);
+static void _vte_terminal_codeset_changed_cb(struct _vte_iso2022_state *state, gpointer p);
+void vte_terminal_set_encoding(RarTerminal *terminal, const char *codeset);
+void vte_terminal_set_emulation(RarTerminal *terminal, const char *emulation);
+void vte_terminal_set_size(RarTerminal *terminal, glong columns, glong rows);
+const char * vte_terminal_get_default_emulation(RarTerminal *terminal);
+static void vte_terminal_set_termcap(RarTerminal *terminal, const char *path, gboolean reset);
+static void vte_terminal_emit_emulation_changed(RarTerminal *terminal);
+void _vte_terminal_inline_error_message(RarTerminal *terminal, const char *format, ...);
+static void vte_terminal_emit_text_modified(RarTerminal *terminal);
+static void vte_terminal_refresh_size(RarTerminal *terminal);
 
 /* these static variables are guarded by the GDK mutex */
 static guint process_timeout_tag = 0;
@@ -132,6 +147,53 @@ rar_terminal_init (RarTerminal *terminal)
 
 	/* Initialize private data. */
 	pvt = terminal->pvt = GET_PRIVATE (terminal);
+
+#ifndef RARXXX
+	/* Initialize the screens and histories. */
+	_vte_ring_init (pvt->alternate_screen.row_data, terminal->row_count);
+	pvt->alternate_screen.sendrecv_mode = TRUE;
+	pvt->alternate_screen.status_line_contents = g_string_new(NULL);
+	pvt->screen = &terminal->pvt->alternate_screen;
+	_vte_terminal_set_default_attributes_y(terminal);
+
+	_vte_ring_init (pvt->normal_screen.row_data,  VTE_SCROLLBACK_INIT);
+	pvt->normal_screen.sendrecv_mode = TRUE;
+	pvt->normal_screen.status_line_contents = g_string_new(NULL);
+	pvt->screen = &terminal->pvt->normal_screen;
+	_vte_terminal_set_default_attributes_y(terminal);
+#endif
+
+	/* Set up I/O encodings. */
+	pvt->iso2022 = _vte_iso2022_state_new(pvt->encoding,
+					      &_vte_terminal_codeset_changed_cb,
+					      terminal);
+	pvt->incoming = NULL;
+	pvt->pending = g_array_new(FALSE, TRUE, sizeof(gunichar));
+	pvt->max_input_bytes = VTE_MAX_INPUT_READ;
+	pvt->outgoing = _vte_buffer_new();
+	pvt->outgoing_conv = VTE_INVALID_CONV;
+	pvt->conv_buffer = _vte_buffer_new();
+	vte_terminal_set_encoding(terminal, NULL);
+	g_assert(terminal->pvt->encoding != NULL);
+
+	/* Load the termcap data and set up the emulation. */
+	//RARXXX pvt->keypad_mode = VTE_KEYMODE_NORMAL;
+	//RARXXX pvt->cursor_mode = VTE_KEYMODE_NORMAL;
+	//RARXXX pvt->dec_saved = g_hash_table_new(NULL, NULL);
+	pvt->default_column_count = VTE_COLUMNS;
+	pvt->default_row_count = VTE_ROWS;
+
+	/* Setting the terminal type and size requires the PTY master to
+	 * be set up properly first. */
+        pvt->pty = NULL;
+	vte_terminal_set_emulation(terminal, NULL);
+	vte_terminal_set_size(terminal,
+			      pvt->default_column_count,
+			      pvt->default_row_count);
+	pvt->pty_input_source = 0;
+	pvt->pty_output_source = 0;
+	pvt->pty_pid = -1;
+        pvt->child_exit_status = 0;
 
 }
 
@@ -453,6 +515,7 @@ vte_terminal_get_pty_object(RarTerminal *terminal)
         return terminal->pvt->pty;
 }
 
+
 /**
  * get_chunk
  */
@@ -575,6 +638,7 @@ _vte_incoming_chunks_reverse (struct _vte_incoming_chunk *chunk)
 	return prev;
 }
 
+
 /**
  * vte_terminal_process_incoming
  * Process incoming data, first converting it to unicode characters, and then
@@ -584,14 +648,15 @@ static void
 vte_terminal_process_incoming (RarTerminal *terminal)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-#if 0
-	RarScreen *screen;
-	VteVisualPosition cursor;
-	gboolean cursor_visible;
+	//RARXXX RarScreen *screen;
+	//RARXXX VteVisualPosition cursor;
+	//RARXXX gboolean cursor_visible;
 	GdkPoint bbox_topleft, bbox_bottomright;
 	gunichar *wbuf, c;
-	long wcount, start, delta;
-	gboolean leftovers, modified, bottom, again;
+	//RARXXX long wcount, start, delta;
+	long wcount, start;
+	//RARXXX gboolean leftovers, modified, bottom, again;
+	gboolean leftovers, modified, again;
 	gboolean invalidated_text;
 	GArray *unichars;
 	struct _vte_incoming_chunk *chunk, *next_chunk, *achunk = NULL;
@@ -603,6 +668,7 @@ vte_terminal_process_incoming (RarTerminal *terminal)
 			terminal->pvt->pending->len);
 	_vte_debug_print (VTE_DEBUG_WORK, "(");
 
+#ifndef RARXXX
 	screen = terminal->pvt->screen;
 
 	delta = screen->scroll_delta;
@@ -611,6 +677,7 @@ vte_terminal_process_incoming (RarTerminal *terminal)
 	/* Save the current cursor position. */
 	cursor = screen->cursor_current;
 	cursor_visible = terminal->pvt->cursor_visible;
+#endif
 
 	/* We should only be called when there's data to process. */
 	g_assert(terminal->pvt->incoming ||
@@ -626,9 +693,14 @@ vte_terminal_process_incoming (RarTerminal *terminal)
 		if (chunk->len == 0) {
 			goto skip_chunk;
 		}
+
+#ifdef RARXXX
+		processed = chunk->len;
+#else
 		processed = _vte_iso2022_process(terminal->pvt->iso2022,
 				chunk->data, chunk->len,
 				unichars);
+#endif
 		if (G_UNLIKELY (processed != chunk->len)) {
 			/* shuffle the data about */
 			g_memmove (chunk->data, chunk->data + processed,
@@ -692,11 +764,12 @@ skip_chunk:
 	bbox_topleft.x = bbox_topleft.y = G_MAXINT;
 
 	while (start < wcount && !leftovers) {
-		const char *match;
+		const char *match = NULL;
 		GQuark quark;
 		const gunichar *next;
 		GValueArray *params = NULL;
 
+#ifndef RARXX
 		/* Try to match any control sequences. */
 		_vte_matcher_match(terminal->pvt->matcher,
 				   &wbuf[start],
@@ -705,6 +778,7 @@ skip_chunk:
 				   &next,
 				   &quark,
 				   &params);
+#endif
 		/* We're in one of three possible situations now.
 		 * First, the match string is a non-empty string and next
 		 * points to the first character which isn't part of this
@@ -720,6 +794,7 @@ skip_chunk:
 			start = (next - wbuf);
 			modified = TRUE;
 
+#ifndef RARXXX
 			/* if we have moved during the sequence handler, restart the bbox */
 			if (invalidated_text &&
 					(screen->cursor_current.col > bbox_bottomright.x + VTE_CELL_BBOX_SLACK ||
@@ -745,6 +820,7 @@ skip_chunk:
 				bbox_bottomright.x = bbox_bottomright.y = -G_MAXINT;
 				bbox_topleft.x = bbox_topleft.y = G_MAXINT;
 			}
+#endif
 		} else
 		/* Second, we have a NULL match, and next points to the very
 		 * next character in the buffer.  Insert the character which
@@ -805,14 +881,17 @@ skip_chunk:
 				}
 			}
 
+#ifndef RARXXX
 			bbox_topleft.x = MIN(bbox_topleft.x,
 					screen->cursor_current.col);
 			bbox_topleft.y = MIN(bbox_topleft.y,
 					screen->cursor_current.row);
+#endif
 
 			/* Insert the character. */
 			if (G_UNLIKELY (_vte_terminal_insert_char(terminal, c,
 						 FALSE, FALSE))) {
+#ifndef RARXXX
 				/* line wrapped, correct bbox */
 				if (invalidated_text &&
 						(screen->cursor_current.col > bbox_bottomright.x + VTE_CELL_BBOX_SLACK	||
@@ -840,7 +919,9 @@ skip_chunk:
 				bbox_topleft.x = MIN(bbox_topleft.x, 0);
 				bbox_topleft.y = MIN(bbox_topleft.y,
 						screen->cursor_current.row);
+#endif
 			}
+#ifndef RARXXX
 			/* Add the cells over which we have moved to the region
 			 * which we need to refresh for the user. */
 			bbox_bottomright.x = MAX(bbox_bottomright.x,
@@ -848,6 +929,7 @@ skip_chunk:
 			/* cursor_current.row + 1 (defer until inv.) */
 			bbox_bottomright.y = MAX(bbox_bottomright.y,
 					screen->cursor_current.row);
+#endif
 			invalidated_text = TRUE;
 
 			/* We *don't* emit flush pending signals here. */
@@ -905,6 +987,7 @@ next_match:
 	if (modified) {
 		/* Keep the cursor on-screen if we scroll on output, or if
 		 * we're currently at the bottom of the buffer. */
+#ifndef RARXXX
 		_vte_terminal_update_insert_delta(terminal);
 		if (terminal->pvt->scroll_on_output || bottom) {
 			vte_terminal_maybe_scroll_to_bottom(terminal);
@@ -928,15 +1011,19 @@ next_match:
 			}
 			g_free(selection);
 		}
+#endif
 	}
 
+#ifndef RARXXX
 	if (modified || (screen != terminal->pvt->screen)) {
 		/* Signal that the visible contents changed. */
 		_vte_terminal_queue_contents_changed(terminal);
 	}
+#endif
 
-	vte_terminal_emit_pending_signals (terminal);
+	//RARXXX vte_terminal_emit_pending_signals (terminal);
 
+#ifndef RARXXX
 	if (invalidated_text) {
 		/* Clip off any part of the box which isn't already on-screen. */
 		bbox_topleft.x = MAX(bbox_topleft.x, 0);
@@ -953,7 +1040,6 @@ next_match:
 				bbox_topleft.y,
 				bbox_bottomright.y - bbox_topleft.y);
 	}
-
 
 	if ((cursor.col != terminal->pvt->screen->cursor_current.col) ||
 	    (cursor.row != terminal->pvt->screen->cursor_current.row)) {
@@ -979,6 +1065,7 @@ next_match:
 		gtk_im_context_set_cursor_location(terminal->pvt->im_context,
 						   &rect);
 	}
+#endif
 
 	_vte_debug_print (VTE_DEBUG_WORK, ")");
 	_vte_debug_print (VTE_DEBUG_IO,
@@ -986,7 +1073,6 @@ next_match:
 			(long) unichars->len,
 			(long) _vte_incoming_chunks_length(terminal->pvt->incoming),
 			_vte_incoming_chunks_count(terminal->pvt->incoming));
-#endif
 }
 
 /**
@@ -1889,6 +1975,391 @@ vte_terminal_feed(RarTerminal *terminal, const char *data, glong length)
 			_vte_terminal_feed_chunks (terminal, chunk);
 		} while (1);
 		vte_terminal_start_processing (terminal);
+	}
+}
+
+/**
+ * _vte_terminal_codeset_changed_cb
+ */
+static void
+_vte_terminal_codeset_changed_cb(struct _vte_iso2022_state *state, gpointer p)
+{
+	vte_terminal_set_encoding(p, _vte_iso2022_state_get_codeset(state));
+}
+
+/**
+ * vte_terminal_set_encoding:
+ * @terminal: a #RarTerminal
+ * @codeset: (allow-none): a valid #GIConv target, or %NULL to use the default encoding
+ *
+ * Changes the encoding the terminal will expect data from the child to
+ * be encoded with.  For certain terminal types, applications executing in the
+ * terminal can change the encoding.  The default encoding is defined by the
+ * application's locale settings.
+ */
+void
+vte_terminal_set_encoding(RarTerminal *terminal, const char *codeset)
+{
+        RarTerminalPrivate *pvt;
+        GObject *object;
+	const char *old_codeset;
+	VteConv conv;
+	char *obuf1, *obuf2;
+	gsize bytes_written;
+
+	g_return_if_fail(RAR_IS_TERMINAL(terminal));
+
+        object = G_OBJECT(terminal);
+        pvt = terminal->pvt;
+
+	old_codeset = pvt->encoding;
+	if (codeset == NULL) {
+		g_get_charset(&codeset);
+	}
+	if ((old_codeset != NULL) && (strcmp(codeset, old_codeset) == 0)) {
+		/* Nothing to do! */
+		return;
+	}
+
+        g_object_freeze_notify(object);
+
+	/* Open new conversions. */
+	conv = _vte_conv_open(codeset, "UTF-8");
+	if (conv == VTE_INVALID_CONV) {
+		g_warning(_("Unable to convert characters from %s to %s."),
+			  "UTF-8", codeset);
+		/* fallback to no conversion */
+		conv = _vte_conv_open(codeset = "UTF-8", "UTF-8");
+	}
+	if (terminal->pvt->outgoing_conv != VTE_INVALID_CONV) {
+		_vte_conv_close(terminal->pvt->outgoing_conv);
+	}
+	terminal->pvt->outgoing_conv = conv;
+
+	/* Set the terminal's encoding to the new value. */
+	terminal->pvt->encoding = g_intern_string(codeset);
+
+	/* Convert any buffered output bytes. */
+	if ((_vte_buffer_length(terminal->pvt->outgoing) > 0) &&
+	    (old_codeset != NULL)) {
+		/* Convert back to UTF-8. */
+		obuf1 = g_convert((gchar *)terminal->pvt->outgoing->data,
+				  _vte_buffer_length(terminal->pvt->outgoing),
+				  "UTF-8",
+				  old_codeset,
+				  NULL,
+				  &bytes_written,
+				  NULL);
+		if (obuf1 != NULL) {
+			/* Convert to the new encoding. */
+			obuf2 = g_convert(obuf1,
+					  bytes_written,
+					  codeset,
+					  "UTF-8",
+					  NULL,
+					  &bytes_written,
+					  NULL);
+			if (obuf2 != NULL) {
+				_vte_buffer_clear(terminal->pvt->outgoing);
+				_vte_buffer_append(terminal->pvt->outgoing,
+						   obuf2, bytes_written);
+				g_free(obuf2);
+			}
+			g_free(obuf1);
+		}
+	}
+
+	/* Set the encoding for incoming text. */
+	_vte_iso2022_state_set_codeset(terminal->pvt->iso2022,
+				       terminal->pvt->encoding);
+
+	_vte_debug_print(VTE_DEBUG_IO,
+			"Set terminal encoding to `%s'.\n",
+			terminal->pvt->encoding);
+	//RARXXX vte_terminal_emit_encoding_changed(terminal);
+
+        g_object_thaw_notify(object);
+}
+
+/**
+ * vte_terminal_set_emulation:
+ * @terminal: a #RarTerminal
+ * @emulation: (allow-none): the name of a terminal description, or %NULL to use the default
+ *
+ * Sets what type of terminal the widget attempts to emulate by scanning for
+ * control sequences defined in the system's termcap file.  Unless you
+ * are interested in this feature, always use "xterm".
+ */
+void
+vte_terminal_set_emulation(RarTerminal *terminal, const char *emulation)
+{
+        RarTerminalPrivate *pvt;
+        GObject *object;
+	int columns, rows;
+
+	g_return_if_fail(RAR_IS_TERMINAL(terminal));
+
+        object = G_OBJECT(terminal);
+        pvt = terminal->pvt;
+
+        g_object_freeze_notify(object);
+
+	/* Set the emulation type, for reference. */
+	if (emulation == NULL) {
+		emulation = vte_terminal_get_default_emulation(terminal);
+	}
+	terminal->pvt->screen->shared->emulation = g_intern_string(emulation);
+	_vte_debug_print(VTE_DEBUG_MISC,
+			"Setting emulation to `%s'...\n", emulation);
+	/* Find and read the right termcap file. */
+	vte_terminal_set_termcap(terminal, NULL, FALSE);
+
+	/* Create a table to hold the control sequences. */
+	if (terminal->pvt->matcher != NULL) {
+		_vte_matcher_free(terminal->pvt->matcher);
+	}
+	terminal->pvt->matcher = _vte_matcher_new(emulation, terminal->pvt->screen->shared->termcap);
+
+	if (terminal->pvt->screen->shared->termcap != NULL) {
+		/* Read emulation flags. */
+		terminal->pvt->screen->shared->flags.am = _vte_termcap_find_boolean(terminal->pvt->screen->shared->termcap,
+								    terminal->pvt->screen->shared->emulation,
+								    "am");
+		terminal->pvt->screen->shared->flags.bw = _vte_termcap_find_boolean(terminal->pvt->screen->shared->termcap,
+								    terminal->pvt->screen->shared->emulation,
+								    "bw");
+		terminal->pvt->screen->shared->flags.LP = _vte_termcap_find_boolean(terminal->pvt->screen->shared->termcap,
+								    terminal->pvt->screen->shared->emulation,
+								    "LP");
+		terminal->pvt->screen->shared->flags.ul = _vte_termcap_find_boolean(terminal->pvt->screen->shared->termcap,
+								    terminal->pvt->screen->shared->emulation,
+								    "ul");
+		terminal->pvt->screen->shared->flags.xn = _vte_termcap_find_boolean(terminal->pvt->screen->shared->termcap,
+								    terminal->pvt->screen->shared->emulation,
+								    "xn");
+
+		/* Resize to the given default. */
+		columns = _vte_termcap_find_numeric(terminal->pvt->screen->shared->termcap,
+						    terminal->pvt->screen->shared->emulation,
+						    "co");
+		if (columns <= 0) {
+			columns = VTE_COLUMNS;
+		}
+		terminal->pvt->default_column_count = columns;
+
+		rows = _vte_termcap_find_numeric(terminal->pvt->screen->shared->termcap,
+						 terminal->pvt->screen->shared->emulation,
+						 "li");
+		if (rows <= 0 ) {
+			rows = VTE_ROWS;
+		}
+		terminal->pvt->default_row_count = rows;
+	}
+
+	/* Notify observers that we changed our emulation. */
+	vte_terminal_emit_emulation_changed(terminal);
+
+        g_object_thaw_notify(object);
+}
+
+/**
+ * vte_terminal_set_size:
+ * @terminal: a #RarTerminal
+ * @columns: the desired number of columns
+ * @rows: the desired number of rows
+ *
+ * Attempts to change the terminal's size in terms of rows and columns.  If
+ * the attempt succeeds, the widget will resize itself to the proper size.
+ */
+void
+vte_terminal_set_size(RarTerminal *terminal, glong columns, glong rows)
+{
+	glong old_columns, old_rows;
+
+	g_return_if_fail(RAR_IS_TERMINAL(terminal));
+
+	_vte_debug_print(VTE_DEBUG_MISC,
+			"Setting PTY size to %ldx%ld.\n",
+			columns, rows);
+
+	old_rows = terminal->row_count;
+	old_columns = terminal->column_count;
+
+	if (terminal->pvt->pty != NULL) {
+                GError *error = NULL;
+
+		/* Try to set the terminal size, and read it back,
+		 * in case something went awry.
+                 */
+		if (!vte_pty_set_size(terminal->pvt->pty, rows, columns, &error)) {
+			g_warning("%s\n", error->message);
+                        g_error_free(error);
+		}
+		vte_terminal_refresh_size(terminal);
+	} else {
+		terminal->row_count = rows;
+		terminal->column_count = columns;
+	}
+	if (old_rows != terminal->row_count || old_columns != terminal->column_count) {
+		RarScreen *screen = terminal->pvt->screen;
+		glong visible_rows = MIN (old_rows, _vte_ring_length (screen->row_data));
+		if (terminal->row_count < visible_rows) {
+			glong delta = visible_rows - terminal->row_count;
+			screen->insert_delta += delta;
+#ifndef RARXXX
+			vte_terminal_queue_adjustment_value_changed (
+					terminal,
+					screen->scroll_delta + delta);
+#endif
+		}
+		//RARXXX gtk_widget_queue_resize_no_redraw (&terminal->widget);
+		/* Our visible text changed. */
+		vte_terminal_emit_text_modified(terminal);
+	}
+}
+
+/**
+ * vte_terminal_get_default_emulation:
+ * @terminal: a #RarTerminal
+ *
+ * Queries the terminal for its default emulation, which is attempted if the
+ * terminal type passed to vte_terminal_set_emulation() is %NULL.
+ *
+ * Returns: (transfer none) (type utf8): an interned string containing the name of the default terminal
+ *   type the widget attempts to emulate
+ *
+ * Since: 0.11.11
+ */
+const char *
+vte_terminal_get_default_emulation(RarTerminal *terminal)
+{
+	return g_intern_static_string(VTE_DEFAULT_EMULATION);
+}
+
+/**
+ * vte_terminal_set_termcap
+ * Set the path to the termcap file we read, and read it in.
+ */
+static void
+vte_terminal_set_termcap(RarTerminal *terminal, const char *path,
+			 gboolean reset)
+{
+        GObject *object = G_OBJECT(terminal);
+	struct stat st;
+	char *wpath;
+
+	if (path == NULL) {
+		wpath = g_strdup_printf(DATADIR "/" PACKAGE "/termcap/%s",
+					terminal->pvt->screen->shared->emulation ?
+					terminal->pvt->screen->shared->emulation :
+					vte_terminal_get_default_emulation(terminal));
+		if (g_stat(wpath, &st) != 0) {
+			g_free(wpath);
+			wpath = g_strdup("/etc/termcap");
+		}
+		path = g_intern_string (wpath);
+		g_free(wpath);
+	} else {
+		path = g_intern_string (path);
+	}
+	if (path == terminal->pvt->termcap_path) {
+		return;
+	}
+
+        g_object_freeze_notify(object);
+
+	terminal->pvt->termcap_path = path;
+
+	_vte_debug_print(VTE_DEBUG_MISC, "Loading termcap `%s'...",
+			terminal->pvt->termcap_path);
+	if (terminal->pvt->screen->shared->termcap != NULL) {
+		_vte_termcap_free(terminal->pvt->screen->shared->termcap);
+	}
+	terminal->pvt->screen->shared->termcap = _vte_termcap_new(terminal->pvt->termcap_path);
+	_vte_debug_print(VTE_DEBUG_MISC, "\n");
+	if (terminal->pvt->screen->shared->termcap == NULL) {
+		_vte_terminal_inline_error_message(terminal,
+				"Failed to load terminal capabilities from '%s'",
+				terminal->pvt->termcap_path);
+	}
+	if (reset) {
+		vte_terminal_set_emulation(terminal, terminal->pvt->screen->shared->emulation);
+	}
+
+        g_object_thaw_notify(object);
+}
+
+/**
+ * vte_terminal_emit_emulation_changed
+ * Emit an "emulation-changed" signal.
+ */
+static void
+vte_terminal_emit_emulation_changed(RarTerminal *terminal)
+{
+#ifndef RAR
+	_vte_debug_print(VTE_DEBUG_SIGNALS,
+			"Emitting `emulation-changed'.\n");
+	g_signal_emit_by_name(terminal, "emulation-changed");
+        g_object_notify(G_OBJECT(terminal), "emulation");
+#endif
+}
+
+/**
+ * _vte_terminal_inline_error_message
+ */
+void
+_vte_terminal_inline_error_message(RarTerminal *terminal, const char *format, ...)
+{
+	va_list ap;
+	char *str;
+
+	va_start (ap, format);
+	str = g_strdup_vprintf (format, ap);
+	va_end (ap);
+
+	vte_terminal_feed (terminal, "*** VTE ***: ", 13);
+	vte_terminal_feed (terminal, str, -1);
+	vte_terminal_feed (terminal, "\r\n", 2);
+	g_free (str);
+}
+
+/**
+ * vte_terminal_emit_text_modified
+ * Emit a "text-modified" signal.
+ */
+static void
+vte_terminal_emit_text_modified(RarTerminal *terminal)
+{
+#ifndef RARXXX
+	if (!terminal->pvt->accessible_emit) {
+		return;
+	}
+	_vte_debug_print(VTE_DEBUG_SIGNALS,
+			"Emitting `text-modified'.\n");
+	g_signal_emit_by_name(terminal, "text-modified");
+#endif
+}
+
+/**
+ * vte_terminal_refresh_size
+ * Read and refresh our perception of the size of the PTY.
+ */
+static void
+vte_terminal_refresh_size(RarTerminal *terminal)
+{
+        RarTerminalPrivate *pvt = terminal->pvt;
+	int rows, columns;
+        GError *error = NULL;
+
+        if (pvt->pty == NULL)
+                return;
+
+        if (vte_pty_get_size(pvt->pty, &rows, &columns, &error)) {
+                terminal->row_count = rows;
+                terminal->column_count = columns;
+        } else {
+                g_warning(_("Error reading PTY size, using defaults: %s\n"), error->message);
+                g_error_free(error);
 	}
 }
 

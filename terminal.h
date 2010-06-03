@@ -33,38 +33,6 @@ struct _RarTerminal {
 	Adj *adjustment;	// GtkAdjustment
 	glong column_count;
 	glong row_count;
-
-	/* There were in VtePrivate */
-	RarScreen *alternate_screen;
-	RarScreen *normal_screen;
-	int cursor_mode;
-	gboolean cursor_visible;
-	GHashTable *dec_saved;
-	const char *emulation;
-	struct vte_terminal_flags {
-		gboolean am;
-		gboolean bw;
-		gboolean LP;
-		gboolean ul;
-		gboolean xn;
-	} flags;
-	gboolean hp_fkey_mode;
-	int keypad_mode;
-	gboolean legacy_fkey_mode;
-	gboolean margin_bell;
-	gboolean meta_sends_escape;
-	int mouse_tracking_mode;
-	gboolean nrc_mode;
-	RarScreen *screen;
-	long scrollback_lines;
-	gboolean smooth_scroll;
-	gboolean sun_fkey_mode;
-	GHashTable *tabstops;
-	struct _vte_termcap *termcap;
-	gboolean text_deleted_flag;
-	gboolean text_modified_flag;
-	gboolean text_inserted_flag;
-	gboolean vt220_fkey_mode;
 };
 
 /**

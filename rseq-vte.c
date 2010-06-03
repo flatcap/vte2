@@ -9,7 +9,7 @@
 
 #ifdef RARXXX // copied from vteseq.c
 /* Typedef the handle type */
-typedef void (*VteTerminalSequenceHandler) (RarTerminal *terminal, GValueArray *params);
+typedef void (*VteTerminalSequenceHandler) (RarScreen *screen, GValueArray *params);
 #endif
 
 #ifdef RARXXX // copied from vte-private.h
@@ -36,7 +36,7 @@ typedef enum _VteKeymode {
  * _vte_invalidate_all
  */
 /*static*/ void
-_vte_invalidate_all(RarTerminal *terminal)
+_vte_invalidate_all(RarScreen *screen)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -45,7 +45,7 @@ _vte_invalidate_all(RarTerminal *terminal)
  * _vte_invalidate_cells
  */
 /*static*/ void
-_vte_invalidate_cells(RarTerminal *terminal, glong column_start, gint column_count, glong row_start, gint row_count)
+_vte_invalidate_cells(RarScreen *screen, glong column_start, gint column_count, glong row_start, gint row_count)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -54,7 +54,7 @@ _vte_invalidate_cells(RarTerminal *terminal, glong column_start, gint column_cou
  * _vte_terminal_adjust_adjustments
  */
 /*static*/ void
-_vte_terminal_adjust_adjustments(RarTerminal *terminal)
+_vte_terminal_adjust_adjustments(RarScreen *screen)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -63,7 +63,7 @@ _vte_terminal_adjust_adjustments(RarTerminal *terminal)
  * _vte_terminal_cleanup_tab_fragments_at_cursor 
  */
 /*static*/ void
-_vte_terminal_cleanup_tab_fragments_at_cursor (RarTerminal *terminal)
+_vte_terminal_cleanup_tab_fragments_at_cursor (RarScreen *screen)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -72,7 +72,7 @@ _vte_terminal_cleanup_tab_fragments_at_cursor (RarTerminal *terminal)
  * _vte_terminal_cursor_down 
  */
 /*static*/ void
-_vte_terminal_cursor_down (RarTerminal *terminal)
+_vte_terminal_cursor_down (RarScreen *screen)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -81,7 +81,7 @@ _vte_terminal_cursor_down (RarTerminal *terminal)
  * _vte_terminal_emit_text_deleted
  */
 /*static*/ void
-_vte_terminal_emit_text_deleted(RarTerminal *terminal)
+_vte_terminal_emit_text_deleted(RarScreen *screen)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -90,7 +90,7 @@ _vte_terminal_emit_text_deleted(RarTerminal *terminal)
  * _vte_terminal_emit_text_inserted
  */
 /*static*/ void
-_vte_terminal_emit_text_inserted(RarTerminal *terminal)
+_vte_terminal_emit_text_inserted(RarScreen *screen)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -99,7 +99,7 @@ _vte_terminal_emit_text_inserted(RarTerminal *terminal)
  * _vte_terminal_ensure_row 
  */
 /*static*/ VteRowData *
-_vte_terminal_ensure_row (RarTerminal *terminal)
+_vte_terminal_ensure_row (RarScreen *screen)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 	return NULL;
@@ -109,7 +109,7 @@ _vte_terminal_ensure_row (RarTerminal *terminal)
  * _vte_terminal_get_tabstop
  */
 /*static*/ gboolean
-_vte_terminal_get_tabstop(RarTerminal *terminal, int column)
+_vte_terminal_get_tabstop(RarScreen *screen, int column)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 	return FALSE;
@@ -119,7 +119,7 @@ _vte_terminal_get_tabstop(RarTerminal *terminal, int column)
  * _vte_terminal_insert_char
  */
 /*static*/ gboolean
-_vte_terminal_insert_char(RarTerminal *terminal, gunichar c, gboolean insert, gboolean invalidate_now)
+_vte_terminal_insert_char(RarScreen *screen, gunichar c, gboolean insert, gboolean invalidate_now)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 	return FALSE;
@@ -129,7 +129,7 @@ _vte_terminal_insert_char(RarTerminal *terminal, gunichar c, gboolean insert, gb
  * _vte_terminal_queue_contents_changed
  */
 /*static*/ void
-_vte_terminal_queue_contents_changed(RarTerminal *terminal)
+_vte_terminal_queue_contents_changed(RarScreen *screen)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -138,7 +138,7 @@ _vte_terminal_queue_contents_changed(RarTerminal *terminal)
  * vte_terminal_reset
  */
 /*static*/ void
-vte_terminal_reset(RarTerminal *terminal, gboolean clear_tabstops, gboolean clear_history)
+vte_terminal_reset(RarScreen *screen, gboolean clear_tabstops, gboolean clear_history)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -147,7 +147,7 @@ vte_terminal_reset(RarTerminal *terminal, gboolean clear_tabstops, gboolean clea
  * _vte_terminal_ring_append 
  */
 /*static*/ VteRowData *
-_vte_terminal_ring_append (RarTerminal *terminal, gboolean fill)
+_vte_terminal_ring_append (RarScreen *screen, gboolean fill)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 	return NULL;
@@ -157,7 +157,7 @@ _vte_terminal_ring_append (RarTerminal *terminal, gboolean fill)
  * _vte_terminal_ring_insert 
  */
 /*static*/ VteRowData *
-_vte_terminal_ring_insert (RarTerminal *terminal, glong position, gboolean fill)
+_vte_terminal_ring_insert (RarScreen *screen, glong position, gboolean fill)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 	return NULL;
@@ -167,7 +167,7 @@ _vte_terminal_ring_insert (RarTerminal *terminal, glong position, gboolean fill)
  * _vte_terminal_ring_remove 
  */
 /*static*/ void
-_vte_terminal_ring_remove (RarTerminal *terminal, glong position)
+_vte_terminal_ring_remove (RarScreen *screen, glong position)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -176,7 +176,7 @@ _vte_terminal_ring_remove (RarTerminal *terminal, glong position)
  * _vte_terminal_scroll_region 
  */
 /*static*/ void
-_vte_terminal_scroll_region (RarTerminal *terminal, long row, glong count, glong delta)
+_vte_terminal_scroll_region (RarScreen *screen, long row, glong count, glong delta)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -185,7 +185,7 @@ _vte_terminal_scroll_region (RarTerminal *terminal, long row, glong count, glong
  * _vte_terminal_set_default_attributes
  */
 /*static*/ void
-_vte_terminal_set_default_attributes(RarTerminal *terminal)
+_vte_terminal_set_default_attributes(RarScreen *screen)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -194,7 +194,7 @@ _vte_terminal_set_default_attributes(RarTerminal *terminal)
  * _vte_terminal_set_pointer_visible
  */
 /*static*/ void
-_vte_terminal_set_pointer_visible(RarTerminal *terminal, gboolean visible)
+_vte_terminal_set_pointer_visible(RarScreen *screen, gboolean visible)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -203,7 +203,7 @@ _vte_terminal_set_pointer_visible(RarTerminal *terminal, gboolean visible)
  * vte_terminal_set_scrollback_lines
  */
 /*static*/ void
-vte_terminal_set_scrollback_lines(RarTerminal *terminal, glong lines)
+vte_terminal_set_scrollback_lines(RarScreen *screen, glong lines)
 {
 	printf ("NOT IMPL: %s\n", __FUNCTION__);
 }
@@ -215,7 +215,7 @@ vte_terminal_set_scrollback_lines(RarTerminal *terminal, glong lines)
  * Call another function a given number of times, or once.
  */
 /*static*/ void
-vte_sequence_handler_multiple(RarTerminal *terminal,
+vte_sequence_handler_multiple(RarScreen *screen,
 			      GValueArray *params,
 			      VteTerminalSequenceHandler handler)
 {
@@ -232,7 +232,7 @@ vte_sequence_handler_multiple(RarTerminal *terminal,
 		}
 	}
 	for (i = 0; i < val; i++)
-		handler (terminal, NULL);
+		handler (screen, NULL);
 }
 
 /**
@@ -242,7 +242,7 @@ vte_sequence_handler_multiple(RarTerminal *terminal,
  * increment value.
  */
 /*static*/ void
-vte_sequence_handler_offset(RarTerminal *terminal,
+vte_sequence_handler_offset(RarScreen *screen,
 			    GValueArray *params,
 			    int increment,
 			    VteTerminalSequenceHandler handler)
@@ -260,7 +260,7 @@ vte_sequence_handler_offset(RarTerminal *terminal,
 			g_value_set_long(value, val);
 		}
 	}
-	handler (terminal, params);
+	handler (screen, params);
 }
 
 /**
@@ -269,13 +269,11 @@ vte_sequence_handler_offset(RarTerminal *terminal,
  * Clear the current line.
  */
 /*static*/ void
-_vte_terminal_clear_current_line (RarTerminal *terminal)
+_vte_terminal_clear_current_line (RarScreen *screen)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
+#ifndef RARXXX
 	VteRowData *rowdata;
-	RarScreen *screen;
-
-	screen = terminal->screen;
 
 	/* If the cursor is actually on the screen, clear data in the row
 	 * which corresponds to the cursor. */
@@ -286,16 +284,17 @@ _vte_terminal_clear_current_line (RarTerminal *terminal)
 		/* Remove it. */
 		_vte_row_data_shrink (rowdata, 0);
 		/* Add enough cells to the end of the line to fill out the row. */
-		_vte_row_data_fill (rowdata, &screen->fill_defaults, terminal->column_count);
+		_vte_row_data_fill (rowdata, &screen->fill_defaults, screen->shared->column_count);
 		rowdata->attr.soft_wrapped = 0;
 		/* Repaint this row. */
-		_vte_invalidate_cells(terminal,
-				      0, terminal->column_count,
+		_vte_invalidate_cells(screen,
+				      0, screen->shared->column_count,
 				      screen->cursor_current.row, 1);
 	}
 
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
+#endif
 }
 
 /**
@@ -304,27 +303,27 @@ _vte_terminal_clear_current_line (RarTerminal *terminal)
  * Clear the entire screen.
  */
 /*static*/ void
-_vte_terminal_clear_screen (RarTerminal *terminal)
+_vte_terminal_clear_screen (RarScreen *screen)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
+#ifndef RARXXX
 	long i, initial, row;
-	RarScreen *screen;
-	screen = terminal->screen;
 	initial = screen->insert_delta;
 	row = screen->cursor_current.row - screen->insert_delta;
 	initial = _vte_ring_next(screen->row_data);
 	/* Add a new screen's worth of rows. */
-	for (i = 0; i < terminal->row_count; i++)
-		_vte_terminal_ring_append (terminal, TRUE);
+	for (i = 0; i < screen->shared->row_count; i++)
+		_vte_terminal_ring_append (screen, TRUE);
 	/* Move the cursor and insertion delta to the first line in the
 	 * newly-cleared area and scroll if need be. */
 	screen->insert_delta = initial;
 	screen->cursor_current.row = row + screen->insert_delta;
-	_vte_terminal_adjust_adjustments(terminal);
+	_vte_terminal_adjust_adjustments(screen);
 	/* Redraw everything. */
-	_vte_invalidate_all(terminal);
+	_vte_invalidate_all(screen);
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
+#endif
 }
 
 /**
@@ -333,18 +332,18 @@ _vte_terminal_clear_screen (RarTerminal *terminal)
  * Find the character an the given position in the backscroll buffer.
  */
 /*static*/ VteCell *
-vte_terminal_find_charcell (RarTerminal *terminal, glong col, glong row)
+vte_terminal_find_charcell (RarScreen *screen, glong col, glong row)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	VteRowData *rowdata;
 	VteCell *ret = NULL;
-	RarScreen *screen;
-	g_assert(RAR_IS_TERMINAL(terminal));
-	screen = terminal->screen;
+#ifndef RARXXX
+	VteRowData *rowdata;
+	g_assert(RAR_IS_TERMINAL(screen));
 	if (_vte_ring_contains (screen->row_data, row)) {
 		rowdata = _vte_ring_index_writable (screen->row_data, row);
 		ret = _vte_row_data_get_writable (rowdata, col);
 	}
+#endif
 	return ret;
 }
 
@@ -352,13 +351,13 @@ vte_terminal_find_charcell (RarTerminal *terminal, glong col, glong row)
  * _vte_terminal_home_cursor
  */
 /*static*/ void
-_vte_terminal_home_cursor (RarTerminal *terminal)
+_vte_terminal_home_cursor (RarScreen *screen)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
-	screen = terminal->screen;
+#ifndef RARXXX
 	screen->cursor_current.row = screen->insert_delta;
 	screen->cursor_current.col = 0;
+#endif
 }
 
 /**
@@ -367,63 +366,63 @@ _vte_terminal_home_cursor (RarTerminal *terminal)
  * Scroll the text, but don't move the cursor.  Negative = up, positive = down.
  */
 /*static*/ void
-_vte_terminal_scroll_text (RarTerminal *terminal, int scroll_amount)
+_vte_terminal_scroll_text (RarScreen *screen, int scroll_amount)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
+#ifndef RARXXX
 	long start, end, i;
-	RarScreen *screen;
-
-	screen = terminal->screen;
 
 	if (screen->scrolling_restricted) {
 		start = screen->insert_delta + screen->scrolling_region.start;
 		end = screen->insert_delta + screen->scrolling_region.end;
 	} else {
 		start = screen->insert_delta;
-		end = start + terminal->row_count - 1;
+		end = start + screen->shared->row_count - 1;
 	}
 
 	while (_vte_ring_next(screen->row_data) <= end)
-		_vte_terminal_ring_append (terminal, FALSE);
+		_vte_terminal_ring_append (screen, FALSE);
 
 	if (scroll_amount > 0) {
 		for (i = 0; i < scroll_amount; i++) {
-			_vte_terminal_ring_remove (terminal, end);
-			_vte_terminal_ring_insert (terminal, start, TRUE);
+			_vte_terminal_ring_remove (screen, end);
+			_vte_terminal_ring_insert (screen, start, TRUE);
 		}
 	} else {
 		for (i = 0; i < -scroll_amount; i++) {
-			_vte_terminal_ring_remove (terminal, start);
-			_vte_terminal_ring_insert (terminal, end, TRUE);
+			_vte_terminal_ring_remove (screen, start);
+			_vte_terminal_ring_insert (screen, end, TRUE);
 		}
 	}
 
 	/* Update the display. */
-	_vte_terminal_scroll_region(terminal, start, end - start + 1,
+	_vte_terminal_scroll_region(screen, start, end - start + 1,
 				   scroll_amount);
 
 	/* Adjust the scrollbars if necessary. */
-	_vte_terminal_adjust_adjustments(terminal);
+	_vte_terminal_adjust_adjustments(screen);
 
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_inserted_flag = TRUE;
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_inserted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
+#endif
 }
 
 /**
  * vte_terminal_termcap_string_same_as_for
  */
 /*static*/ gboolean
-vte_terminal_termcap_string_same_as_for (RarTerminal *terminal,
+vte_terminal_termcap_string_same_as_for (RarScreen *screen,
 					 const char  *cap_str,
 					 const char  *cap_other)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
+#ifndef RARXXX
 	char *other_str;
 	gboolean ret;
 
-	other_str = _vte_termcap_find_string(terminal->termcap,
-					     terminal->emulation,
+	other_str = _vte_termcap_find_string(screen->shared->termcap,
+					     screen->shared->emulation,
 					     cap_other);
 
 	ret = other_str && (g_ascii_strcasecmp(cap_str, other_str) == 0);
@@ -431,6 +430,8 @@ vte_terminal_termcap_string_same_as_for (RarTerminal *terminal,
 	g_free (other_str);
 
 	return ret;
+#endif
+	return FALSE;
 }
 
 /**
@@ -439,13 +440,12 @@ vte_terminal_termcap_string_same_as_for (RarTerminal *terminal,
  * Clear above the current line.
  */
 /*static*/ void
-_vte_terminal_clear_above_current (RarTerminal *terminal)
+_vte_terminal_clear_above_current (RarScreen *screen)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
+#ifndef RARXXX
 	VteRowData *rowdata;
 	long i;
-	RarScreen *screen;
-	screen = terminal->screen;
 	/* If the cursor is actually on the screen, clear data in the row
 	 * which corresponds to the cursor. */
 	for (i = screen->insert_delta; i < screen->cursor_current.row; i++) {
@@ -456,43 +456,42 @@ _vte_terminal_clear_above_current (RarTerminal *terminal)
 			/* Remove it. */
 			_vte_row_data_shrink (rowdata, 0);
 			/* Add new cells until we fill the row. */
-			_vte_row_data_fill (rowdata, &screen->fill_defaults, terminal->column_count);
+			_vte_row_data_fill (rowdata, &screen->fill_defaults, screen->shared->column_count);
 			rowdata->attr.soft_wrapped = 0;
 			/* Repaint the row. */
-			_vte_invalidate_cells(terminal,
-					0, terminal->column_count, i, 1);
+			_vte_invalidate_cells(screen,
+					0, screen->shared->column_count, i, 1);
 		}
 	}
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
+#endif
 }
 
 
 /* Prototype all handlers... */
-#define VTE_SEQUENCE_HANDLER(name) static void name (RarTerminal *terminal, GValueArray *params);
+#define VTE_SEQUENCE_HANDLER(name) static void name (RarScreen *screen, GValueArray *params);
 #include "rseq-list.h"
 #undef VTE_SEQUENCE_HANDLER
 
 /**
- * vte_sequence_handler_al
+ * vte_sequence_handler_al - Add line
  *
  * Add a line at the current cursor position.
  */
 static void
-vte_sequence_handler_al (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_al (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 	long start, end, param, i;
 	GValue *value;
 
 	/* Find out which part of the screen we're messing with. */
-	screen = terminal->screen;
 	start = screen->cursor_current.row;
 	if (screen->scrolling_restricted) {
 		end = screen->insert_delta + screen->scrolling_region.end;
 	} else {
-		end = screen->insert_delta + terminal->row_count - 1;
+		end = screen->insert_delta + screen->shared->row_count - 1;
 	}
 
 	/* Extract any parameters. */
@@ -508,50 +507,48 @@ vte_sequence_handler_al (RarTerminal *terminal, GValueArray *params)
 	for (i = 0; i < param; i++) {
 		/* Clear a line off the end of the region and add one to the
 		 * top of the region. */
-		_vte_terminal_ring_remove (terminal, end);
-		_vte_terminal_ring_insert (terminal, start, TRUE);
+		_vte_terminal_ring_remove (screen, end);
+		_vte_terminal_ring_insert (screen, start, TRUE);
 		/* Adjust the scrollbars if necessary. */
-		_vte_terminal_adjust_adjustments(terminal);
+		_vte_terminal_adjust_adjustments(screen);
 	}
 
 	/* Update the display. */
-	_vte_terminal_scroll_region(terminal, start, end - start + 1, param);
+	_vte_terminal_scroll_region(screen, start, end - start + 1, param);
 
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
 }
 
 /**
- * vte_sequence_handler_AL
+ * vte_sequence_handler_AL - Add lines
  *
  * Add N lines at the current cursor position.
  */
 static void
-vte_sequence_handler_AL (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_AL (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_al (terminal, params);
+	vte_sequence_handler_al (screen, params);
 }
 
 /**
- * vte_sequence_handler_bt
- *
- * Backtab.
+ * vte_sequence_handler_bt - Backtab
  */
 static void
-vte_sequence_handler_bt (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_bt (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	long newcol;
 
 	/* Calculate which column is the previous tab stop. */
-	newcol = terminal->screen->cursor_current.col;
+	newcol = screen->cursor_current.col;
 
-	if (terminal->tabstops != NULL) {
+	if (screen->shared->tabstops != NULL) {
 		/* Find the next tabstop. */
 		while (newcol >= 0) {
-			if (_vte_terminal_get_tabstop(terminal,
-						     newcol % terminal->column_count)) {
+			if (_vte_terminal_get_tabstop(screen,
+						     newcol % screen->shared->column_count)) {
 				break;
 			}
 			newcol--;
@@ -566,26 +563,24 @@ vte_sequence_handler_bt (RarTerminal *terminal, GValueArray *params)
 	/* Warp the cursor. */
 	_vte_debug_print(VTE_DEBUG_PARSE,
 			"Moving cursor to column %ld.\n", (long)newcol);
-	terminal->screen->cursor_current.col = newcol;
+	screen->cursor_current.col = newcol;
 }
 
 /**
- * vte_sequence_handler_cb
+ * vte_sequence_handler_cb - Clear to beginning
  *
  * Clear from the cursor position to the beginning of the line.
  */
 static void
-vte_sequence_handler_cb (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cb (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	VteRowData *rowdata;
 	long i;
-	RarScreen *screen;
 	VteCell *pcell;
-	screen = terminal->screen;
 
 	/* Get the data for the row which the cursor points to. */
-	rowdata = _vte_terminal_ensure_row(terminal);
+	rowdata = _vte_terminal_ensure_row(screen);
 	/* Clear the data up to the current column with the default
 	 * attributes.  If there is no such character cell, we need
 	 * to add one. */
@@ -600,28 +595,26 @@ vte_sequence_handler_cb (RarTerminal *terminal, GValueArray *params)
 		}
 	}
 	/* Repaint this row. */
-	_vte_invalidate_cells(terminal,
+	_vte_invalidate_cells(screen,
 			      0, screen->cursor_current.col+1,
 			      screen->cursor_current.row, 1);
 
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
 }
 
 /**
- * vte_sequence_handler_cd
+ * vte_sequence_handler_cd - Clear down
  *
  * Clear to the right of the cursor and below the current line.
  */
 static void
-vte_sequence_handler_cd (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cd (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	VteRowData *rowdata;
 	glong i;
-	RarScreen *screen;
 
-	screen = terminal->screen;
 	/* If the cursor is actually on the screen, clear the rest of the
 	 * row the cursor is on and all of the rows below the cursor. */
 	i = screen->cursor_current.row;
@@ -644,26 +637,26 @@ vte_sequence_handler_cd (RarTerminal *terminal, GValueArray *params)
 	}
 	/* Now fill the cleared areas. */
 	for (i = screen->cursor_current.row;
-	     i < screen->insert_delta + terminal->row_count;
+	     i < screen->insert_delta + screen->shared->row_count;
 	     i++) {
 		/* Retrieve the row's data, creating it if necessary. */
 		if (_vte_ring_contains (screen->row_data, i)) {
 			rowdata = _vte_ring_index_writable (screen->row_data, i);
 			g_assert(rowdata != NULL);
 		} else {
-			rowdata = _vte_terminal_ring_append (terminal, FALSE);
+			rowdata = _vte_terminal_ring_append (screen, FALSE);
 		}
 		/* Pad out the row. */
-		_vte_row_data_fill (rowdata, &screen->fill_defaults, terminal->column_count);
+		_vte_row_data_fill (rowdata, &screen->fill_defaults, screen->shared->column_count);
 		rowdata->attr.soft_wrapped = 0;
 		/* Repaint this row. */
-		_vte_invalidate_cells(terminal,
-				      0, terminal->column_count,
+		_vte_invalidate_cells(screen,
+				      0, screen->shared->column_count,
 				      i, 1);
 	}
 
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
 }
 
 /**
@@ -672,32 +665,30 @@ vte_sequence_handler_cd (RarTerminal *terminal, GValueArray *params)
  * Clear from the cursor position to the end of the line.
  */
 static void
-vte_sequence_handler_ce (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ce (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	VteRowData *rowdata;
-	RarScreen *screen;
 
-	screen = terminal->screen;
 	/* Get the data for the row which the cursor points to. */
-	rowdata = _vte_terminal_ensure_row(terminal);
+	rowdata = _vte_terminal_ensure_row(screen);
 	g_assert(rowdata != NULL);
 	/* Remove the data at the end of the array until the current column
 	 * is the end of the array. */
 	if ((glong) _vte_row_data_length (rowdata) > screen->cursor_current.col) {
 		_vte_row_data_shrink (rowdata, screen->cursor_current.col);
 		/* We've modified the display.  Make a note of it. */
-		terminal->text_deleted_flag = TRUE;
+		screen->shared->text_deleted_flag = TRUE;
 	}
 	if (screen->fill_defaults.attr.back != VTE_DEF_BG) {
 		/* Add enough cells to fill out the row. */
-		_vte_row_data_fill (rowdata, &screen->fill_defaults, terminal->column_count);
+		_vte_row_data_fill (rowdata, &screen->fill_defaults, screen->shared->column_count);
 	}
 	rowdata->attr.soft_wrapped = 0;
 	/* Repaint this row. */
-	_vte_invalidate_cells(terminal,
+	_vte_invalidate_cells(screen,
 			      screen->cursor_current.col,
-			      terminal->column_count -
+			      screen->shared->column_count -
 			      screen->cursor_current.col,
 			      screen->cursor_current.row, 1);
 }
@@ -708,24 +699,22 @@ vte_sequence_handler_ce (RarTerminal *terminal, GValueArray *params)
  * Move the cursor to the given column (horizontal position).
  */
 static void
-vte_sequence_handler_ch (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ch (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 	GValue *value;
 	long val;
 
-	screen = terminal->screen;
 	/* We only care if there's a parameter in there. */
 	if ((params != NULL) && (params->n_values > 0)) {
 		value = g_value_array_get_nth(params, 0);
 		if (G_VALUE_HOLDS_LONG(value)) {
 			val = CLAMP(g_value_get_long(value),
 				    0,
-				    terminal->column_count - 1);
+				    screen->shared->column_count - 1);
 			/* Move the cursor. */
 			screen->cursor_current.col = val;
-			_vte_terminal_cleanup_tab_fragments_at_cursor (terminal);
+			_vte_terminal_cleanup_tab_fragments_at_cursor (screen);
 		}
 	}
 }
@@ -736,14 +725,14 @@ vte_sequence_handler_ch (RarTerminal *terminal, GValueArray *params)
  * Clear the screen and home the cursor.
  */
 static void
-vte_sequence_handler_cl (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cl (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	_vte_terminal_clear_screen (terminal);
-	_vte_terminal_home_cursor (terminal);
+	_vte_terminal_clear_screen (screen);
+	_vte_terminal_home_cursor (screen);
 
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
 }
 
 /**
@@ -752,14 +741,11 @@ vte_sequence_handler_cl (RarTerminal *terminal, GValueArray *params)
  * Move the cursor to the given position.
  */
 static void
-vte_sequence_handler_cm (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cm (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *row, *col;
 	long rowval, colval, origin;
-	RarScreen *screen;
-
-	screen = terminal->screen;
 
 	/* We need at least two parameters. */
 	rowval = colval = 0;
@@ -774,19 +760,19 @@ vte_sequence_handler_cm (RarTerminal *terminal, GValueArray *params)
 				origin = 0;
 			}
 			rowval = g_value_get_long(row) + origin;
-			rowval = CLAMP(rowval, 0, terminal->row_count - 1);
+			rowval = CLAMP(rowval, 0, screen->shared->row_count - 1);
 		}
 		if (params->n_values >= 2) {
 			col = g_value_array_get_nth(params, 1);
 			if (G_VALUE_HOLDS_LONG(col)) {
 				colval = g_value_get_long(col);
-				colval = CLAMP(colval, 0, terminal->column_count - 1);
+				colval = CLAMP(colval, 0, screen->shared->column_count - 1);
 			}
 		}
 	}
 	screen->cursor_current.row = rowval + screen->insert_delta;
 	screen->cursor_current.col = colval;
-	_vte_terminal_cleanup_tab_fragments_at_cursor (terminal);
+	_vte_terminal_cleanup_tab_fragments_at_cursor (screen);
 }
 
 /**
@@ -795,10 +781,10 @@ vte_sequence_handler_cm (RarTerminal *terminal, GValueArray *params)
  * Carriage return.
  */
 static void
-vte_sequence_handler_cr (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cr (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->cursor_current.col = 0;
+	screen->cursor_current.col = 0;
 }
 
 /**
@@ -807,17 +793,15 @@ vte_sequence_handler_cr (RarTerminal *terminal, GValueArray *params)
  * Restrict scrolling and updates to a subset of the visible lines.
  */
 static void
-vte_sequence_handler_cs (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cs (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	long start=-1, end=-1, rows;
 	GValue *value;
-	RarScreen *screen;
 
-	_vte_terminal_home_cursor (terminal);
+	_vte_terminal_home_cursor (screen);
 
 	/* We require two parameters.  Anything less is a reset. */
-	screen = terminal->screen;
 	if ((params == NULL) || (params->n_values < 2)) {
 		screen->scrolling_restricted = FALSE;
 		return;
@@ -832,7 +816,7 @@ vte_sequence_handler_cs (RarTerminal *terminal, GValueArray *params)
 		end = g_value_get_long(value);
 	}
 	/* Catch garbage. */
-	rows = terminal->row_count;
+	rows = screen->shared->row_count;
 	if (start <= 0 || start >= rows) {
 		start = 0;
 	}
@@ -857,15 +841,13 @@ vte_sequence_handler_cs (RarTerminal *terminal, GValueArray *params)
  * GNU Emacs is special.
  */
 static void
-vte_sequence_handler_cS (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cS (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	long start=0, end=terminal->row_count-1, rows;
+	long start=0, end=screen->shared->row_count-1, rows;
 	GValue *value;
-	RarScreen *screen;
 
 	/* We require four parameters. */
-	screen = terminal->screen;
 	if ((params == NULL) || (params->n_values < 2)) {
 		screen->scrolling_restricted = FALSE;
 		return;
@@ -885,7 +867,7 @@ vte_sequence_handler_cS (RarTerminal *terminal, GValueArray *params)
 	screen->scrolling_region.end = end;
 	screen->scrolling_restricted = TRUE;
 	/* Special case -- run wild, run free. */
-	rows = terminal->row_count;
+	rows = screen->shared->row_count;
 	if ((screen->scrolling_region.start == 0) &&
 	    (screen->scrolling_region.end == rows - 1)) {
 		screen->scrolling_restricted = FALSE;
@@ -902,13 +884,11 @@ vte_sequence_handler_cS (RarTerminal *terminal, GValueArray *params)
  * Move the cursor to the given row (vertical position).
  */
 static void
-vte_sequence_handler_cv (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cv (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 	GValue *value;
 	long val, origin;
-	screen = terminal->screen;
 	/* We only care if there's a parameter in there. */
 	if ((params != NULL) && (params->n_values > 0)) {
 		value = g_value_array_get_nth(params, 0);
@@ -921,7 +901,7 @@ vte_sequence_handler_cv (RarTerminal *terminal, GValueArray *params)
 				origin = 0;
 			}
 			val = g_value_get_long(value) + origin;
-			val = CLAMP(val, 0, terminal->row_count - 1);
+			val = CLAMP(val, 0, screen->shared->row_count - 1);
 			screen->cursor_current.row = screen->insert_delta + val;
 		}
 	}
@@ -933,14 +913,11 @@ vte_sequence_handler_cv (RarTerminal *terminal, GValueArray *params)
  * Delete a character at the current cursor position.
  */
 static void
-vte_sequence_handler_dc (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_dc (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 	VteRowData *rowdata;
 	long col;
-
-	screen = terminal->screen;
 
 	if (_vte_ring_next(screen->row_data) > screen->cursor_current.row) {
 		long len;
@@ -953,18 +930,18 @@ vte_sequence_handler_dc (RarTerminal *terminal, GValueArray *params)
 		if (col < len) {
 			_vte_row_data_remove (rowdata, col);
 			if (screen->fill_defaults.attr.back != VTE_DEF_BG) {
-				_vte_row_data_fill (rowdata, &screen->fill_defaults, terminal->column_count);
-				len = terminal->column_count;
+				_vte_row_data_fill (rowdata, &screen->fill_defaults, screen->shared->column_count);
+				len = screen->shared->column_count;
 			}
 			/* Repaint this row. */
-			_vte_invalidate_cells(terminal,
+			_vte_invalidate_cells(screen,
 					col, len - col,
 					screen->cursor_current.row, 1);
 		}
 	}
 
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
 }
 
 /**
@@ -973,10 +950,10 @@ vte_sequence_handler_dc (RarTerminal *terminal, GValueArray *params)
  * Delete N characters at the current cursor position.
  */
 static void
-vte_sequence_handler_DC (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_DC (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_dc);
+	vte_sequence_handler_multiple(screen, params, vte_sequence_handler_dc);
 }
 
 /**
@@ -985,20 +962,18 @@ vte_sequence_handler_DC (RarTerminal *terminal, GValueArray *params)
  * Delete a line at the current cursor position.
  */
 static void
-vte_sequence_handler_dl (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_dl (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 	long start, end, param, i;
 	GValue *value;
 
 	/* Find out which part of the screen we're messing with. */
-	screen = terminal->screen;
 	start = screen->cursor_current.row;
 	if (screen->scrolling_restricted) {
 		end = screen->insert_delta + screen->scrolling_region.end;
 	} else {
-		end = screen->insert_delta + terminal->row_count - 1;
+		end = screen->insert_delta + screen->shared->row_count - 1;
 	}
 
 	/* Extract any parameters. */
@@ -1014,17 +989,17 @@ vte_sequence_handler_dl (RarTerminal *terminal, GValueArray *params)
 	for (i = 0; i < param; i++) {
 		/* Clear a line off the end of the region and add one to the
 		 * top of the region. */
-		_vte_terminal_ring_remove (terminal, start);
-		_vte_terminal_ring_insert (terminal, end, TRUE);
+		_vte_terminal_ring_remove (screen, start);
+		_vte_terminal_ring_insert (screen, end, TRUE);
 		/* Adjust the scrollbars if necessary. */
-		_vte_terminal_adjust_adjustments(terminal);
+		_vte_terminal_adjust_adjustments(screen);
 	}
 
 	/* Update the display. */
-	_vte_terminal_scroll_region(terminal, start, end - start + 1, -param);
+	_vte_terminal_scroll_region(screen, start, end - start + 1, -param);
 
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
 }
 
 /**
@@ -1033,32 +1008,29 @@ vte_sequence_handler_dl (RarTerminal *terminal, GValueArray *params)
  * Delete N lines at the current cursor position.
  */
 static void
-vte_sequence_handler_DL (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_DL (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_dl (terminal, params);
+	vte_sequence_handler_dl (screen, params);
 }
 
 /**
- * vte_sequence_handler_do
+ * vte_sequence_handler_do - Cursor down
  *
  * Cursor down, no scrolling.
  */
 static void
-vte_sequence_handler_do (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_do (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	long start, end;
-	RarScreen *screen;
-
-	screen = terminal->screen;
 
 	if (screen->scrolling_restricted) {
 		start = screen->insert_delta + screen->scrolling_region.start;
 		end = screen->insert_delta + screen->scrolling_region.end;
 	} else {
 		start = screen->insert_delta;
-		end = start + terminal->row_count - 1;
+		end = start + screen->shared->row_count - 1;
 	}
 
 	/* Move the cursor down. */
@@ -1071,10 +1043,10 @@ vte_sequence_handler_do (RarTerminal *terminal, GValueArray *params)
  * Cursor down, no scrolling.
  */
 static void
-vte_sequence_handler_DO (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_DO (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_do);
+	vte_sequence_handler_multiple(screen, params, vte_sequence_handler_do);
 }
 
 /**
@@ -1084,16 +1056,13 @@ vte_sequence_handler_DO (RarTerminal *terminal, GValueArray *params)
  * spaces, but not moving the cursor).
  */
 static void
-vte_sequence_handler_ec (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ec (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 	VteRowData *rowdata;
 	GValue *value;
 	VteCell *cell;
 	long col, i, count;
-
-	screen = terminal->screen;
 
 	/* If we got a parameter, use it. */
 	count = 1;
@@ -1105,7 +1074,7 @@ vte_sequence_handler_ec (RarTerminal *terminal, GValueArray *params)
 	}
 
 	/* Clear out the given number of characters. */
-	rowdata = _vte_terminal_ensure_row(terminal);
+	rowdata = _vte_terminal_ensure_row(screen);
 	if (_vte_ring_next(screen->row_data) > screen->cursor_current.row) {
 		g_assert(rowdata != NULL);
 		/* Write over the characters.  (If there aren't enough, we'll
@@ -1125,13 +1094,13 @@ vte_sequence_handler_ec (RarTerminal *terminal, GValueArray *params)
 			}
 		}
 		/* Repaint this row. */
-		_vte_invalidate_cells(terminal,
+		_vte_invalidate_cells(screen,
 				      screen->cursor_current.col, count,
 				      screen->cursor_current.row, 1);
 	}
 
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
 }
 
 /**
@@ -1140,10 +1109,10 @@ vte_sequence_handler_ec (RarTerminal *terminal, GValueArray *params)
  * Move from status line.
  */
 static void
-vte_sequence_handler_fs (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_fs (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->status_line = FALSE;
+	screen->status_line = FALSE;
 }
 
 /**
@@ -1152,10 +1121,10 @@ vte_sequence_handler_fs (RarTerminal *terminal, GValueArray *params)
  * Move the cursor to the home position.
  */
 static void
-vte_sequence_handler_ho (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ho (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	_vte_terminal_home_cursor (terminal);
+	_vte_terminal_home_cursor (screen);
 }
 
 /**
@@ -1164,17 +1133,14 @@ vte_sequence_handler_ho (RarTerminal *terminal, GValueArray *params)
  * Insert a character.
  */
 static void
-vte_sequence_handler_ic (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ic (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	VteVisualPosition save;
-	RarScreen *screen;
-
-	screen = terminal->screen;
 
 	save = screen->cursor_current;
 
-	_vte_terminal_insert_char(terminal, ' ', TRUE, TRUE);
+	_vte_terminal_insert_char(screen, ' ', TRUE, TRUE);
 
 	screen->cursor_current = save;
 }
@@ -1185,10 +1151,10 @@ vte_sequence_handler_ic (RarTerminal *terminal, GValueArray *params)
  * Insert N characters.
  */
 static void
-vte_sequence_handler_IC (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_IC (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_ic);
+	vte_sequence_handler_multiple(screen, params, vte_sequence_handler_ic);
 }
 
 /**
@@ -1198,11 +1164,11 @@ vte_sequence_handler_IC (RarTerminal *terminal, GValueArray *params)
  * to send the cursor back one position.
  */
 static void
-vte_sequence_handler_kb (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_kb (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	/* Move the cursor left. */
-	vte_sequence_handler_le (terminal, params);
+	vte_sequence_handler_le (screen, params);
 }
 
 /**
@@ -1211,10 +1177,10 @@ vte_sequence_handler_kb (RarTerminal *terminal, GValueArray *params)
  * Keypad mode end.
  */
 static void
-vte_sequence_handler_ke (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ke (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->keypad_mode = VTE_KEYMODE_NORMAL;
+	screen->shared->keypad_mode = VTE_KEYMODE_NORMAL;
 }
 
 /**
@@ -1223,34 +1189,30 @@ vte_sequence_handler_ke (RarTerminal *terminal, GValueArray *params)
  * Keypad mode start.
  */
 static void
-vte_sequence_handler_ks (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ks (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->keypad_mode = VTE_KEYMODE_APPLICATION;
+	screen->shared->keypad_mode = VTE_KEYMODE_APPLICATION;
 }
 
 /**
- * vte_sequence_handler_le
- *
- * Cursor left.
+ * vte_sequence_handler_le - Cursor left
  */
 static void
-vte_sequence_handler_le (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_le (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 
-	screen = terminal->screen;
 	if (screen->cursor_current.col > 0) {
 		/* There's room to move left, so do so. */
 		screen->cursor_current.col--;
-		_vte_terminal_cleanup_tab_fragments_at_cursor (terminal);
+		_vte_terminal_cleanup_tab_fragments_at_cursor (screen);
 	} else {
-		if (terminal->flags.bw) {
+		if (screen->shared->flags.bw) {
 			/* Wrap to the previous line. */
-			screen->cursor_current.col = terminal->column_count - 1;
+			screen->cursor_current.col = screen->shared->column_count - 1;
 			if (screen->scrolling_restricted) {
-				vte_sequence_handler_sr (terminal, params);
+				vte_sequence_handler_sr (screen, params);
 			} else {
 				screen->cursor_current.row = MAX(screen->cursor_current.row - 1,
 								 screen->insert_delta);
@@ -1268,10 +1230,10 @@ vte_sequence_handler_le (RarTerminal *terminal, GValueArray *params)
  * Move the cursor left N columns.
  */
 static void
-vte_sequence_handler_LE (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_LE (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_le);
+	vte_sequence_handler_multiple(screen, params, vte_sequence_handler_le);
 }
 
 /**
@@ -1280,14 +1242,12 @@ vte_sequence_handler_LE (RarTerminal *terminal, GValueArray *params)
  * Move the cursor to the lower left corner of the display.
  */
 static void
-vte_sequence_handler_ll (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ll (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
-	screen = terminal->screen;
 	screen->cursor_current.row = MAX(screen->insert_delta,
 					 screen->insert_delta +
-					 terminal->row_count - 1);
+					 screen->shared->row_count - 1);
 	screen->cursor_current.col = 0;
 }
 
@@ -1297,10 +1257,10 @@ vte_sequence_handler_ll (RarTerminal *terminal, GValueArray *params)
  * Blink on.
  */
 static void
-vte_sequence_handler_mb (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_mb (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->defaults.attr.blink = 1;
+	screen->defaults.attr.blink = 1;
 }
 
 /**
@@ -1309,11 +1269,11 @@ vte_sequence_handler_mb (RarTerminal *terminal, GValueArray *params)
  * Bold on.
  */
 static void
-vte_sequence_handler_md (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_md (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->defaults.attr.bold = 1;
-	terminal->screen->defaults.attr.half = 0;
+	screen->defaults.attr.bold = 1;
+	screen->defaults.attr.half = 0;
 }
 
 /**
@@ -1322,10 +1282,10 @@ vte_sequence_handler_md (RarTerminal *terminal, GValueArray *params)
  * End modes.
  */
 static void
-vte_sequence_handler_me (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_me (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	_vte_terminal_set_default_attributes(terminal);
+	_vte_terminal_set_default_attributes(screen);
 }
 
 /**
@@ -1334,11 +1294,11 @@ vte_sequence_handler_me (RarTerminal *terminal, GValueArray *params)
  * Half-bright on.
  */
 static void
-vte_sequence_handler_mh (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_mh (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->defaults.attr.half = 1;
-	terminal->screen->defaults.attr.bold = 0;
+	screen->defaults.attr.half = 1;
+	screen->defaults.attr.bold = 0;
 }
 
 /**
@@ -1347,10 +1307,10 @@ vte_sequence_handler_mh (RarTerminal *terminal, GValueArray *params)
  * Invisible on.
  */
 static void
-vte_sequence_handler_mk (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_mk (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->defaults.attr.invisible = 1;
+	screen->defaults.attr.invisible = 1;
 }
 
 /**
@@ -1359,10 +1319,10 @@ vte_sequence_handler_mk (RarTerminal *terminal, GValueArray *params)
  * Reverse on.
  */
 static void
-vte_sequence_handler_mr (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_mr (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->defaults.attr.reverse = 1;
+	screen->defaults.attr.reverse = 1;
 }
 
 /**
@@ -1371,12 +1331,10 @@ vte_sequence_handler_mr (RarTerminal *terminal, GValueArray *params)
  * Cursor right.
  */
 static void
-vte_sequence_handler_nd (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_nd (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
-	screen = terminal->screen;
-	if ((screen->cursor_current.col + 1) < terminal->column_count) {
+	if ((screen->cursor_current.col + 1) < screen->shared->column_count) {
 		/* There's room to move right. */
 		screen->cursor_current.col++;
 	}
@@ -1388,10 +1346,10 @@ vte_sequence_handler_nd (RarTerminal *terminal, GValueArray *params)
  * Carriage return command(?).
  */
 static void
-vte_sequence_handler_nw (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_nw (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_cr (terminal, params);
+	vte_sequence_handler_cr (screen, params);
 }
 
 /**
@@ -1400,17 +1358,15 @@ vte_sequence_handler_nw (RarTerminal *terminal, GValueArray *params)
  * Restore cursor (position).
  */
 static void
-vte_sequence_handler_rc (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_rc (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
-	screen = terminal->screen;
 	screen->cursor_current.col = screen->cursor_saved.col;
 	screen->cursor_current.row = CLAMP(screen->cursor_saved.row +
 					   screen->insert_delta,
 					   screen->insert_delta,
 					   screen->insert_delta +
-					   terminal->row_count - 1);
+					   screen->shared->row_count - 1);
 }
 
 /**
@@ -1419,10 +1375,10 @@ vte_sequence_handler_rc (RarTerminal *terminal, GValueArray *params)
  * Cursor right N characters.
  */
 static void
-vte_sequence_handler_RI (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_RI (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_nd);
+	vte_sequence_handler_multiple(screen, params, vte_sequence_handler_nd);
 }
 
 /**
@@ -1431,15 +1387,13 @@ vte_sequence_handler_RI (RarTerminal *terminal, GValueArray *params)
  * Save cursor (position).
  */
 static void
-vte_sequence_handler_sc (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_sc (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
-	screen = terminal->screen;
 	screen->cursor_saved.col = screen->cursor_current.col;
 	screen->cursor_saved.row = CLAMP(screen->cursor_current.row -
 					 screen->insert_delta,
-					 0, terminal->row_count - 1);
+					 0, screen->shared->row_count - 1);
 }
 
 /**
@@ -1448,7 +1402,7 @@ vte_sequence_handler_sc (RarTerminal *terminal, GValueArray *params)
  * Standout end.
  */
 static void
-vte_sequence_handler_se (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_se (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	char *standout;
@@ -1459,21 +1413,21 @@ vte_sequence_handler_se (RarTerminal *terminal, GValueArray *params)
 	 * If the standout sequence is the same as another sequence, do what
 	 * we'd do for that other sequence instead. */
 
-	standout = _vte_termcap_find_string(terminal->termcap,
-					    terminal->emulation,
+	standout = _vte_termcap_find_string(screen->shared->termcap,
+					    screen->shared->emulation,
 					    "so");
 	g_assert(standout != NULL);
 
-	if (vte_terminal_termcap_string_same_as_for (terminal, standout, "mb") /* blink */   ||
-	    vte_terminal_termcap_string_same_as_for (terminal, standout, "md") /* bold */    ||
-	    vte_terminal_termcap_string_same_as_for (terminal, standout, "mh") /* half */    ||
-	    vte_terminal_termcap_string_same_as_for (terminal, standout, "mr") /* reverse */ ||
-	    vte_terminal_termcap_string_same_as_for (terminal, standout, "us") /* underline */)
+	if (vte_terminal_termcap_string_same_as_for (screen, standout, "mb") /* blink */   ||
+	    vte_terminal_termcap_string_same_as_for (screen, standout, "md") /* bold */    ||
+	    vte_terminal_termcap_string_same_as_for (screen, standout, "mh") /* half */    ||
+	    vte_terminal_termcap_string_same_as_for (screen, standout, "mr") /* reverse */ ||
+	    vte_terminal_termcap_string_same_as_for (screen, standout, "us") /* underline */)
 	{
-		vte_sequence_handler_me (terminal, params);
+		vte_sequence_handler_me (screen, params);
 	} else {
 		/* Otherwise just set standout mode. */
-		terminal->screen->defaults.attr.standout = 0;
+		screen->defaults.attr.standout = 0;
 	}
 
 	g_free(standout);
@@ -1485,10 +1439,10 @@ vte_sequence_handler_se (RarTerminal *terminal, GValueArray *params)
  * Cursor down, with scrolling.
  */
 static void
-vte_sequence_handler_sf (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_sf (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	_vte_terminal_cursor_down (terminal);
+	_vte_terminal_cursor_down (screen);
 }
 
 /**
@@ -1497,11 +1451,11 @@ vte_sequence_handler_sf (RarTerminal *terminal, GValueArray *params)
  * Cursor down, with scrolling.
  */
 static void
-vte_sequence_handler_SF (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_SF (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	/* XXX implement this directly in _vte_terminal_cursor_down */
-	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_sf);
+	vte_sequence_handler_multiple(screen, params, vte_sequence_handler_sf);
 }
 
 /**
@@ -1510,7 +1464,7 @@ vte_sequence_handler_SF (RarTerminal *terminal, GValueArray *params)
  * Standout start.
  */
 static void
-vte_sequence_handler_so (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_so (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	char *standout;
@@ -1521,24 +1475,24 @@ vte_sequence_handler_so (RarTerminal *terminal, GValueArray *params)
 	 * If the standout sequence is the same as another sequence, do what
 	 * we'd do for that other sequence instead. */
 
-	standout = _vte_termcap_find_string(terminal->termcap,
-					    terminal->emulation,
+	standout = _vte_termcap_find_string(screen->shared->termcap,
+					    screen->shared->emulation,
 					    "so");
 	g_assert(standout != NULL);
 
-	if (vte_terminal_termcap_string_same_as_for (terminal, standout, "mb") /* blink */)
-		vte_sequence_handler_mb (terminal, params);
-	else if (vte_terminal_termcap_string_same_as_for (terminal, standout, "md") /* bold */)
-		vte_sequence_handler_md (terminal, params);
-	else if (vte_terminal_termcap_string_same_as_for (terminal, standout, "mh") /* half */)
-		vte_sequence_handler_mh (terminal, params);
-	else if (vte_terminal_termcap_string_same_as_for (terminal, standout, "mr") /* reverse */)
-		vte_sequence_handler_mr (terminal, params);
-	else if (vte_terminal_termcap_string_same_as_for (terminal, standout, "us") /* underline */)
-		vte_sequence_handler_us (terminal, params);
+	if (vte_terminal_termcap_string_same_as_for (screen, standout, "mb") /* blink */)
+		vte_sequence_handler_mb (screen, params);
+	else if (vte_terminal_termcap_string_same_as_for (screen, standout, "md") /* bold */)
+		vte_sequence_handler_md (screen, params);
+	else if (vte_terminal_termcap_string_same_as_for (screen, standout, "mh") /* half */)
+		vte_sequence_handler_mh (screen, params);
+	else if (vte_terminal_termcap_string_same_as_for (screen, standout, "mr") /* reverse */)
+		vte_sequence_handler_mr (screen, params);
+	else if (vte_terminal_termcap_string_same_as_for (screen, standout, "us") /* underline */)
+		vte_sequence_handler_us (screen, params);
 	else {
 		/* Otherwise just set standout mode. */
-		terminal->screen->defaults.attr.standout = 1;
+		screen->defaults.attr.standout = 1;
 	}
 
 	g_free(standout);
@@ -1550,40 +1504,37 @@ vte_sequence_handler_so (RarTerminal *terminal, GValueArray *params)
  * Cursor up, scrolling if need be.
  */
 static void
-vte_sequence_handler_sr (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_sr (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	long start, end;
-	RarScreen *screen;
-
-	screen = terminal->screen;
 
 	if (screen->scrolling_restricted) {
 		start = screen->scrolling_region.start + screen->insert_delta;
 		end = screen->scrolling_region.end + screen->insert_delta;
 	} else {
-		start = terminal->screen->insert_delta;
-		end = start + terminal->row_count - 1;
+		start = screen->insert_delta;
+		end = start + screen->shared->row_count - 1;
 	}
 
 	if (screen->cursor_current.row == start) {
 		/* If we're at the top of the scrolling region, add a
 		 * line at the top to scroll the bottom off. */
-		_vte_terminal_ring_remove (terminal, end);
-		_vte_terminal_ring_insert (terminal, start, TRUE);
+		_vte_terminal_ring_remove (screen, end);
+		_vte_terminal_ring_insert (screen, start, TRUE);
 		/* Update the display. */
-		_vte_terminal_scroll_region(terminal, start, end - start + 1, 1);
-		_vte_invalidate_cells(terminal,
-				      0, terminal->column_count,
+		_vte_terminal_scroll_region(screen, start, end - start + 1, 1);
+		_vte_invalidate_cells(screen,
+				      0, screen->shared->column_count,
 				      start, 2);
 	} else {
 		/* Otherwise, just move the cursor up. */
 		screen->cursor_current.row--;
 	}
 	/* Adjust the scrollbars if necessary. */
-	_vte_terminal_adjust_adjustments(terminal);
+	_vte_terminal_adjust_adjustments(screen);
 	/* We modified the display, so make a note of it. */
-	terminal->text_modified_flag = TRUE;
+	screen->shared->text_modified_flag = TRUE;
 }
 
 /**
@@ -1592,10 +1543,10 @@ vte_sequence_handler_sr (RarTerminal *terminal, GValueArray *params)
  * Cursor up, with scrolling.
  */
 static void
-vte_sequence_handler_SR (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_SR (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_sr);
+	vte_sequence_handler_multiple(screen, params, vte_sequence_handler_sr);
 }
 
 /**
@@ -1604,22 +1555,20 @@ vte_sequence_handler_SR (RarTerminal *terminal, GValueArray *params)
  * Tab.
  */
 static void
-vte_sequence_handler_ta (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ta (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 	long old_len, newcol, col;
 
 	/* Calculate which column is the next tab stop. */
-	screen = terminal->screen;
 	newcol = col = screen->cursor_current.col;
 
 	g_assert (col >= 0);
 
-	if (terminal->tabstops != NULL) {
+	if (screen->shared->tabstops != NULL) {
 		/* Find the next tabstop. */
 		for (newcol++; newcol < VTE_TAB_MAX; newcol++) {
-			if (_vte_terminal_get_tabstop(terminal, newcol)) {
+			if (_vte_terminal_get_tabstop(screen, newcol)) {
 				break;
 			}
 		}
@@ -1627,13 +1576,13 @@ vte_sequence_handler_ta (RarTerminal *terminal, GValueArray *params)
 
 	/* If we have no tab stops or went past the end of the line, stop
 	 * at the right-most column. */
-	if (newcol >= terminal->column_count) {
-		newcol = terminal->column_count - 1;
+	if (newcol >= screen->shared->column_count) {
+		newcol = screen->shared->column_count - 1;
 	}
 
 	/* but make sure we don't move cursor back (bug #340631) */
 	if (col < newcol) {
-		VteRowData *rowdata = _vte_terminal_ensure_row (terminal);
+		VteRowData *rowdata = _vte_terminal_ensure_row (screen);
 
 		/* Smart tab handling: bug 353610
 		 *
@@ -1686,7 +1635,7 @@ vte_sequence_handler_ta (RarTerminal *terminal, GValueArray *params)
 			}
 		}
 
-		_vte_invalidate_cells (terminal,
+		_vte_invalidate_cells (screen,
 				screen->cursor_current.col,
 				newcol - screen->cursor_current.col,
 				screen->cursor_current.row, 1);
@@ -1700,12 +1649,12 @@ vte_sequence_handler_ta (RarTerminal *terminal, GValueArray *params)
  * Move to status line.
  */
 static void
-vte_sequence_handler_ts (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ts (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->status_line = TRUE;
-	terminal->screen->status_line_changed = TRUE;
-	g_string_truncate(terminal->screen->status_line_contents, 0);
+	screen->status_line = TRUE;
+	screen->status_line_changed = TRUE;
+	g_string_truncate(screen->status_line_contents, 0);
 }
 
 /**
@@ -1714,34 +1663,32 @@ vte_sequence_handler_ts (RarTerminal *terminal, GValueArray *params)
  * Underline this character and move right.
  */
 static void
-vte_sequence_handler_uc (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_uc (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	VteCell *cell;
 	int column;
-	RarScreen *screen;
 
-	screen = terminal->screen;
 	column = screen->cursor_current.col;
-	cell = vte_terminal_find_charcell(terminal, column, screen->cursor_current.row);
+	cell = vte_terminal_find_charcell(screen, column, screen->cursor_current.row);
 	while ((cell != NULL) && (cell->attr.fragment) && (column > 0)) {
 		column--;
-		cell = vte_terminal_find_charcell(terminal, column, screen->cursor_current.row);
+		cell = vte_terminal_find_charcell(screen, column, screen->cursor_current.row);
 	}
 	if (cell != NULL) {
 		/* Set this character to be underlined. */
 		cell->attr.underline = 1;
 		/* Cause the character to be repainted. */
-		_vte_invalidate_cells(terminal,
+		_vte_invalidate_cells(screen,
 				      column, cell->attr.columns,
 				      screen->cursor_current.row, 1);
 		/* Move the cursor right. */
-		vte_sequence_handler_nd (terminal, params);
+		vte_sequence_handler_nd (screen, params);
 	}
 
 	/* We've modified the display without changing the text.  Make a note
 	 * of it. */
-	terminal->text_modified_flag = TRUE;
+	screen->shared->text_modified_flag = TRUE;
 }
 
 /**
@@ -1750,10 +1697,10 @@ vte_sequence_handler_uc (RarTerminal *terminal, GValueArray *params)
  * Underline end.
  */
 static void
-vte_sequence_handler_ue (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_ue (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->defaults.attr.underline = 0;
+	screen->defaults.attr.underline = 0;
 }
 
 /**
@@ -1762,20 +1709,17 @@ vte_sequence_handler_ue (RarTerminal *terminal, GValueArray *params)
  * Cursor up, no scrolling.
  */
 static void
-vte_sequence_handler_up (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_up (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 	long start, end;
-
-	screen = terminal->screen;
 
 	if (screen->scrolling_restricted) {
 		start = screen->insert_delta + screen->scrolling_region.start;
 		end = screen->insert_delta + screen->scrolling_region.end;
 	} else {
 		start = screen->insert_delta;
-		end = start + terminal->row_count - 1;
+		end = start + screen->shared->row_count - 1;
 	}
 
 	screen->cursor_current.row = MAX(screen->cursor_current.row - 1, start);
@@ -1787,10 +1731,10 @@ vte_sequence_handler_up (RarTerminal *terminal, GValueArray *params)
  * Cursor up N lines, no scrolling.
  */
 static void
-vte_sequence_handler_UP (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_UP (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_multiple(terminal, params, vte_sequence_handler_up);
+	vte_sequence_handler_multiple(screen, params, vte_sequence_handler_up);
 }
 
 /**
@@ -1799,10 +1743,10 @@ vte_sequence_handler_UP (RarTerminal *terminal, GValueArray *params)
  * Underline start.
  */
 static void
-vte_sequence_handler_us (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_us (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->defaults.attr.underline = 1;
+	screen->defaults.attr.underline = 1;
 }
 
 
@@ -1812,7 +1756,7 @@ vte_sequence_handler_us (RarTerminal *terminal, GValueArray *params)
  * Handle ANSI color setting and related stuffs (SGR).
  */
 static void
-vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_character_attributes (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	unsigned int i;
@@ -1830,50 +1774,50 @@ vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *p
 		param = g_value_get_long(value);
 		switch (param) {
 		case 0:
-			_vte_terminal_set_default_attributes(terminal);
+			_vte_terminal_set_default_attributes(screen);
 			break;
 		case 1:
-			terminal->screen->defaults.attr.bold = 1;
-			terminal->screen->defaults.attr.half = 0;
+			screen->defaults.attr.bold = 1;
+			screen->defaults.attr.half = 0;
 			break;
 		case 2:
-			terminal->screen->defaults.attr.half = 1;
-			terminal->screen->defaults.attr.bold = 0;
+			screen->defaults.attr.half = 1;
+			screen->defaults.attr.bold = 0;
 			break;
 		case 4:
-			terminal->screen->defaults.attr.underline = 1;
+			screen->defaults.attr.underline = 1;
 			break;
 		case 5:
-			terminal->screen->defaults.attr.blink = 1;
+			screen->defaults.attr.blink = 1;
 			break;
 		case 7:
-			terminal->screen->defaults.attr.reverse = 1;
+			screen->defaults.attr.reverse = 1;
 			break;
 		case 8:
-			terminal->screen->defaults.attr.invisible = 1;
+			screen->defaults.attr.invisible = 1;
 			break;
 		case 9:
-			terminal->screen->defaults.attr.strikethrough = 1;
+			screen->defaults.attr.strikethrough = 1;
 			break;
 		case 21: /* Error in old versions of linux console. */
 		case 22: /* ECMA 48. */
-			terminal->screen->defaults.attr.bold = 0;
-			terminal->screen->defaults.attr.half = 0;
+			screen->defaults.attr.bold = 0;
+			screen->defaults.attr.half = 0;
 			break;
 		case 24:
-			terminal->screen->defaults.attr.underline = 0;
+			screen->defaults.attr.underline = 0;
 			break;
 		case 25:
-			terminal->screen->defaults.attr.blink = 0;
+			screen->defaults.attr.blink = 0;
 			break;
 		case 27:
-			terminal->screen->defaults.attr.reverse = 0;
+			screen->defaults.attr.reverse = 0;
 			break;
 		case 28:
-			terminal->screen->defaults.attr.invisible = 0;
+			screen->defaults.attr.invisible = 0;
 			break;
 		case 29:
-			terminal->screen->defaults.attr.strikethrough = 0;
+			screen->defaults.attr.strikethrough = 0;
 			break;
 		case 30:
 		case 31:
@@ -1883,7 +1827,7 @@ vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *p
 		case 35:
 		case 36:
 		case 37:
-			terminal->screen->defaults.attr.fore = param - 30;
+			screen->defaults.attr.fore = param - 30;
 			break;
 		case 38:
 		{
@@ -1899,14 +1843,14 @@ vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *p
 				param1 = g_value_get_long(value1);
 				param2 = g_value_get_long(value2);
 				if (G_LIKELY (param1 == 5 && param2 >= 0 && param2 < 256))
-					terminal->screen->defaults.attr.fore = param2;
+					screen->defaults.attr.fore = param2;
 				i += 2;
 			}
 			break;
 		}
 		case 39:
 			/* default foreground */
-			terminal->screen->defaults.attr.fore = VTE_DEF_FG;
+			screen->defaults.attr.fore = VTE_DEF_FG;
 			break;
 		case 40:
 		case 41:
@@ -1916,7 +1860,7 @@ vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *p
 		case 45:
 		case 46:
 		case 47:
-			terminal->screen->defaults.attr.back = param - 40;
+			screen->defaults.attr.back = param - 40;
 			break;
 		case 48:
 		{
@@ -1932,14 +1876,14 @@ vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *p
 				param1 = g_value_get_long(value1);
 				param2 = g_value_get_long(value2);
 				if (G_LIKELY (param1 == 5 && param2 >= 0 && param2 < 256))
-					terminal->screen->defaults.attr.back = param2;
+					screen->defaults.attr.back = param2;
 				i += 2;
 			}
 			break;
 		}
 		case 49:
 			/* default background */
-			terminal->screen->defaults.attr.back = VTE_DEF_BG;
+			screen->defaults.attr.back = VTE_DEF_BG;
 			break;
 		case 90:
 		case 91:
@@ -1949,7 +1893,7 @@ vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *p
 		case 95:
 		case 96:
 		case 97:
-			terminal->screen->defaults.attr.fore = param - 90 + VTE_COLOR_BRIGHT_OFFSET;
+			screen->defaults.attr.fore = param - 90 + VTE_COLOR_BRIGHT_OFFSET;
 			break;
 		case 100:
 		case 101:
@@ -1959,23 +1903,19 @@ vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *p
 		case 105:
 		case 106:
 		case 107:
-			terminal->screen->defaults.attr.back = param - 100 + VTE_COLOR_BRIGHT_OFFSET;
+			screen->defaults.attr.back = param - 100 + VTE_COLOR_BRIGHT_OFFSET;
 			break;
 		}
 	}
 	/* If we had no parameters, default to the defaults. */
 	if (i == 0) {
-		_vte_terminal_set_default_attributes(terminal);
+		_vte_terminal_set_default_attributes(screen);
 	}
 	/* Save the new colors. */
-	terminal->screen->color_defaults.attr.fore =
-		terminal->screen->defaults.attr.fore;
-	terminal->screen->color_defaults.attr.back =
-		terminal->screen->defaults.attr.back;
-	terminal->screen->fill_defaults.attr.fore =
-		terminal->screen->defaults.attr.fore;
-	terminal->screen->fill_defaults.attr.back =
-		terminal->screen->defaults.attr.back;
+	screen->color_defaults.attr.fore = screen->defaults.attr.fore;
+	screen->color_defaults.attr.back = screen->defaults.attr.back;
+	screen->fill_defaults.attr.fore = screen->defaults.attr.fore;
+	screen->fill_defaults.attr.back = screen->defaults.attr.back;
 }
 
 /**
@@ -1984,10 +1924,10 @@ vte_sequence_handler_character_attributes (RarTerminal *terminal, GValueArray *p
  * Move the cursor.
  */
 static void
-vte_sequence_handler_character_position_absolute (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_character_position_absolute (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_ch);
+	vte_sequence_handler_offset(screen, params, -1, vte_sequence_handler_ch);
 }
 
 /**
@@ -1996,26 +1936,23 @@ vte_sequence_handler_character_position_absolute (RarTerminal *terminal, GValueA
  * Move the cursor to the given column, 1-based.
  */
 static void
-vte_sequence_handler_cursor_character_absolute (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cursor_character_absolute (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 	GValue *value;
 	long val;
-
-	screen = terminal->screen;
 
         val = 0;
 	if ((params != NULL) && (params->n_values > 0)) {
 		value = g_value_array_get_nth(params, 0);
 		if (G_VALUE_HOLDS_LONG(value)) {
 			val = CLAMP(g_value_get_long(value),
-				    1, terminal->column_count) - 1;
+				    1, screen->shared->column_count) - 1;
 		}
 	}
 
         screen->cursor_current.col = val;
-	_vte_terminal_cleanup_tab_fragments_at_cursor (terminal);
+	_vte_terminal_cleanup_tab_fragments_at_cursor (screen);
 }
 
 /**
@@ -2024,13 +1961,11 @@ vte_sequence_handler_cursor_character_absolute (RarTerminal *terminal, GValueArr
  * Move the cursor to the lower left-hand corner.
  */
 static void
-vte_sequence_handler_cursor_lower_left (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cursor_lower_left (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	RarScreen *screen;
 	long row;
-	screen = terminal->screen;
-	row = MAX(0, terminal->row_count - 1);
+	row = MAX(0, screen->shared->row_count - 1);
 	screen->cursor_current.row = screen->insert_delta + row;
 	screen->cursor_current.col = 0;
 }
@@ -2041,11 +1976,11 @@ vte_sequence_handler_cursor_lower_left (RarTerminal *terminal, GValueArray *para
  * Move the cursor to the beginning of the next line, scrolling if necessary.
  */
 static void
-vte_sequence_handler_cursor_next_line (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cursor_next_line (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->cursor_current.col = 0;
-	vte_sequence_handler_DO (terminal, params);
+	screen->cursor_current.col = 0;
+	vte_sequence_handler_DO (screen, params);
 }
 
 /**
@@ -2054,10 +1989,10 @@ vte_sequence_handler_cursor_next_line (RarTerminal *terminal, GValueArray *param
  * Move the cursor to the given position, 1-based.
  */
 static void
-vte_sequence_handler_cursor_position (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cursor_position (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_cm);
+	vte_sequence_handler_offset(screen, params, -1, vte_sequence_handler_cm);
 }
 
 /**
@@ -2066,11 +2001,11 @@ vte_sequence_handler_cursor_position (RarTerminal *terminal, GValueArray *params
  * Move the cursor to the beginning of the next line, scrolling if necessary.
  */
 static void
-vte_sequence_handler_cursor_preceding_line (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_cursor_preceding_line (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->cursor_current.col = 0;
-	vte_sequence_handler_UP (terminal, params);
+	screen->cursor_current.col = 0;
+	vte_sequence_handler_UP (screen, params);
 }
 
 /**
@@ -2079,7 +2014,7 @@ vte_sequence_handler_cursor_preceding_line (RarTerminal *terminal, GValueArray *
  * Manipulate certain terminal attributes.
  */
 static void
-vte_sequence_handler_decset_internal (RarTerminal *terminal,
+vte_sequence_handler_decset_internal (RarScreen *screen,
 				     int setting,
 				     gboolean restore,
 				     gboolean save,
@@ -2091,15 +2026,15 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 	guint i;
 	struct {
 		int setting;
-		gboolean *bvalue;
-		gint *ivalue;
-		gpointer *pvalue;
-		gpointer fvalue;
-		gpointer tvalue;
+		gboolean *bvalue;	// bool value
+		gint *ivalue;		// int value
+		gpointer *pvalue;	// pointer value
+		gpointer fvalue;	// From
+		gpointer tvalue;	// To
 		VteTerminalSequenceHandler reset, set;
 	} settings[] = {
 		/* 1: Application/normal cursor keys. */
-		{1, NULL, &terminal->cursor_mode, NULL,
+		{1, NULL, &screen->shared->cursor_mode, NULL,
 		 GINT_TO_POINTER(VTE_KEYMODE_NORMAL),
 		 GINT_TO_POINTER(VTE_KEYMODE_APPLICATION),
 		 NULL, NULL,},
@@ -2108,30 +2043,30 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 		/* 3: disallowed, window size is set by user. */
 		{3, NULL, NULL, NULL, NULL, NULL, NULL, NULL,},
 		/* 4: Smooth scroll. */
-		{4, &terminal->smooth_scroll, NULL, NULL,
+		{4, &screen->shared->smooth_scroll, NULL, NULL,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL,},
 		/* 5: Reverse video. */
-		{5, &terminal->screen->reverse_mode, NULL, NULL,
+		{5, &screen->reverse_mode, NULL, NULL,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL,},
 		/* 6: Origin mode: when enabled, cursor positioning is
 		 * relative to the scrolling region. */
-		{6, &terminal->screen->origin_mode, NULL, NULL,
+		{6, &screen->origin_mode, NULL, NULL,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL,},
 		/* 7: Wraparound mode. */
-		{7, &terminal->flags.am, NULL, NULL,
+		{7, &screen->shared->flags.am, NULL, NULL,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL,},
 		/* 8: disallowed, keyboard repeat is set by user. */
 		{8, NULL, NULL, NULL, NULL, NULL, NULL, NULL,},
 		/* 9: Send-coords-on-click. */
-		{9, NULL, &terminal->mouse_tracking_mode, NULL,
+		{9, NULL, &screen->shared->mouse_tracking_mode, NULL,
 		 GINT_TO_POINTER(0),
 		 GINT_TO_POINTER(MOUSE_TRACKING_SEND_XY_ON_CLICK),
 		 NULL, NULL,},
@@ -2140,7 +2075,7 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 		/* 18: print form feed. */
 		/* 19: set print extent to full screen. */
 		/* 25: Cursor visible. */
-		{25, &terminal->cursor_visible, NULL, NULL,
+		{25, &screen->shared->cursor_visible, NULL, NULL,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL,},
@@ -2153,44 +2088,44 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 		{40, NULL, NULL, NULL, NULL, NULL, NULL, NULL,},
 		/* 41: more(1) fix. */
 		/* 42: Enable NLS replacements. */
-		{42, &terminal->nrc_mode, NULL, NULL,
+		{42, &screen->shared->nrc_mode, NULL, NULL,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL,},
 		/* 44: Margin bell. */
-		{44, &terminal->margin_bell, NULL, NULL,
+		{44, &screen->shared->margin_bell, NULL, NULL,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL,},
 		/* 47: Alternate screen. */
-		{47, NULL, NULL, (gpointer) &terminal->screen,
-		 &terminal->normal_screen,
-		 &terminal->alternate_screen,
+		{47, NULL, NULL, (gpointer) &screen,
+		 &screen->normal_screen,
+		 &screen->alternate_screen,
 		 NULL, NULL,},
 		/* 66: Keypad mode. */
-		{66, &terminal->keypad_mode, NULL, NULL,
+		{66, &screen->shared->keypad_mode, NULL, NULL,
 		 GINT_TO_POINTER(VTE_KEYMODE_NORMAL),
 		 GINT_TO_POINTER(VTE_KEYMODE_APPLICATION),
 		 NULL, NULL,},
 		/* 67: disallowed, backspace key policy is set by user. */
 		{67, NULL, NULL, NULL, NULL, NULL, NULL, NULL,},
 		/* 1000: Send-coords-on-button. */
-		{1000, NULL, &terminal->mouse_tracking_mode, NULL,
+		{1000, NULL, &screen->shared->mouse_tracking_mode, NULL,
 		 GINT_TO_POINTER(0),
 		 GINT_TO_POINTER(MOUSE_TRACKING_SEND_XY_ON_BUTTON),
 		 NULL, NULL,},
 		/* 1001: Hilite tracking. */
-		{1001, NULL, &terminal->mouse_tracking_mode, NULL,
+		{1001, NULL, &screen->shared->mouse_tracking_mode, NULL,
 		 GINT_TO_POINTER(0),
 		 GINT_TO_POINTER(MOUSE_TRACKING_HILITE_TRACKING),
 		 NULL, NULL,},
 		/* 1002: Cell motion tracking. */
-		{1002, NULL, &terminal->mouse_tracking_mode, NULL,
+		{1002, NULL, &screen->shared->mouse_tracking_mode, NULL,
 		 GINT_TO_POINTER(0),
 		 GINT_TO_POINTER(MOUSE_TRACKING_CELL_MOTION_TRACKING),
 		 NULL, NULL,},
 		/* 1003: All motion tracking. */
-		{1003, NULL, &terminal->mouse_tracking_mode, NULL,
+		{1003, NULL, &screen->shared->mouse_tracking_mode, NULL,
 		 GINT_TO_POINTER(0),
 		 GINT_TO_POINTER(MOUSE_TRACKING_ALL_MOTION_TRACKING),
 		 NULL, NULL,},
@@ -2201,16 +2136,16 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 		/* 1035: disallowed, don't know what to do with it. */
 		{1035, NULL, NULL, NULL, NULL, NULL, NULL, NULL,},
 		/* 1036: Meta-sends-escape. */
-		{1036, &terminal->meta_sends_escape, NULL, NULL,
+		{1036, &screen->shared->meta_sends_escape, NULL, NULL,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL,},
 		/* 1037: disallowed, delete key policy is set by user. */
 		{1037, NULL, NULL, NULL, NULL, NULL, NULL, NULL,},
 		/* 1047: Use alternate screen buffer. */
-		{1047, NULL, NULL, (gpointer) &terminal->screen,
-		 &terminal->normal_screen,
-		 &terminal->alternate_screen,
+		{1047, NULL, NULL, (gpointer) &screen,
+		 &screen->normal_screen,
+		 &screen->alternate_screen,
 		 NULL, NULL,},
 		/* 1048: Save/restore cursor position. */
 		{1048, NULL, NULL, NULL,
@@ -2220,33 +2155,33 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 		 vte_sequence_handler_sc,},
 		/* 1049: Use alternate screen buffer, saving the cursor
 		 * position. */
-		{1049, NULL, NULL, (gpointer) &terminal->screen,
-		 &terminal->normal_screen,
-		 &terminal->alternate_screen,
+		{1049, NULL, NULL, (gpointer) &screen,
+		 &screen->normal_screen,
+		 &screen->alternate_screen,
 		 vte_sequence_handler_rc,
 		 vte_sequence_handler_sc,},
 		/* 1051: Sun function key mode. */
-		{1051, NULL, NULL, (gpointer) &terminal->sun_fkey_mode,
+		{1051, NULL, NULL, (gpointer) &screen->shared->sun_fkey_mode,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL},
 		/* 1052: HP function key mode. */
-		{1052, NULL, NULL, (gpointer) &terminal->hp_fkey_mode,
+		{1052, NULL, NULL, (gpointer) &screen->shared->hp_fkey_mode,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL},
 		/* 1060: Legacy function key mode. */
-		{1060, NULL, NULL, (gpointer) &terminal->legacy_fkey_mode,
+		{1060, NULL, NULL, (gpointer) &screen->shared->legacy_fkey_mode,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL},
 		/* 1061: VT220 function key mode. */
-		{1061, NULL, NULL, (gpointer) &terminal->vt220_fkey_mode,
+		{1061, NULL, NULL, (gpointer) &screen->shared->vt220_fkey_mode,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL},
 		/* 2004: Bracketed paste mode. */
-		{2004, &terminal->screen->bracketed_paste_mode, NULL, NULL,
+		{2004, &screen->bracketed_paste_mode, NULL, NULL,
 		 GINT_TO_POINTER(FALSE),
 		 GINT_TO_POINTER(TRUE),
 		 NULL, NULL,},
@@ -2265,7 +2200,7 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 
 		/* Read the old setting. */
 		if (restore) {
-			p = g_hash_table_lookup(terminal->dec_saved,
+			p = g_hash_table_lookup(screen->shared->dec_saved,
 						GINT_TO_POINTER(setting));
 			set = (p != NULL);
 			_vte_debug_print(VTE_DEBUG_PARSE,
@@ -2288,7 +2223,7 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 			_vte_debug_print(VTE_DEBUG_PARSE,
 					"Setting %d is %s, saving.\n",
 					setting, set ? "set" : "unset");
-			g_hash_table_insert(terminal->dec_saved,
+			g_hash_table_insert(screen->shared->dec_saved,
 					    GINT_TO_POINTER(setting),
 					    GINT_TO_POINTER(set));
 		}
@@ -2298,7 +2233,7 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 					"Setting %d to %s.\n",
 					setting, set ? "set" : "unset");
 			if (settings[i].set && set) {
-				settings[i].set (terminal, NULL);
+				settings[i].set (screen, NULL);
 			}
 			if (settings[i].bvalue) {
 				*(settings[i].bvalue) = set;
@@ -2314,7 +2249,7 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 					settings[i].fvalue;
 			}
 			if (settings[i].reset && !set) {
-				settings[i].reset (terminal, NULL);
+				settings[i].reset (screen, NULL);
 			}
 		}
 	}
@@ -2328,28 +2263,28 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 		break;
 #if 0		/* 3: disallowed, window size is set by user. */
 	case 3:
-		vte_terminal_emit_resize_window(terminal,
+		vte_terminal_emit_resize_window(screen,
 						(set ? 132 : 80) *
-						terminal->char_width +
-						terminal->inner_border.left +
-                                                terminal->inner_border.right,
-						terminal->row_count *
-						terminal->char_height +
-						terminal->inner_border.top +
-                                                terminal->inner_border.bottom);
+						screen->char_width +
+						screen->inner_border.left +
+                                                screen->inner_border.right,
+						screen->shared->row_count *
+						screen->char_height +
+						screen->inner_border.top +
+                                                screen->inner_border.bottom);
 		/* Request a resize and redraw. */
-		_vte_invalidate_all(terminal);
+		_vte_invalidate_all(screen);
 		break;
 #endif
 	case 5:
 		/* Repaint everything in reverse mode. */
-		_vte_invalidate_all(terminal);
+		_vte_invalidate_all(screen);
 		break;
 	case 6:
 		/* Reposition the cursor in its new home position. */
-		terminal->screen->cursor_current.col = 0;
-		terminal->screen->cursor_current.row =
-			terminal->screen->insert_delta;
+		screen->cursor_current.col = 0;
+		screen->cursor_current.row =
+			screen->insert_delta;
 		break;
 	case 47:
 	case 1047:
@@ -2357,16 +2292,18 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 		/* Clear the alternate screen if we're switching
 		 * to it, and home the cursor. */
 		if (set) {
-			_vte_terminal_clear_screen (terminal);
-			_vte_terminal_home_cursor (terminal);
+			_vte_terminal_clear_screen (screen);
+			_vte_terminal_home_cursor (screen);
 		}
 		/* Reset scrollbars and repaint everything. */
-		terminal->adjustment->value =
-			terminal->screen->scroll_delta;
-		vte_terminal_set_scrollback_lines(terminal,
-				terminal->scrollback_lines);
-		_vte_terminal_queue_contents_changed(terminal);
-		_vte_invalidate_all (terminal);
+#ifndef RARXXX
+		screen->adjustment->value =
+			screen->scroll_delta;
+		vte_terminal_set_scrollback_lines(screen,
+				screen->scrollback_lines);
+#endif
+		_vte_terminal_queue_contents_changed(screen);
+		_vte_invalidate_all (screen);
 		break;
 	case 9:
 	case 1000:
@@ -2374,7 +2311,7 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
 	case 1002:
 	case 1003:
 		/* Make the pointer visible. */
-		_vte_terminal_set_pointer_visible(terminal, TRUE);
+		_vte_terminal_set_pointer_visible(screen, TRUE);
 		break;
 	case 66:
 		_vte_debug_print(VTE_DEBUG_KEYBOARD, set ?
@@ -2418,7 +2355,7 @@ vte_sequence_handler_decset_internal (RarTerminal *terminal,
  * Set certain terminal attributes.
  */
 static void
-vte_sequence_handler_decset (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_decset (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
@@ -2433,7 +2370,7 @@ vte_sequence_handler_decset (RarTerminal *terminal, GValueArray *params)
 			continue;
 		}
 		setting = g_value_get_long(value);
-		vte_sequence_handler_decset_internal(terminal, setting, FALSE, FALSE, TRUE);
+		vte_sequence_handler_decset_internal(screen, setting, FALSE, FALSE, TRUE);
 	}
 }
 
@@ -2443,7 +2380,7 @@ vte_sequence_handler_decset (RarTerminal *terminal, GValueArray *params)
  * Unset certain terminal attributes.
  */
 static void
-vte_sequence_handler_decreset (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_decreset (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
@@ -2458,7 +2395,7 @@ vte_sequence_handler_decreset (RarTerminal *terminal, GValueArray *params)
 			continue;
 		}
 		setting = g_value_get_long(value);
-		vte_sequence_handler_decset_internal(terminal, setting, FALSE, FALSE, FALSE);
+		vte_sequence_handler_decset_internal(screen, setting, FALSE, FALSE, FALSE);
 	}
 }
 
@@ -2468,15 +2405,13 @@ vte_sequence_handler_decreset (RarTerminal *terminal, GValueArray *params)
  * Delete certain lines from the scrolling region.
  */
 static void
-vte_sequence_handler_delete_lines (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_delete_lines (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
-	RarScreen *screen;
 	long param, end, row;
 	int i;
 
-	screen = terminal->screen;
 	/* The default is one. */
 	param = 1;
 	/* Extract any parameters. */
@@ -2491,21 +2426,21 @@ vte_sequence_handler_delete_lines (RarTerminal *terminal, GValueArray *params)
 	if (screen->scrolling_restricted) {
 		end = screen->insert_delta + screen->scrolling_region.end;
 	} else {
-		end = screen->insert_delta + terminal->row_count - 1;
+		end = screen->insert_delta + screen->shared->row_count - 1;
 	}
 	/* Clear them from below the current cursor. */
 	for (i = 0; i < param; i++) {
 		/* Insert a line at the end of the region and remove one from
 		 * the top of the region. */
-		_vte_terminal_ring_remove (terminal, row);
-		_vte_terminal_ring_insert (terminal, end, TRUE);
+		_vte_terminal_ring_remove (screen, row);
+		_vte_terminal_ring_insert (screen, end, TRUE);
 	}
 	/* Update the display. */
-	_vte_terminal_scroll_region(terminal, row, end - row + 1, -param);
+	_vte_terminal_scroll_region(screen, row, end - row + 1, -param);
 	/* Adjust the scrollbars if necessary. */
-	_vte_terminal_adjust_adjustments(terminal);
+	_vte_terminal_adjust_adjustments(screen);
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
 }
 
 /**
@@ -2514,10 +2449,10 @@ vte_sequence_handler_delete_lines (RarTerminal *terminal, GValueArray *params)
  * Erase a specified number of characters.
  */
 static void
-vte_sequence_handler_erase_characters (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_erase_characters (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_ec (terminal, params);
+	vte_sequence_handler_ec (screen, params);
 }
 
 /**
@@ -2526,7 +2461,7 @@ vte_sequence_handler_erase_characters (RarTerminal *terminal, GValueArray *param
  * Erase certain lines in the display.
  */
 static void
-vte_sequence_handler_erase_in_display (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_erase_in_display (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
@@ -2546,24 +2481,24 @@ vte_sequence_handler_erase_in_display (RarTerminal *terminal, GValueArray *param
 	switch (param) {
 	case 0:
 		/* Clear below the current line. */
-		vte_sequence_handler_cd (terminal, NULL);
+		vte_sequence_handler_cd (screen, NULL);
 		break;
 	case 1:
 		/* Clear above the current line. */
-		_vte_terminal_clear_above_current (terminal);
+		_vte_terminal_clear_above_current (screen);
 		/* Clear everything to the left of the cursor, too. */
 		/* FIXME: vttest. */
-		vte_sequence_handler_cb (terminal, NULL);
+		vte_sequence_handler_cb (screen, NULL);
 		break;
 	case 2:
 		/* Clear the entire screen. */
-		_vte_terminal_clear_screen (terminal);
+		_vte_terminal_clear_screen (screen);
 		break;
 	default:
 		break;
 	}
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
 }
 
 /**
@@ -2572,7 +2507,7 @@ vte_sequence_handler_erase_in_display (RarTerminal *terminal, GValueArray *param
  * Erase certain parts of the current line in the display.
  */
 static void
-vte_sequence_handler_erase_in_line (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_erase_in_line (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
@@ -2592,21 +2527,21 @@ vte_sequence_handler_erase_in_line (RarTerminal *terminal, GValueArray *params)
 	switch (param) {
 	case 0:
 		/* Clear to end of the line. */
-		vte_sequence_handler_ce (terminal, NULL);
+		vte_sequence_handler_ce (screen, NULL);
 		break;
 	case 1:
 		/* Clear to start of the line. */
-		vte_sequence_handler_cb (terminal, NULL);
+		vte_sequence_handler_cb (screen, NULL);
 		break;
 	case 2:
 		/* Clear the entire line. */
-		_vte_terminal_clear_current_line (terminal);
+		_vte_terminal_clear_current_line (screen);
 		break;
 	default:
 		break;
 	}
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_deleted_flag = TRUE;
+	screen->shared->text_deleted_flag = TRUE;
 }
 
 /**
@@ -2615,10 +2550,10 @@ vte_sequence_handler_erase_in_line (RarTerminal *terminal, GValueArray *params)
  * Form-feed / next-page.
  */
 static void
-vte_sequence_handler_form_feed (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_form_feed (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_index (terminal, params);
+	vte_sequence_handler_index (screen, params);
 }
 
 /**
@@ -2627,10 +2562,10 @@ vte_sequence_handler_form_feed (RarTerminal *terminal, GValueArray *params)
  * Perform a full-bore reset.
  */
 static void
-vte_sequence_handler_full_reset (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_full_reset (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_terminal_reset(terminal, TRUE, TRUE);
+	vte_terminal_reset(screen, TRUE, TRUE);
 }
 
 /**
@@ -2639,10 +2574,10 @@ vte_sequence_handler_full_reset (RarTerminal *terminal, GValueArray *params)
  * Move the cursor to a specified position.
  */
 static void
-vte_sequence_handler_horizontal_and_vertical_position (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_horizontal_and_vertical_position (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_cm);
+	vte_sequence_handler_offset(screen, params, -1, vte_sequence_handler_cm);
 }
 
 /**
@@ -2651,10 +2586,10 @@ vte_sequence_handler_horizontal_and_vertical_position (RarTerminal *terminal, GV
  * Cursor down, with scrolling.
  */
 static void
-vte_sequence_handler_index (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_index (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_sf (terminal, params);
+	vte_sequence_handler_sf (screen, params);
 }
 
 /**
@@ -2663,10 +2598,10 @@ vte_sequence_handler_index (RarTerminal *terminal, GValueArray *params)
  * Insert a specified number of blank characters.
  */
 static void
-vte_sequence_handler_insert_blank_characters (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_insert_blank_characters (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_IC (terminal, params);
+	vte_sequence_handler_IC (screen, params);
 }
 
 /**
@@ -2675,14 +2610,12 @@ vte_sequence_handler_insert_blank_characters (RarTerminal *terminal, GValueArray
  * Insert a certain number of lines below the current cursor.
  */
 static void
-vte_sequence_handler_insert_lines (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_insert_lines (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
-	RarScreen *screen;
 	long param, end, row;
 	int i;
-	screen = terminal->screen;
 	/* The default is one. */
 	param = 1;
 	/* Extract any parameters. */
@@ -2697,31 +2630,31 @@ vte_sequence_handler_insert_lines (RarTerminal *terminal, GValueArray *params)
 	if (screen->scrolling_restricted) {
 		end = screen->insert_delta + screen->scrolling_region.end;
 	} else {
-		end = screen->insert_delta + terminal->row_count - 1;
+		end = screen->insert_delta + screen->shared->row_count - 1;
 	}
 	/* Insert the new lines at the cursor. */
 	for (i = 0; i < param; i++) {
 		/* Clear a line off the end of the region and add one to the
 		 * top of the region. */
-		_vte_terminal_ring_remove (terminal, end);
-		_vte_terminal_ring_insert (terminal, row, TRUE);
+		_vte_terminal_ring_remove (screen, end);
+		_vte_terminal_ring_insert (screen, row, TRUE);
 	}
 	/* Update the display. */
-	_vte_terminal_scroll_region(terminal, row, end - row + 1, param);
+	_vte_terminal_scroll_region(screen, row, end - row + 1, param);
 	/* Adjust the scrollbars if necessary. */
-	_vte_terminal_adjust_adjustments(terminal);
+	_vte_terminal_adjust_adjustments(screen);
 	/* We've modified the display.  Make a note of it. */
-	terminal->text_inserted_flag = TRUE;
+	screen->shared->text_inserted_flag = TRUE;
 }
 
 /**
  * vte_sequence_handler_line_position_absolute
  */
 static void
-vte_sequence_handler_line_position_absolute (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_line_position_absolute (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_cv);
+	vte_sequence_handler_offset(screen, params, -1, vte_sequence_handler_cv);
 }
 
 /**
@@ -2730,11 +2663,11 @@ vte_sequence_handler_line_position_absolute (RarTerminal *terminal, GValueArray 
  * Move the cursor to the beginning of the next line, scrolling if necessary.
  */
 static void
-vte_sequence_handler_next_line (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_next_line (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	terminal->screen->cursor_current.col = 0;
-	vte_sequence_handler_DO (terminal, params);
+	screen->cursor_current.col = 0;
+	vte_sequence_handler_DO (screen, params);
 }
 
 /**
@@ -2743,7 +2676,7 @@ vte_sequence_handler_next_line (RarTerminal *terminal, GValueArray *params)
  * Restore a certain terminal attribute.
  */
 static void
-vte_sequence_handler_restore_mode (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_restore_mode (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
@@ -2758,7 +2691,7 @@ vte_sequence_handler_restore_mode (RarTerminal *terminal, GValueArray *params)
 			continue;
 		}
 		setting = g_value_get_long(value);
-		vte_sequence_handler_decset_internal(terminal, setting, TRUE, FALSE, FALSE);
+		vte_sequence_handler_decset_internal(screen, setting, TRUE, FALSE, FALSE);
 	}
 }
 
@@ -2768,10 +2701,10 @@ vte_sequence_handler_restore_mode (RarTerminal *terminal, GValueArray *params)
  * Cursor down, with scrolling.
  */
 static void
-vte_sequence_handler_reverse_index (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_reverse_index (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_sr (terminal, params);
+	vte_sequence_handler_sr (screen, params);
 }
 
 /**
@@ -2780,7 +2713,7 @@ vte_sequence_handler_reverse_index (RarTerminal *terminal, GValueArray *params)
  * Save a certain terminal attribute.
  */
 static void
-vte_sequence_handler_save_mode (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_save_mode (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue *value;
@@ -2795,7 +2728,7 @@ vte_sequence_handler_save_mode (RarTerminal *terminal, GValueArray *params)
 			continue;
 		}
 		setting = g_value_get_long(value);
-		vte_sequence_handler_decset_internal(terminal, setting, FALSE, TRUE, FALSE);
+		vte_sequence_handler_decset_internal(screen, setting, FALSE, TRUE, FALSE);
 	}
 }
 
@@ -2805,40 +2738,37 @@ vte_sequence_handler_save_mode (RarTerminal *terminal, GValueArray *params)
  * letter "E".
  */
 static void
-vte_sequence_handler_screen_alignment_test (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_screen_alignment_test (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	long row;
 	VteRowData *rowdata;
-	RarScreen *screen;
 	VteCell cell;
 
-	screen = terminal->screen;
-
-	for (row = terminal->screen->insert_delta;
-	     row < terminal->screen->insert_delta + terminal->row_count;
+	for (row = screen->insert_delta;
+	     row < screen->insert_delta + screen->shared->row_count;
 	     row++) {
 		/* Find this row. */
 		while (_vte_ring_next(screen->row_data) <= row)
-			_vte_terminal_ring_append (terminal, FALSE);
-		_vte_terminal_adjust_adjustments(terminal);
+			_vte_terminal_ring_append (screen, FALSE);
+		_vte_terminal_adjust_adjustments(screen);
 		rowdata = _vte_ring_index_writable (screen->row_data, row);
 		g_assert(rowdata != NULL);
 		/* Clear this row. */
 		_vte_row_data_shrink (rowdata, 0);
 
-		_vte_terminal_emit_text_deleted(terminal);
+		_vte_terminal_emit_text_deleted(screen);
 		/* Fill this row. */
 		cell.c = 'E';
 		cell.attr = basic_cell.cell.attr;
 		cell.attr.columns = 1;
-		_vte_row_data_fill (rowdata, &cell, terminal->column_count);
-		_vte_terminal_emit_text_inserted(terminal);
+		_vte_row_data_fill (rowdata, &cell, screen->shared->column_count);
+		_vte_terminal_emit_text_inserted(screen);
 	}
-	_vte_invalidate_all(terminal);
+	_vte_invalidate_all(screen);
 
 	/* We modified the display, so make a note of it for completeness. */
-	terminal->text_modified_flag = TRUE;
+	screen->shared->text_modified_flag = TRUE;
 }
 
 /**
@@ -2847,7 +2777,7 @@ vte_sequence_handler_screen_alignment_test (RarTerminal *terminal, GValueArray *
  * Scroll the text down, but don't move the cursor.
  */
 static void
-vte_sequence_handler_scroll_down (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_scroll_down (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	long val = 1;
@@ -2861,7 +2791,7 @@ vte_sequence_handler_scroll_down (RarTerminal *terminal, GValueArray *params)
 		}
 	}
 
-	_vte_terminal_scroll_text (terminal, val);
+	_vte_terminal_scroll_text (screen, val);
 }
 
 /**
@@ -2870,7 +2800,7 @@ vte_sequence_handler_scroll_down (RarTerminal *terminal, GValueArray *params)
  * Scroll the text up, but don't move the cursor.
  */
 static void
-vte_sequence_handler_scroll_up (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_scroll_up (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	long val = 1;
@@ -2884,7 +2814,7 @@ vte_sequence_handler_scroll_up (RarTerminal *terminal, GValueArray *params)
 		}
 	}
 
-	_vte_terminal_scroll_text (terminal, -val);
+	_vte_terminal_scroll_text (screen, -val);
 }
 
 /**
@@ -2893,17 +2823,17 @@ vte_sequence_handler_scroll_up (RarTerminal *terminal, GValueArray *params)
  * Restrict the scrolling region.
  */
 static void
-vte_sequence_handler_set_scrolling_region (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_set_scrolling_region (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_cs);
+	vte_sequence_handler_offset(screen, params, -1, vte_sequence_handler_cs);
 }
 
 /**
  * vte_sequence_handler_set_scrolling_region_from_start
  */
 static void
-vte_sequence_handler_set_scrolling_region_from_start (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_set_scrolling_region_from_start (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue value = {0};
@@ -2913,14 +2843,14 @@ vte_sequence_handler_set_scrolling_region_from_start (RarTerminal *terminal, GVa
 
 	g_value_array_insert (params, 0, &value);
 
-	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_cs);
+	vte_sequence_handler_offset(screen, params, -1, vte_sequence_handler_cs);
 }
 
 /**
  * vte_sequence_handler_set_scrolling_region_to_end
  */
 static void
-vte_sequence_handler_set_scrolling_region_to_end (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_set_scrolling_region_to_end (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
 	GValue value = {0};
@@ -2930,7 +2860,7 @@ vte_sequence_handler_set_scrolling_region_to_end (RarTerminal *terminal, GValueA
 
 	g_value_array_insert (params, 1, &value);
 
-	vte_sequence_handler_offset(terminal, params, -1, vte_sequence_handler_cs);
+	vte_sequence_handler_offset(screen, params, -1, vte_sequence_handler_cs);
 }
 
 /**
@@ -2939,10 +2869,10 @@ vte_sequence_handler_set_scrolling_region_to_end (RarTerminal *terminal, GValueA
  * Perform a soft reset.
  */
 static void
-vte_sequence_handler_soft_reset (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_soft_reset (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_terminal_reset(terminal, FALSE, FALSE);
+	vte_terminal_reset(screen, FALSE, FALSE);
 }
 
 /**
@@ -2951,10 +2881,10 @@ vte_sequence_handler_soft_reset (RarTerminal *terminal, GValueArray *params)
  * Vertical tab.
  */
 static void
-vte_sequence_handler_vertical_tab (RarTerminal *terminal, GValueArray *params)
+vte_sequence_handler_vertical_tab (RarScreen *screen, GValueArray *params)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	vte_sequence_handler_index (terminal, params);
+	vte_sequence_handler_index (screen, params);
 }
 
 
@@ -2981,7 +2911,7 @@ _vte_sequence_get_handler (const char *name)
  * Handle a terminal control sequence and its parameters.
  */
 void
-_vte_terminal_handle_sequence (RarTerminal *terminal,
+_vte_terminal_handle_sequence (RarScreen *screen,
 			      const char *match_s,
 			      GQuark match G_GNUC_UNUSED,
 			      GValueArray *params)
@@ -2999,7 +2929,7 @@ _vte_terminal_handle_sequence (RarTerminal *terminal,
 
 	if (handler != NULL) {
 		/* Let the handler handle it. */
-		handler (terminal, params);
+		handler (screen, params);
 	} else {
 		_vte_debug_print (VTE_DEBUG_MISC,
 				  "No handler for control sequence `%s' defined.\n",

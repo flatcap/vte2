@@ -746,20 +746,6 @@ vte_terminal_emit_commit(VteTerminal *terminal, const gchar *text, guint length)
 }
 
 /**
- * vte_terminal_emit_emulation_changed
- * Emit an "emulation-changed" signal.
- */
-static void
-vte_terminal_emit_emulation_changed(VteTerminal *terminal)
-{
-	_vte_debug_print(VTE_DEBUG_SIGNALS,
-			"Emitting `emulation-changed'.\n");
-	g_signal_emit_by_name(terminal, "emulation-changed");
-        g_object_notify(G_OBJECT(terminal), "emulation");
-
-}
-
-/**
  * vte_terminal_emit_encoding_changed
  * Emit an "encoding-changed" signal.
  */
@@ -914,21 +900,6 @@ _vte_terminal_emit_text_deleted_y(VteTerminal *terminal)
 	_vte_debug_print(VTE_DEBUG_SIGNALS,
 			"Emitting `text-deleted'.\n");
 	g_signal_emit_by_name(terminal, "text-deleted");
-}
-
-/**
- * vte_terminal_emit_text_modified
- * Emit a "text-modified" signal.
- */
-static void
-vte_terminal_emit_text_modified(VteTerminal *terminal)
-{
-	if (!terminal->pvt->accessible_emit) {
-		return;
-	}
-	_vte_debug_print(VTE_DEBUG_SIGNALS,
-			"Emitting `text-modified'.\n");
-	g_signal_emit_by_name(terminal, "text-modified");
 }
 
 /**
@@ -2219,100 +2190,6 @@ vte_terminal_maybe_scroll_to_bottom(VteTerminal *terminal)
 	vte_terminal_queue_adjustment_value_changed (terminal, delta);
 	_vte_debug_print(VTE_DEBUG_ADJ,
 			"Snapping to bottom of screen\n");
-}
-
-/**
- * vte_terminal_set_encoding:
- * @terminal: a #VteTerminal
- * @codeset: (allow-none): a valid #GIConv target, or %NULL to use the default encoding
- *
- * Changes the encoding the terminal will expect data from the child to
- * be encoded with.  For certain terminal types, applications executing in the
- * terminal can change the encoding.  The default encoding is defined by the
- * application's locale settings.
- */
-void
-vte_terminal_set_encoding(VteTerminal *terminal, const char *codeset)
-{
-        VteTerminalPrivate *pvt;
-        GObject *object;
-	const char *old_codeset;
-	VteConv conv;
-	char *obuf1, *obuf2;
-	gsize bytes_written;
-
-	g_return_if_fail(VTE_IS_TERMINAL(terminal));
-
-        object = G_OBJECT(terminal);
-        pvt = terminal->pvt;
-
-	old_codeset = pvt->encoding;
-	if (codeset == NULL) {
-		g_get_charset(&codeset);
-	}
-	if ((old_codeset != NULL) && (strcmp(codeset, old_codeset) == 0)) {
-		/* Nothing to do! */
-		return;
-	}
-
-        g_object_freeze_notify(object);
-
-	/* Open new conversions. */
-	conv = _vte_conv_open(codeset, "UTF-8");
-	if (conv == VTE_INVALID_CONV) {
-		g_warning(_("Unable to convert characters from %s to %s."),
-			  "UTF-8", codeset);
-		/* fallback to no conversion */
-		conv = _vte_conv_open(codeset = "UTF-8", "UTF-8");
-	}
-	if (terminal->pvt->outgoing_conv != VTE_INVALID_CONV) {
-		_vte_conv_close(terminal->pvt->outgoing_conv);
-	}
-	terminal->pvt->outgoing_conv = conv;
-
-	/* Set the terminal's encoding to the new value. */
-	terminal->pvt->encoding = g_intern_string(codeset);
-
-	/* Convert any buffered output bytes. */
-	if ((_vte_buffer_length(terminal->pvt->outgoing) > 0) &&
-	    (old_codeset != NULL)) {
-		/* Convert back to UTF-8. */
-		obuf1 = g_convert((gchar *)terminal->pvt->outgoing->data,
-				  _vte_buffer_length(terminal->pvt->outgoing),
-				  "UTF-8",
-				  old_codeset,
-				  NULL,
-				  &bytes_written,
-				  NULL);
-		if (obuf1 != NULL) {
-			/* Convert to the new encoding. */
-			obuf2 = g_convert(obuf1,
-					  bytes_written,
-					  codeset,
-					  "UTF-8",
-					  NULL,
-					  &bytes_written,
-					  NULL);
-			if (obuf2 != NULL) {
-				_vte_buffer_clear(terminal->pvt->outgoing);
-				_vte_buffer_append(terminal->pvt->outgoing,
-						   obuf2, bytes_written);
-				g_free(obuf2);
-			}
-			g_free(obuf1);
-		}
-	}
-
-	/* Set the encoding for incoming text. */
-	_vte_iso2022_state_set_codeset(terminal->pvt->iso2022,
-				       terminal->pvt->encoding);
-
-	_vte_debug_print(VTE_DEBUG_IO,
-			"Set terminal encoding to `%s'.\n",
-			terminal->pvt->encoding);
-	vte_terminal_emit_encoding_changed(terminal);
-
-        g_object_thaw_notify(object);
 }
 
 /**
@@ -7045,83 +6922,6 @@ vte_terminal_get_font(VteTerminal *terminal)
 }
 
 /**
- * vte_terminal_refresh_size
- * Read and refresh our perception of the size of the PTY.
- */
-static void
-vte_terminal_refresh_size(VteTerminal *terminal)
-{
-        VteTerminalPrivate *pvt = terminal->pvt;
-	int rows, columns;
-        GError *error = NULL;
-
-        if (pvt->pty == NULL)
-                return;
-
-        if (vte_pty_get_size(pvt->pty, &rows, &columns, &error)) {
-                terminal->row_count = rows;
-                terminal->column_count = columns;
-        } else {
-                g_warning(_("Error reading PTY size, using defaults: %s\n"), error->message);
-                g_error_free(error);
-	}
-}
-
-/**
- * vte_terminal_set_size:
- * @terminal: a #VteTerminal
- * @columns: the desired number of columns
- * @rows: the desired number of rows
- *
- * Attempts to change the terminal's size in terms of rows and columns.  If
- * the attempt succeeds, the widget will resize itself to the proper size.
- */
-void
-vte_terminal_set_size(VteTerminal *terminal, glong columns, glong rows)
-{
-	glong old_columns, old_rows;
-
-	g_return_if_fail(VTE_IS_TERMINAL(terminal));
-
-	_vte_debug_print(VTE_DEBUG_MISC,
-			"Setting PTY size to %ldx%ld.\n",
-			columns, rows);
-
-	old_rows = terminal->row_count;
-	old_columns = terminal->column_count;
-
-	if (terminal->pvt->pty != NULL) {
-                GError *error = NULL;
-
-		/* Try to set the terminal size, and read it back,
-		 * in case something went awry.
-                 */
-		if (!vte_pty_set_size(terminal->pvt->pty, rows, columns, &error)) {
-			g_warning("%s\n", error->message);
-                        g_error_free(error);
-		}
-		vte_terminal_refresh_size(terminal);
-	} else {
-		terminal->row_count = rows;
-		terminal->column_count = columns;
-	}
-	if (old_rows != terminal->row_count || old_columns != terminal->column_count) {
-		VteScreen *screen = terminal->pvt->screen;
-		glong visible_rows = MIN (old_rows, _vte_ring_length (screen->row_data));
-		if (terminal->row_count < visible_rows) {
-			glong delta = visible_rows - terminal->row_count;
-			screen->insert_delta += delta;
-			vte_terminal_queue_adjustment_value_changed (
-					terminal,
-					screen->scroll_delta + delta);
-		}
-		gtk_widget_queue_resize_no_redraw (&terminal->widget);
-		/* Our visible text changed. */
-		vte_terminal_emit_text_modified(terminal);
-	}
-}
-
-/**
  * vte_terminal_handle_scroll
  * Redraw the widget.
  */
@@ -7198,106 +6998,7 @@ vte_terminal_set_scroll_adjustments(GtkWidget *widget,
 				 terminal);
 }
 
-/**
- * vte_terminal_set_emulation:
- * @terminal: a #VteTerminal
- * @emulation: (allow-none): the name of a terminal description, or %NULL to use the default
- *
- * Sets what type of terminal the widget attempts to emulate by scanning for
- * control sequences defined in the system's termcap file.  Unless you
- * are interested in this feature, always use "xterm".
- */
-void
-vte_terminal_set_emulation(VteTerminal *terminal, const char *emulation)
-{
-        VteTerminalPrivate *pvt;
-        GObject *object;
-	int columns, rows;
-
-	g_return_if_fail(VTE_IS_TERMINAL(terminal));
-
-        object = G_OBJECT(terminal);
-        pvt = terminal->pvt;
-
-        g_object_freeze_notify(object);
-
-	/* Set the emulation type, for reference. */
-	if (emulation == NULL) {
-		emulation = vte_terminal_get_default_emulation(terminal);
-	}
-	terminal->pvt->emulation = g_intern_string(emulation);
-	_vte_debug_print(VTE_DEBUG_MISC,
-			"Setting emulation to `%s'...\n", emulation);
-	/* Find and read the right termcap file. */
-	vte_terminal_set_termcap(terminal, NULL, FALSE);
-
-	/* Create a table to hold the control sequences. */
-	if (terminal->pvt->matcher != NULL) {
-		_vte_matcher_free(terminal->pvt->matcher);
-	}
-	terminal->pvt->matcher = _vte_matcher_new(emulation, terminal->pvt->termcap);
-
-	if (terminal->pvt->termcap != NULL) {
-		/* Read emulation flags. */
-		terminal->pvt->flags.am = _vte_termcap_find_boolean(terminal->pvt->termcap,
-								    terminal->pvt->emulation,
-								    "am");
-		terminal->pvt->flags.bw = _vte_termcap_find_boolean(terminal->pvt->termcap,
-								    terminal->pvt->emulation,
-								    "bw");
-		terminal->pvt->flags.LP = _vte_termcap_find_boolean(terminal->pvt->termcap,
-								    terminal->pvt->emulation,
-								    "LP");
-		terminal->pvt->flags.ul = _vte_termcap_find_boolean(terminal->pvt->termcap,
-								    terminal->pvt->emulation,
-								    "ul");
-		terminal->pvt->flags.xn = _vte_termcap_find_boolean(terminal->pvt->termcap,
-								    terminal->pvt->emulation,
-								    "xn");
-
-		/* Resize to the given default. */
-		columns = _vte_termcap_find_numeric(terminal->pvt->termcap,
-						    terminal->pvt->emulation,
-						    "co");
-		if (columns <= 0) {
-			columns = VTE_COLUMNS;
-		}
-		terminal->pvt->default_column_count = columns;
-
-		rows = _vte_termcap_find_numeric(terminal->pvt->termcap,
-						 terminal->pvt->emulation,
-						 "li");
-		if (rows <= 0 ) {
-			rows = VTE_ROWS;
-		}
-		terminal->pvt->default_row_count = rows;
-	}
-
-	/* Notify observers that we changed our emulation. */
-	vte_terminal_emit_emulation_changed(terminal);
-
-        g_object_thaw_notify(object);
-}
-
 /* FIXMEchpe deprecate this function, it's wrong */
-/**
- * vte_terminal_get_default_emulation:
- * @terminal: a #VteTerminal
- *
- * Queries the terminal for its default emulation, which is attempted if the
- * terminal type passed to vte_terminal_set_emulation() is %NULL.
- *
- * Returns: (transfer none) (type utf8): an interned string containing the name of the default terminal
- *   type the widget attempts to emulate
- *
- * Since: 0.11.11
- */
-const char *
-vte_terminal_get_default_emulation(VteTerminal *terminal)
-{
-	return g_intern_static_string(VTE_DEFAULT_EMULATION);
-}
-
 /**
  * vte_terminal_get_emulation:
  * @terminal: a #VteTerminal
@@ -7313,87 +7014,6 @@ vte_terminal_get_emulation(VteTerminal *terminal)
 {
 	g_return_val_if_fail(VTE_IS_TERMINAL(terminal), NULL);
 	return terminal->pvt->emulation;
-}
-
-/**
- * _vte_terminal_inline_error_message
- */
-void
-_vte_terminal_inline_error_message(VteTerminal *terminal, const char *format, ...)
-{
-	va_list ap;
-	char *str;
-
-	va_start (ap, format);
-	str = g_strdup_vprintf (format, ap);
-	va_end (ap);
-
-	vte_terminal_feed (terminal, "*** VTE ***: ", 13);
-	vte_terminal_feed (terminal, str, -1);
-	vte_terminal_feed (terminal, "\r\n", 2);
-	g_free (str);
-}
-
-/**
- * vte_terminal_set_termcap
- * Set the path to the termcap file we read, and read it in.
- */
-static void
-vte_terminal_set_termcap(VteTerminal *terminal, const char *path,
-			 gboolean reset)
-{
-        GObject *object = G_OBJECT(terminal);
-	struct stat st;
-	char *wpath;
-
-	if (path == NULL) {
-		wpath = g_strdup_printf(DATADIR "/" PACKAGE "/termcap/%s",
-					terminal->pvt->emulation ?
-					terminal->pvt->emulation :
-					vte_terminal_get_default_emulation(terminal));
-		if (g_stat(wpath, &st) != 0) {
-			g_free(wpath);
-			wpath = g_strdup("/etc/termcap");
-		}
-		path = g_intern_string (wpath);
-		g_free(wpath);
-	} else {
-		path = g_intern_string (path);
-	}
-	if (path == terminal->pvt->termcap_path) {
-		return;
-	}
-
-        g_object_freeze_notify(object);
-
-	terminal->pvt->termcap_path = path;
-
-	_vte_debug_print(VTE_DEBUG_MISC, "Loading termcap `%s'...",
-			terminal->pvt->termcap_path);
-	if (terminal->pvt->termcap != NULL) {
-		_vte_termcap_free(terminal->pvt->termcap);
-	}
-	terminal->pvt->termcap = _vte_termcap_new(terminal->pvt->termcap_path);
-	_vte_debug_print(VTE_DEBUG_MISC, "\n");
-	if (terminal->pvt->termcap == NULL) {
-		_vte_terminal_inline_error_message(terminal,
-				"Failed to load terminal capabilities from '%s'",
-				terminal->pvt->termcap_path);
-	}
-	if (reset) {
-		vte_terminal_set_emulation(terminal, terminal->pvt->emulation);
-	}
-
-        g_object_thaw_notify(object);
-}
-
-/**
- * _vte_terminal_codeset_changed_cb
- */
-static void
-_vte_terminal_codeset_changed_cb(struct _vte_iso2022_state *state, gpointer p)
-{
-	vte_terminal_set_encoding(p, _vte_iso2022_state_get_codeset(state));
 }
 
 /**
@@ -14052,6 +13672,16 @@ vte_terminal_search_find_next (VteTerminal *terminal)
 }
 
 
+//moved:vte_terminal_refresh_size:terminal.c
+//moved:vte_terminal_emit_text_modified:terminal.c
+//moved:_vte_terminal_inline_error_message:terminal.c
+//moved:vte_terminal_emit_emulation_changed:terminal.c
+//moved:vte_terminal_set_termcap:terminal.c
+//moved:vte_terminal_get_default_emulation:terminal.c
+//moved:vte_terminal_set_size:terminal.c
+//moved:vte_terminal_set_emulation:terminal.c
+//moved:vte_terminal_set_encoding:terminal.c
+//moved:_vte_terminal_codeset_changed_cb:terminal.c
 //moved:vte_terminal_set_pty:terminal.c
 //moved:vte_terminal_get_pty:terminal.c
 //moved:vte_terminal_get_pty_object:terminal.c

@@ -22,7 +22,7 @@ app_close (gpointer loop)
 static gboolean
 term_work (gpointer data)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);
 	static int count = 0;
 
 	//RarTerminal *term = RAR_TERMINAL (data);

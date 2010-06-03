@@ -90,7 +90,7 @@ static int _vte_pty_helper_tunnel = -1;
 static void
 _vte_pty_reset_signal_handlers(void)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);
 #ifdef SIGHUP
 	signal(SIGHUP,  SIG_DFL);
 #endif
