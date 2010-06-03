@@ -662,7 +662,7 @@ vte_sequence_handler_cd (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ce
+ * vte_sequence_handler_ce - Clear to end
  *
  * Clear from the cursor position to the end of the line.
  */
@@ -696,7 +696,7 @@ vte_sequence_handler_ce (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ch
+ * vte_sequence_handler_ch - Cursor horizontal move
  *
  * Move the cursor to the given column (horizontal position).
  */
@@ -722,7 +722,7 @@ vte_sequence_handler_ch (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_cl
+ * vte_sequence_handler_cl - Clear screen
  *
  * Clear the screen and home the cursor.
  */
@@ -738,7 +738,7 @@ vte_sequence_handler_cl (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_cm
+ * vte_sequence_handler_cm - Cursor move
  *
  * Move the cursor to the given position.
  */
@@ -788,7 +788,7 @@ vte_sequence_handler_cr (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_cs
+ * vte_sequence_handler_cs - Restrict scrolling
  *
  * Restrict scrolling and updates to a subset of the visible lines.
  */
@@ -835,7 +835,7 @@ vte_sequence_handler_cs (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_cS
+ * vte_sequence_handler_cS - Restrict scrolling
  *
  * Restrict scrolling and updates to a subset of the visible lines, because
  * GNU Emacs is special.
@@ -879,7 +879,7 @@ vte_sequence_handler_cS (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_cv
+ * vte_sequence_handler_cv - Cursor vertical move
  *
  * Move the cursor to the given row (vertical position).
  */
@@ -908,7 +908,7 @@ vte_sequence_handler_cv (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_dc
+ * vte_sequence_handler_dc - Delete character
  *
  * Delete a character at the current cursor position.
  */
@@ -945,7 +945,7 @@ vte_sequence_handler_dc (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_DC
+ * vte_sequence_handler_DC - Delete characters
  *
  * Delete N characters at the current cursor position.
  */
@@ -957,7 +957,7 @@ vte_sequence_handler_DC (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_dl
+ * vte_sequence_handler_dl - Delete line
  *
  * Delete a line at the current cursor position.
  */
@@ -1003,7 +1003,7 @@ vte_sequence_handler_dl (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_DL
+ * vte_sequence_handler_DL - Delete lines
  *
  * Delete N lines at the current cursor position.
  */
@@ -1038,7 +1038,7 @@ vte_sequence_handler_do (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_DO
+ * vte_sequence_handler_DO - Cursor down
  *
  * Cursor down, no scrolling.
  */
@@ -1050,7 +1050,7 @@ vte_sequence_handler_DO (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ec
+ * vte_sequence_handler_ec - Erase characters
  *
  * Erase characters starting at the cursor position (overwriting N with
  * spaces, but not moving the cursor).
@@ -1104,9 +1104,7 @@ vte_sequence_handler_ec (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_fs
- *
- * Move from status line.
+ * vte_sequence_handler_fs - Move from status line
  */
 static void
 vte_sequence_handler_fs (RarOuter *outer, GValueArray *params)
@@ -1116,7 +1114,7 @@ vte_sequence_handler_fs (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ho
+ * vte_sequence_handler_ho - Home cursor
  *
  * Move the cursor to the home position.
  */
@@ -1128,9 +1126,7 @@ vte_sequence_handler_ho (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ic
- *
- * Insert a character.
+ * vte_sequence_handler_ic - Insert character
  */
 static void
 vte_sequence_handler_ic (RarOuter *outer, GValueArray *params)
@@ -1146,7 +1142,7 @@ vte_sequence_handler_ic (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_IC
+ * vte_sequence_handler_IC - Insert characters
  *
  * Insert N characters.
  */
@@ -1158,7 +1154,7 @@ vte_sequence_handler_IC (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_kb
+ * vte_sequence_handler_kb - Send key for backspace
  *
  * Send me a backspace key sym, will you?  Guess that the application meant
  * to send the cursor back one position.
@@ -1172,9 +1168,7 @@ vte_sequence_handler_kb (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ke
- *
- * Keypad mode end.
+ * vte_sequence_handler_ke - Keypad mode end
  */
 static void
 vte_sequence_handler_ke (RarOuter *outer, GValueArray *params)
@@ -1184,7 +1178,7 @@ vte_sequence_handler_ke (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ks
+ * vte_sequence_handler_ks - Keypad mode start
  *
  * Keypad mode start.
  */
@@ -1225,7 +1219,7 @@ vte_sequence_handler_le (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_LE
+ * vte_sequence_handler_LE - Cursor left
  *
  * Move the cursor left N columns.
  */
@@ -1237,7 +1231,7 @@ vte_sequence_handler_LE (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ll
+ * vte_sequence_handler_ll - Cursor lower left
  *
  * Move the cursor to the lower left corner of the display.
  */
@@ -1252,9 +1246,7 @@ vte_sequence_handler_ll (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_mb
- *
- * Blink on.
+ * vte_sequence_handler_mb - Blink on
  */
 static void
 vte_sequence_handler_mb (RarOuter *outer, GValueArray *params)
@@ -1264,9 +1256,7 @@ vte_sequence_handler_mb (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_md
- *
- * Bold on.
+ * vte_sequence_handler_md - Bold on
  */
 static void
 vte_sequence_handler_md (RarOuter *outer, GValueArray *params)
@@ -1277,9 +1267,7 @@ vte_sequence_handler_md (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_me
- *
- * End modes.
+ * vte_sequence_handler_me - End modes
  */
 static void
 vte_sequence_handler_me (RarOuter *outer, GValueArray *params)
@@ -1289,9 +1277,7 @@ vte_sequence_handler_me (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_mh
- *
- * Half-bright on.
+ * vte_sequence_handler_mh - Half-bright on
  */
 static void
 vte_sequence_handler_mh (RarOuter *outer, GValueArray *params)
@@ -1302,9 +1288,7 @@ vte_sequence_handler_mh (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_mk
- *
- * Invisible on.
+ * vte_sequence_handler_mk - Invisible on
  */
 static void
 vte_sequence_handler_mk (RarOuter *outer, GValueArray *params)
@@ -1314,9 +1298,7 @@ vte_sequence_handler_mk (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_mr
- *
- * Reverse on.
+ * vte_sequence_handler_mr - Reverse on
  */
 static void
 vte_sequence_handler_mr (RarOuter *outer, GValueArray *params)
@@ -1326,9 +1308,7 @@ vte_sequence_handler_mr (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_nd
- *
- * Cursor right.
+ * vte_sequence_handler_nd - Cursor right
  */
 static void
 vte_sequence_handler_nd (RarOuter *outer, GValueArray *params)
@@ -1341,7 +1321,7 @@ vte_sequence_handler_nd (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_nw
+ * vte_sequence_handler_nw - Carriage return
  *
  * Carriage return command(?).
  */
@@ -1353,7 +1333,7 @@ vte_sequence_handler_nw (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_rc
+ * vte_sequence_handler_rc - Restore cursor position
  *
  * Restore cursor (position).
  */
@@ -1370,7 +1350,7 @@ vte_sequence_handler_rc (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_RI
+ * vte_sequence_handler_RI - Cursor right
  *
  * Cursor right N characters.
  */
@@ -1382,7 +1362,7 @@ vte_sequence_handler_RI (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_sc
+ * vte_sequence_handler_sc - Save cursor position
  *
  * Save cursor (position).
  */
@@ -1397,9 +1377,7 @@ vte_sequence_handler_sc (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_se
- *
- * Standout end.
+ * vte_sequence_handler_se - Standout end
  */
 static void
 vte_sequence_handler_se (RarOuter *outer, GValueArray *params)
@@ -1434,7 +1412,7 @@ vte_sequence_handler_se (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_sf
+ * vte_sequence_handler_sf - Cursor down (scroll)
  *
  * Cursor down, with scrolling.
  */
@@ -1446,7 +1424,7 @@ vte_sequence_handler_sf (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_SF
+ * vte_sequence_handler_SF - Cursor down (scroll)
  *
  * Cursor down, with scrolling.
  */
@@ -1459,9 +1437,7 @@ vte_sequence_handler_SF (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_so
- *
- * Standout start.
+ * vte_sequence_handler_so - Standout start
  */
 static void
 vte_sequence_handler_so (RarOuter *outer, GValueArray *params)
@@ -1499,7 +1475,7 @@ vte_sequence_handler_so (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_sr
+ * vte_sequence_handler_sr - Cursor up (scroll)
  *
  * Cursor up, scrolling if need be.
  */
@@ -1538,7 +1514,7 @@ vte_sequence_handler_sr (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_SR
+ * vte_sequence_handler_SR - Cursor up (scroll)
  *
  * Cursor up, with scrolling.
  */
@@ -1550,9 +1526,7 @@ vte_sequence_handler_SR (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ta
- *
- * Tab.
+ * vte_sequence_handler_ta - Tab
  */
 static void
 vte_sequence_handler_ta (RarOuter *outer, GValueArray *params)
@@ -1644,9 +1618,7 @@ vte_sequence_handler_ta (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ts
- *
- * Move to status line.
+ * vte_sequence_handler_ts - Move to status line
  */
 static void
 vte_sequence_handler_ts (RarOuter *outer, GValueArray *params)
@@ -1658,7 +1630,7 @@ vte_sequence_handler_ts (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_uc
+ * vte_sequence_handler_uc - Underline character
  *
  * Underline this character and move right.
  */
@@ -1692,9 +1664,7 @@ vte_sequence_handler_uc (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_ue
- *
- * Underline end.
+ * vte_sequence_handler_ue - Underline end
  */
 static void
 vte_sequence_handler_ue (RarOuter *outer, GValueArray *params)
@@ -1704,7 +1674,7 @@ vte_sequence_handler_ue (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_up
+ * vte_sequence_handler_up - Cursor up
  *
  * Cursor up, no scrolling.
  */
@@ -1726,7 +1696,7 @@ vte_sequence_handler_up (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_UP
+ * vte_sequence_handler_UP - Cursor up
  *
  * Cursor up N lines, no scrolling.
  */
@@ -1738,9 +1708,7 @@ vte_sequence_handler_UP (RarOuter *outer, GValueArray *params)
 }
 
 /**
- * vte_sequence_handler_us
- *
- * Underline start.
+ * vte_sequence_handler_us - Underline start
  */
 static void
 vte_sequence_handler_us (RarOuter *outer, GValueArray *params)
