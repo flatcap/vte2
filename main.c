@@ -10,7 +10,7 @@
 static gboolean
 app_close (gpointer loop)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	printf ("quitting app_close\n");
 	g_main_loop_quit (loop);
 	return FALSE;
@@ -39,7 +39,7 @@ term_work (gpointer data)
 int
 main (int argc, char *argv[])
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GObject *obj = NULL;
 	RarTerminal *term = NULL;
 	RarView *view1 = NULL;

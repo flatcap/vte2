@@ -133,7 +133,7 @@ enum
 GObject *
 rar_terminal_new (void)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	return g_object_new(RAR_TYPE_TERMINAL, NULL);
 }
 
@@ -143,7 +143,7 @@ rar_terminal_new (void)
 void
 rar_terminal_init (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	RarTerminalPrivate *pvt;
 
 	/* Initialize private data. */
@@ -206,7 +206,7 @@ rar_terminal_init (RarTerminal *terminal)
 static void
 rar_terminal_dispose (GObject *gobject)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 #if 0
 	/* 
 	 * In dispose, you are supposed to free all types referenced from this
@@ -236,7 +236,7 @@ rar_terminal_dispose (GObject *gobject)
 static void
 rar_terminal_finalize (GObject *object)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	printf ("%s: %p dying\n", __FUNCTION__, object);
 
 	/*
@@ -259,7 +259,7 @@ rar_terminal_get_property (GObject *object,
                            GValue *value,
                            GParamSpec *pspec)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
         RarTerminal *terminal = RAR_TERMINAL (object);
         RarTerminalPrivate *pvt = terminal->pvt;
 
@@ -286,7 +286,7 @@ rar_terminal_set_property (GObject *object,
                            const GValue *value,
                            GParamSpec *pspec)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
         RarTerminal *terminal = RAR_TERMINAL (object);
 
 	switch (prop_id)
@@ -309,7 +309,7 @@ rar_terminal_set_property (GObject *object,
 void
 rar_terminal_class_init (RarTerminalClass *klass)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GObjectClass *gobject_class;
 
 	g_type_class_add_private(klass, sizeof (RarTerminalPrivate));
@@ -367,7 +367,7 @@ rar_terminal_class_init (RarTerminalClass *klass)
 void
 rar_terminal_set_shell (RarTerminal *term, const char *shell)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	printf ("%s: shell = %s\n", __FUNCTION__, shell);
 }
 
@@ -377,7 +377,7 @@ rar_terminal_set_shell (RarTerminal *term, const char *shell)
 void
 rar_terminal_set_size (RarTerminal *term, int width, int height)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	printf ("%s: size = %d,%d\n", __FUNCTION__, width, height);
 }
 
@@ -387,7 +387,7 @@ rar_terminal_set_size (RarTerminal *term, int width, int height)
 void
 rar_terminal_set_scrollback (RarTerminal *term, int lines)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	printf ("%s: scrollback = %d\n", __FUNCTION__, lines);
 }
 
@@ -397,7 +397,7 @@ rar_terminal_set_scrollback (RarTerminal *term, int lines)
 void
 rar_terminal_set_env (RarTerminal *term, const char **env)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	printf ("%s: env =", __FUNCTION__);
 	for (; *env; env++) {
 		printf (" %s", *env);
@@ -411,7 +411,7 @@ rar_terminal_set_env (RarTerminal *term, const char **env)
 void
 rar_terminal_run_shell (RarTerminal *term)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	const char *command_argv[] = { "/bin/bash", NULL };
 	const char *env_add[] = { "DEBUG_APP=TRUE", NULL };
 	GPid child_pid = 0;
@@ -428,7 +428,7 @@ rar_terminal_run_shell (RarTerminal *term)
 RarView *
 rar_terminal_new_view (RarTerminal *term)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GObject *obj = NULL;
 	RarView *view = NULL;
 
@@ -525,7 +525,7 @@ vte_terminal_get_pty_object(RarTerminal *terminal)
 /*static*/ struct _vte_incoming_chunk *
 get_chunk (void)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	struct _vte_incoming_chunk *chunk = NULL;
 	if (free_chunks) {
 		chunk = free_chunks;
@@ -545,7 +545,7 @@ get_chunk (void)
 static void
 release_chunk (struct _vte_incoming_chunk *chunk)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	chunk->next = free_chunks;
 	chunk->len = free_chunks ? free_chunks->len + 1 : 0;
 	free_chunks = chunk;
@@ -557,7 +557,7 @@ release_chunk (struct _vte_incoming_chunk *chunk)
 /*static*/ void
 prune_chunks (guint len)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	struct _vte_incoming_chunk *chunk = NULL;
 	if (len && free_chunks != NULL) {
 	    if (free_chunks->len > len) {
@@ -586,7 +586,7 @@ prune_chunks (guint len)
 static void
 _vte_incoming_chunks_release (struct _vte_incoming_chunk *chunk)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	while (chunk) {
 		struct _vte_incoming_chunk *next = chunk->next;
 		release_chunk (chunk);
@@ -600,7 +600,7 @@ _vte_incoming_chunks_release (struct _vte_incoming_chunk *chunk)
 static gsize
 _vte_incoming_chunks_length (struct _vte_incoming_chunk *chunk)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gsize len = 0;
 	while (chunk) {
 		len += chunk->len;
@@ -615,7 +615,7 @@ _vte_incoming_chunks_length (struct _vte_incoming_chunk *chunk)
 static gsize
 _vte_incoming_chunks_count (struct _vte_incoming_chunk *chunk)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gsize cnt = 0;
 	while (chunk) {
 		cnt ++;
@@ -630,7 +630,7 @@ _vte_incoming_chunks_count (struct _vte_incoming_chunk *chunk)
 /*static*/ struct _vte_incoming_chunk *
 _vte_incoming_chunks_reverse (struct _vte_incoming_chunk *chunk)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	struct _vte_incoming_chunk *prev = NULL;
 	while (chunk) {
 		struct _vte_incoming_chunk *next = chunk->next;
@@ -650,7 +650,7 @@ _vte_incoming_chunks_reverse (struct _vte_incoming_chunk *chunk)
 static void
 vte_terminal_process_incoming (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	RarOuter *outer;
 	//RARXXX VteVisualPosition cursor;
 	//RARXXX gboolean cursor_visible;
@@ -1078,7 +1078,7 @@ next_match:
 static void
 _vte_terminal_disconnect_pty_read (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if (terminal->pvt->pty_input_source != 0) {
 		_vte_debug_print (VTE_DEBUG_IO, "disconnecting poll of vte_terminal_io_read\n");
 		g_source_remove(terminal->pvt->pty_input_source);
@@ -1092,7 +1092,7 @@ _vte_terminal_disconnect_pty_read (RarTerminal *terminal)
 static void
 _vte_terminal_disconnect_pty_write (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if (terminal->pvt->pty_output_source != 0) {
 		_vte_debug_print (VTE_DEBUG_IO, "disconnecting poll of vte_terminal_io_write\n");
 
@@ -1107,7 +1107,7 @@ _vte_terminal_disconnect_pty_write (RarTerminal *terminal)
 static void
 remove_from_active_list (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 #if 0
 	if (terminal->pvt->active != NULL
 			&& terminal->pvt->update_regions == NULL) {
@@ -1143,7 +1143,7 @@ remove_from_active_list (RarTerminal *terminal)
 static void
 vte_terminal_stop_processing (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	remove_from_active_list (terminal);
 }
 
@@ -1153,7 +1153,7 @@ vte_terminal_stop_processing (RarTerminal *terminal)
 static void
 _vte_terminal_setup_utf8 (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 #ifndef RARXXX
         RarTerminalPrivate *pvt = terminal->pvt;
         GError *error = NULL;
@@ -1173,7 +1173,7 @@ _vte_terminal_setup_utf8 (RarTerminal *terminal)
 /*static*/ void
 _vte_terminal_feed_chunks (RarTerminal *terminal, struct _vte_incoming_chunk *chunks)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	struct _vte_incoming_chunk *last;
 
 	_vte_debug_print(VTE_DEBUG_IO, "Feed %"G_GSIZE_FORMAT" bytes, in %"G_GSIZE_FORMAT" chunks.\n",
@@ -1191,7 +1191,7 @@ _vte_terminal_feed_chunks (RarTerminal *terminal, struct _vte_incoming_chunk *ch
 static inline gboolean
 vte_terminal_is_processing (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	return terminal->pvt->active != NULL;
 }
 
@@ -1203,7 +1203,7 @@ vte_terminal_is_processing (RarTerminal *terminal)
 static gboolean
 process_timeout (gpointer data)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GList *l, *next;
 	gboolean again;
 
@@ -1291,7 +1291,7 @@ process_timeout (gpointer data)
 static void
 vte_terminal_add_process_timeout (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_debug_print(VTE_DEBUG_TIMEOUT,
 			"Adding terminal to active list\n");
 	terminal->pvt->active = active_terminals =
@@ -1313,7 +1313,7 @@ vte_terminal_add_process_timeout (RarTerminal *terminal)
 static void
 vte_terminal_eof(GIOChannel *channel, RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
         GObject *object = G_OBJECT(terminal);
 
         g_object_freeze_notify(object);
@@ -1332,7 +1332,7 @@ vte_terminal_eof(GIOChannel *channel, RarTerminal *terminal)
 static gboolean
 vte_terminal_emit_eof(RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_debug_print(VTE_DEBUG_SIGNALS,
 			"Emitting `eof'.\n");
 	//RARXXX GDK_THREADS_ENTER ();
@@ -1349,7 +1349,7 @@ vte_terminal_emit_eof(RarTerminal *terminal)
 static void
 vte_terminal_queue_eof(RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_debug_print(VTE_DEBUG_SIGNALS,
 			"Queueing `eof'.\n");
 	g_idle_add_full (G_PRIORITY_HIGH,
@@ -1367,7 +1367,7 @@ vte_terminal_io_read (GIOChannel *channel,
 		     GIOCondition condition,
 		     RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	int err = 0;
 	gboolean eof, again = TRUE;
 
@@ -1495,7 +1495,7 @@ out:
 static void
 mark_input_source_invalid (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_debug_print (VTE_DEBUG_IO, "removed poll of vte_terminal_io_read\n");
 	terminal->pvt->pty_input_source = 0;
 }
@@ -1506,7 +1506,7 @@ mark_input_source_invalid (RarTerminal *terminal)
 static void
 _vte_terminal_connect_pty_read (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if (terminal->pvt->pty_channel == NULL) {
 		return;
 	}
@@ -1537,7 +1537,7 @@ void
 vte_terminal_set_pty_object (RarTerminal *terminal,
                             VtePty *pty)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
         RarTerminalPrivate *pvt;
         GObject *object;
         long flags;
@@ -1628,7 +1628,7 @@ vte_terminal_set_pty_object (RarTerminal *terminal,
 static void
 vte_terminal_emit_child_exited (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_debug_print(VTE_DEBUG_SIGNALS,
 			"Emitting `child-exited'.\n");
 	g_signal_emit_by_name(terminal, "child-exited");
@@ -1643,7 +1643,7 @@ static void
 vte_terminal_catch_child_exited (VteReaper *reaper, int pid, int status,
 				RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if (pid == terminal->pvt->pty_pid) {
                 GObject *object = G_OBJECT(terminal);
 
@@ -1713,7 +1713,7 @@ void
 vte_terminal_watch_child (RarTerminal *terminal,
                           GPid child_pid)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
         RarTerminalPrivate *pvt;
         GObject *object;
         VteReaper *reaper;
@@ -1802,7 +1802,7 @@ vte_terminal_fork_command_full (RarTerminal *terminal,
                                GPid *child_pid /* out */,
                                GError **error)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
         VtePty *pty;
         GPid pid;
 
@@ -1870,7 +1870,7 @@ vte_terminal_fork_command_full (RarTerminal *terminal,
 static inline void
 _vte_terminal_enable_input_source (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if (terminal->pvt->pty_channel == NULL) {
 		return;
 	}
@@ -1893,7 +1893,7 @@ _vte_terminal_enable_input_source (RarTerminal *terminal)
 static inline gboolean
 need_processing (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	return _vte_incoming_chunks_length (terminal->pvt->incoming) != 0;
 }
 
@@ -1903,7 +1903,7 @@ need_processing (RarTerminal *terminal)
 static void
 time_process_incoming (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gdouble elapsed;
 	glong target;
 	g_timer_reset (process_timer);
@@ -1921,7 +1921,7 @@ time_process_incoming (RarTerminal *terminal)
 static inline void
 vte_terminal_start_processing (RarTerminal *terminal)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if (!vte_terminal_is_processing (terminal)) {
 		vte_terminal_add_process_timeout (terminal);
 	}
@@ -1941,7 +1941,7 @@ vte_terminal_start_processing (RarTerminal *terminal)
 void
 vte_terminal_feed(RarTerminal *terminal, const char *data, glong length)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	/* If length == -1, use the length of the data string. */
 	if (length == ((gssize)-1)) {
 		length = strlen(data);

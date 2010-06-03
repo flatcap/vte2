@@ -27,7 +27,7 @@
 static gsize
 _xread (int fd, char *data, gsize len)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gsize ret, total = 0;
 
 	if (G_UNLIKELY (len && !fd))
@@ -53,7 +53,7 @@ _xread (int fd, char *data, gsize len)
 static void
 _xwrite (int fd, const char *data, gsize len)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gsize ret;
 
 	g_assert (fd || !len);
@@ -76,7 +76,7 @@ _xwrite (int fd, const char *data, gsize len)
 static void
 _xtruncate (gint fd, gsize offset)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	int ret;
 
 	if (G_UNLIKELY (!fd))
@@ -90,7 +90,7 @@ _xtruncate (gint fd, gsize offset)
 static gboolean
 _xwrite_contents (gint fd, GOutputStream *output, GCancellable *cancellable, GError **error)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gboolean ret;
 	GInputStream *input;
 
@@ -127,20 +127,20 @@ G_DEFINE_TYPE (VteFileStream, _vte_file_stream, VTE_TYPE_STREAM)
 static void
 _vte_file_stream_init (VteFileStream *stream G_GNUC_UNUSED)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 }
 
 VteStream *
 _vte_file_stream_new (void)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	return (VteStream *) g_object_new (VTE_TYPE_FILE_STREAM, NULL);
 }
 
 static void
 _vte_file_stream_finalize (GObject *object)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteFileStream *stream = (VteFileStream *) object;
 
 	if (stream->fd[0]) close (stream->fd[0]);
@@ -152,7 +152,7 @@ _vte_file_stream_finalize (GObject *object)
 static inline void
 _vte_file_stream_ensure_fd0 (VteFileStream *stream)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gint fd;
 	gchar *file_name;
 	if (G_LIKELY (stream->fd[0]))
@@ -172,7 +172,7 @@ _vte_file_stream_ensure_fd0 (VteFileStream *stream)
 static void
 _vte_file_stream_reset (VteStream *astream, gsize offset)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteFileStream *stream = (VteFileStream *) astream;
 
 	if (stream->fd[0]) _xtruncate (stream->fd[0], 0);
@@ -184,7 +184,7 @@ _vte_file_stream_reset (VteStream *astream, gsize offset)
 static gsize
 _vte_file_stream_append (VteStream *astream, const char *data, gsize len)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteFileStream *stream = (VteFileStream *) astream;
 	gsize ret;
 
@@ -199,7 +199,7 @@ _vte_file_stream_append (VteStream *astream, const char *data, gsize len)
 static gboolean
 _vte_file_stream_read (VteStream *astream, gsize offset, char *data, gsize len)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteFileStream *stream = (VteFileStream *) astream;
 	gsize l;
 
@@ -222,7 +222,7 @@ _vte_file_stream_read (VteStream *astream, gsize offset, char *data, gsize len)
 static void
 _vte_file_stream_swap_fds (VteFileStream *stream)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gint fd;
 
 	fd = stream->fd[0]; stream->fd[0] = stream->fd[1]; stream->fd[1] = fd;
@@ -231,7 +231,7 @@ _vte_file_stream_swap_fds (VteFileStream *stream)
 static void
 _vte_file_stream_truncate (VteStream *astream, gsize offset)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteFileStream *stream = (VteFileStream *) astream;
 
 	if (G_UNLIKELY (offset < stream->offset[1])) {
@@ -251,7 +251,7 @@ _vte_file_stream_truncate (VteStream *astream, gsize offset)
 static void
 _vte_file_stream_new_page (VteStream *astream)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteFileStream *stream = (VteFileStream *) astream;
 
 	stream->offset[1] = stream->offset[0];
@@ -264,7 +264,7 @@ _vte_file_stream_new_page (VteStream *astream)
 static gsize
 _vte_file_stream_head (VteStream *astream)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteFileStream *stream = (VteFileStream *) astream;
 
 	if (stream->fd[0])
@@ -278,7 +278,7 @@ _vte_file_stream_write_contents (VteStream *astream, GOutputStream *output,
 				 gsize offset,
 				 GCancellable *cancellable, GError **error)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteFileStream *stream = (VteFileStream *) astream;
 
 	if (G_UNLIKELY (offset < stream->offset[1]))
@@ -298,7 +298,7 @@ _vte_file_stream_write_contents (VteStream *astream, GOutputStream *output,
 static void
 _vte_file_stream_class_init (VteFileStreamClass *klass)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
 	gobject_class->finalize = _vte_file_stream_finalize;

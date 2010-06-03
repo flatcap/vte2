@@ -219,7 +219,7 @@ vte_sequence_handler_multiple(RarOuter *outer,
 			      GValueArray *params,
 			      VteTerminalSequenceHandler handler)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long val = 1;
 	int i;
 	GValue *value;
@@ -247,7 +247,7 @@ vte_sequence_handler_offset(RarOuter *outer,
 			    int increment,
 			    VteTerminalSequenceHandler handler)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	guint i;
 	long val;
 	GValue *value;
@@ -271,7 +271,7 @@ vte_sequence_handler_offset(RarOuter *outer,
 /*static*/ void
 _vte_terminal_clear_current_line (RarOuter *outer)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 #ifndef RARXXX
 	VteRowData *rowdata;
 
@@ -305,7 +305,7 @@ _vte_terminal_clear_current_line (RarOuter *outer)
 /*static*/ void
 _vte_terminal_clear_screen (RarOuter *outer)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 #ifndef RARXXX
 	long i, initial, row;
 	initial = outer->screen->insert_delta;
@@ -334,7 +334,7 @@ _vte_terminal_clear_screen (RarOuter *outer)
 /*static*/ VteCell *
 vte_terminal_find_charcell (RarOuter *outer, glong col, glong row)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteCell *ret = NULL;
 #ifndef RARXXX
 	VteRowData *rowdata;
@@ -353,7 +353,7 @@ vte_terminal_find_charcell (RarOuter *outer, glong col, glong row)
 /*static*/ void
 _vte_terminal_home_cursor (RarOuter *outer)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 #ifndef RARXXX
 	outer->screen->cursor_current.row = outer->screen->insert_delta;
 	outer->screen->cursor_current.col = 0;
@@ -368,7 +368,7 @@ _vte_terminal_home_cursor (RarOuter *outer)
 /*static*/ void
 _vte_terminal_scroll_text (RarOuter *outer, int scroll_amount)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 #ifndef RARXXX
 	long start, end, i;
 
@@ -416,7 +416,7 @@ vte_terminal_termcap_string_same_as_for (RarOuter *outer,
 					 const char  *cap_str,
 					 const char  *cap_other)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 #ifndef RARXXX
 	char *other_str;
 	gboolean ret;
@@ -442,7 +442,7 @@ vte_terminal_termcap_string_same_as_for (RarOuter *outer,
 /*static*/ void
 _vte_terminal_clear_above_current (RarOuter *outer)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 #ifndef RARXXX
 	VteRowData *rowdata;
 	long i;
@@ -482,7 +482,7 @@ _vte_terminal_clear_above_current (RarOuter *outer)
 static void
 vte_sequence_handler_al (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long start, end, param, i;
 	GValue *value;
 
@@ -528,7 +528,7 @@ vte_sequence_handler_al (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_AL (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_al (outer, params);
 }
 
@@ -538,7 +538,7 @@ vte_sequence_handler_AL (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_bt (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long newcol;
 
 	/* Calculate which column is the previous tab stop. */
@@ -574,7 +574,7 @@ vte_sequence_handler_bt (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cb (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteRowData *rowdata;
 	long i;
 	VteCell *pcell;
@@ -611,7 +611,7 @@ vte_sequence_handler_cb (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cd (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteRowData *rowdata;
 	glong i;
 
@@ -667,7 +667,7 @@ vte_sequence_handler_cd (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ce (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteRowData *rowdata;
 
 	/* Get the data for the row which the cursor points to. */
@@ -701,7 +701,7 @@ vte_sequence_handler_ce (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ch (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long val;
 
@@ -727,7 +727,7 @@ vte_sequence_handler_ch (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cl (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_terminal_clear_screen (outer);
 	_vte_terminal_home_cursor (outer);
 
@@ -743,7 +743,7 @@ vte_sequence_handler_cl (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cm (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *row, *col;
 	long rowval, colval, origin;
 
@@ -783,7 +783,7 @@ vte_sequence_handler_cm (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cr (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->cursor_current.col = 0;
 }
 
@@ -795,7 +795,7 @@ vte_sequence_handler_cr (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cs (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long start=-1, end=-1, rows;
 	GValue *value;
 
@@ -843,7 +843,7 @@ vte_sequence_handler_cs (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cS (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long start=0, end=outer->row_count-1, rows;
 	GValue *value;
 
@@ -886,7 +886,7 @@ vte_sequence_handler_cS (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cv (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long val, origin;
 	/* We only care if there's a parameter in there. */
@@ -915,7 +915,7 @@ vte_sequence_handler_cv (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_dc (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteRowData *rowdata;
 	long col;
 
@@ -952,7 +952,7 @@ vte_sequence_handler_dc (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_DC (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_multiple(outer, params, vte_sequence_handler_dc);
 }
 
@@ -964,7 +964,7 @@ vte_sequence_handler_DC (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_dl (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long start, end, param, i;
 	GValue *value;
 
@@ -1010,7 +1010,7 @@ vte_sequence_handler_dl (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_DL (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_dl (outer, params);
 }
 
@@ -1022,7 +1022,7 @@ vte_sequence_handler_DL (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_do (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long start, end;
 
 	if (outer->screen->scrolling_restricted) {
@@ -1045,7 +1045,7 @@ vte_sequence_handler_do (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_DO (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_multiple(outer, params, vte_sequence_handler_do);
 }
 
@@ -1058,7 +1058,7 @@ vte_sequence_handler_DO (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ec (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteRowData *rowdata;
 	GValue *value;
 	VteCell *cell;
@@ -1111,7 +1111,7 @@ vte_sequence_handler_ec (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_fs (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->status_line = FALSE;
 }
 
@@ -1123,7 +1123,7 @@ vte_sequence_handler_fs (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ho (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_terminal_home_cursor (outer);
 }
 
@@ -1135,7 +1135,7 @@ vte_sequence_handler_ho (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ic (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteVisualPosition save;
 
 	save = outer->screen->cursor_current;
@@ -1153,7 +1153,7 @@ vte_sequence_handler_ic (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_IC (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_multiple(outer, params, vte_sequence_handler_ic);
 }
 
@@ -1166,7 +1166,7 @@ vte_sequence_handler_IC (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_kb (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	/* Move the cursor left. */
 	vte_sequence_handler_le (outer, params);
 }
@@ -1179,7 +1179,7 @@ vte_sequence_handler_kb (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ke (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->keypad_mode = VTE_KEYMODE_NORMAL;
 }
 
@@ -1191,7 +1191,7 @@ vte_sequence_handler_ke (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ks (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->keypad_mode = VTE_KEYMODE_APPLICATION;
 }
 
@@ -1201,7 +1201,7 @@ vte_sequence_handler_ks (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_le (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 
 	if (outer->screen->cursor_current.col > 0) {
 		/* There's room to move left, so do so. */
@@ -1232,7 +1232,7 @@ vte_sequence_handler_le (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_LE (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_multiple(outer, params, vte_sequence_handler_le);
 }
 
@@ -1244,7 +1244,7 @@ vte_sequence_handler_LE (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ll (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->cursor_current.row = MAX(outer->screen->insert_delta,
 					 outer->screen->insert_delta +
 					 outer->row_count - 1);
@@ -1259,7 +1259,7 @@ vte_sequence_handler_ll (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_mb (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->defaults.attr.blink = 1;
 }
 
@@ -1271,7 +1271,7 @@ vte_sequence_handler_mb (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_md (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->defaults.attr.bold = 1;
 	outer->screen->defaults.attr.half = 0;
 }
@@ -1284,7 +1284,7 @@ vte_sequence_handler_md (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_me (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_terminal_set_default_attributes(outer);
 }
 
@@ -1296,7 +1296,7 @@ vte_sequence_handler_me (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_mh (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->defaults.attr.half = 1;
 	outer->screen->defaults.attr.bold = 0;
 }
@@ -1309,7 +1309,7 @@ vte_sequence_handler_mh (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_mk (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->defaults.attr.invisible = 1;
 }
 
@@ -1321,7 +1321,7 @@ vte_sequence_handler_mk (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_mr (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->defaults.attr.reverse = 1;
 }
 
@@ -1333,7 +1333,7 @@ vte_sequence_handler_mr (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_nd (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if ((outer->screen->cursor_current.col + 1) < outer->column_count) {
 		/* There's room to move right. */
 		outer->screen->cursor_current.col++;
@@ -1348,7 +1348,7 @@ vte_sequence_handler_nd (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_nw (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_cr (outer, params);
 }
 
@@ -1360,7 +1360,7 @@ vte_sequence_handler_nw (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_rc (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->cursor_current.col = outer->screen->cursor_saved.col;
 	outer->screen->cursor_current.row = CLAMP(outer->screen->cursor_saved.row +
 					   outer->screen->insert_delta,
@@ -1377,7 +1377,7 @@ vte_sequence_handler_rc (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_RI (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_multiple(outer, params, vte_sequence_handler_nd);
 }
 
@@ -1389,7 +1389,7 @@ vte_sequence_handler_RI (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_sc (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->cursor_saved.col = outer->screen->cursor_current.col;
 	outer->screen->cursor_saved.row = CLAMP(outer->screen->cursor_current.row -
 					 outer->screen->insert_delta,
@@ -1404,7 +1404,7 @@ vte_sequence_handler_sc (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_se (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	char *standout;
 
 	/* Standout may be mapped to another attribute, so attempt to do
@@ -1441,7 +1441,7 @@ vte_sequence_handler_se (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_sf (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_terminal_cursor_down (outer);
 }
 
@@ -1453,7 +1453,7 @@ vte_sequence_handler_sf (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_SF (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	/* XXX implement this directly in _vte_terminal_cursor_down */
 	vte_sequence_handler_multiple(outer, params, vte_sequence_handler_sf);
 }
@@ -1466,7 +1466,7 @@ vte_sequence_handler_SF (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_so (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	char *standout;
 
 	/* Standout may be mapped to another attribute, so attempt to do
@@ -1506,7 +1506,7 @@ vte_sequence_handler_so (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_sr (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long start, end;
 
 	if (outer->screen->scrolling_restricted) {
@@ -1545,7 +1545,7 @@ vte_sequence_handler_sr (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_SR (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_multiple(outer, params, vte_sequence_handler_sr);
 }
 
@@ -1557,7 +1557,7 @@ vte_sequence_handler_SR (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ta (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long old_len, newcol, col;
 
 	/* Calculate which column is the next tab stop. */
@@ -1651,7 +1651,7 @@ vte_sequence_handler_ta (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ts (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->status_line = TRUE;
 	outer->screen->status_line_changed = TRUE;
 	g_string_truncate(outer->screen->status_line_contents, 0);
@@ -1665,7 +1665,7 @@ vte_sequence_handler_ts (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_uc (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteCell *cell;
 	int column;
 
@@ -1699,7 +1699,7 @@ vte_sequence_handler_uc (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_ue (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->defaults.attr.underline = 0;
 }
 
@@ -1711,7 +1711,7 @@ vte_sequence_handler_ue (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_up (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long start, end;
 
 	if (outer->screen->scrolling_restricted) {
@@ -1733,7 +1733,7 @@ vte_sequence_handler_up (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_UP (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_multiple(outer, params, vte_sequence_handler_up);
 }
 
@@ -1745,7 +1745,7 @@ vte_sequence_handler_UP (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_us (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->defaults.attr.underline = 1;
 }
 
@@ -1758,7 +1758,7 @@ vte_sequence_handler_us (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_character_attributes (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	unsigned int i;
 	GValue *value;
 	long param;
@@ -1926,7 +1926,7 @@ vte_sequence_handler_character_attributes (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_character_position_absolute (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_offset(outer, params, -1, vte_sequence_handler_ch);
 }
 
@@ -1938,7 +1938,7 @@ vte_sequence_handler_character_position_absolute (RarOuter *outer, GValueArray *
 static void
 vte_sequence_handler_cursor_character_absolute (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long val;
 
@@ -1963,7 +1963,7 @@ vte_sequence_handler_cursor_character_absolute (RarOuter *outer, GValueArray *pa
 static void
 vte_sequence_handler_cursor_lower_left (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long row;
 	row = MAX(0, outer->row_count - 1);
 	outer->screen->cursor_current.row = outer->screen->insert_delta + row;
@@ -1978,7 +1978,7 @@ vte_sequence_handler_cursor_lower_left (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cursor_next_line (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->cursor_current.col = 0;
 	vte_sequence_handler_DO (outer, params);
 }
@@ -1991,7 +1991,7 @@ vte_sequence_handler_cursor_next_line (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cursor_position (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_offset(outer, params, -1, vte_sequence_handler_cm);
 }
 
@@ -2003,7 +2003,7 @@ vte_sequence_handler_cursor_position (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_cursor_preceding_line (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->cursor_current.col = 0;
 	vte_sequence_handler_UP (outer, params);
 }
@@ -2020,7 +2020,7 @@ vte_sequence_handler_decset_internal (RarOuter *outer,
 				     gboolean save,
 				     gboolean set)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gboolean recognized = FALSE;
 	gpointer p;
 	guint i;
@@ -2357,7 +2357,7 @@ vte_sequence_handler_decset_internal (RarOuter *outer,
 static void
 vte_sequence_handler_decset (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long setting;
 	guint i;
@@ -2382,7 +2382,7 @@ vte_sequence_handler_decset (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_decreset (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long setting;
 	guint i;
@@ -2407,7 +2407,7 @@ vte_sequence_handler_decreset (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_delete_lines (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long param, end, row;
 	int i;
@@ -2451,7 +2451,7 @@ vte_sequence_handler_delete_lines (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_erase_characters (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_ec (outer, params);
 }
 
@@ -2463,7 +2463,7 @@ vte_sequence_handler_erase_characters (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_erase_in_display (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long param;
 	guint i;
@@ -2509,7 +2509,7 @@ vte_sequence_handler_erase_in_display (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_erase_in_line (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long param;
 	guint i;
@@ -2552,7 +2552,7 @@ vte_sequence_handler_erase_in_line (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_form_feed (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_index (outer, params);
 }
 
@@ -2564,7 +2564,7 @@ vte_sequence_handler_form_feed (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_full_reset (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_terminal_reset(outer, TRUE, TRUE);
 }
 
@@ -2576,7 +2576,7 @@ vte_sequence_handler_full_reset (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_horizontal_and_vertical_position (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_offset(outer, params, -1, vte_sequence_handler_cm);
 }
 
@@ -2588,7 +2588,7 @@ vte_sequence_handler_horizontal_and_vertical_position (RarOuter *outer, GValueAr
 static void
 vte_sequence_handler_index (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_sf (outer, params);
 }
 
@@ -2600,7 +2600,7 @@ vte_sequence_handler_index (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_insert_blank_characters (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_IC (outer, params);
 }
 
@@ -2612,7 +2612,7 @@ vte_sequence_handler_insert_blank_characters (RarOuter *outer, GValueArray *para
 static void
 vte_sequence_handler_insert_lines (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long param, end, row;
 	int i;
@@ -2653,7 +2653,7 @@ vte_sequence_handler_insert_lines (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_line_position_absolute (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_offset(outer, params, -1, vte_sequence_handler_cv);
 }
 
@@ -2665,7 +2665,7 @@ vte_sequence_handler_line_position_absolute (RarOuter *outer, GValueArray *param
 static void
 vte_sequence_handler_next_line (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	outer->screen->cursor_current.col = 0;
 	vte_sequence_handler_DO (outer, params);
 }
@@ -2678,7 +2678,7 @@ vte_sequence_handler_next_line (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_restore_mode (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long setting;
 	guint i;
@@ -2703,7 +2703,7 @@ vte_sequence_handler_restore_mode (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_reverse_index (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_sr (outer, params);
 }
 
@@ -2715,7 +2715,7 @@ vte_sequence_handler_reverse_index (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_save_mode (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue *value;
 	long setting;
 	guint i;
@@ -2740,7 +2740,7 @@ vte_sequence_handler_save_mode (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_screen_alignment_test (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long row;
 	VteRowData *rowdata;
 	VteCell cell;
@@ -2779,7 +2779,7 @@ vte_sequence_handler_screen_alignment_test (RarOuter *outer, GValueArray *params
 static void
 vte_sequence_handler_scroll_down (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long val = 1;
 	GValue *value;
 
@@ -2802,7 +2802,7 @@ vte_sequence_handler_scroll_down (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_scroll_up (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	long val = 1;
 	GValue *value;
 
@@ -2825,7 +2825,7 @@ vte_sequence_handler_scroll_up (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_set_scrolling_region (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_offset(outer, params, -1, vte_sequence_handler_cs);
 }
 
@@ -2835,7 +2835,7 @@ vte_sequence_handler_set_scrolling_region (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_set_scrolling_region_from_start (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue value = {0};
 
 	g_value_init (&value, G_TYPE_LONG);
@@ -2852,7 +2852,7 @@ vte_sequence_handler_set_scrolling_region_from_start (RarOuter *outer, GValueArr
 static void
 vte_sequence_handler_set_scrolling_region_to_end (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	GValue value = {0};
 
 	g_value_init (&value, G_TYPE_LONG);
@@ -2871,7 +2871,7 @@ vte_sequence_handler_set_scrolling_region_to_end (RarOuter *outer, GValueArray *
 static void
 vte_sequence_handler_soft_reset (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_terminal_reset(outer, FALSE, FALSE);
 }
 
@@ -2883,7 +2883,7 @@ vte_sequence_handler_soft_reset (RarOuter *outer, GValueArray *params)
 static void
 vte_sequence_handler_vertical_tab (RarOuter *outer, GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	vte_sequence_handler_index (outer, params);
 }
 
@@ -2898,7 +2898,7 @@ vte_sequence_handler_vertical_tab (RarOuter *outer, GValueArray *params)
 static VteTerminalSequenceHandler
 _vte_sequence_get_handler (const char *name)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	int len = strlen (name);
 
 	const struct vteseq_n_struct *seqhandler;
@@ -2916,7 +2916,7 @@ _vte_terminal_handle_sequence (RarOuter *outer,
 			      GQuark match G_GNUC_UNUSED,
 			      GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteTerminalSequenceHandler handler;
 
 #if 0

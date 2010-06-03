@@ -48,7 +48,7 @@ _vte_matcher_add(const struct _vte_matcher *matcher,
 		 const char *pattern, gssize length,
 		 const char *result, GQuark quark)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	matcher->impl->klass->add(matcher->impl, pattern, length, result, quark);
 }
 
@@ -57,7 +57,7 @@ static void
 _vte_matcher_init(struct _vte_matcher *matcher, const char *emulation,
 		  struct _vte_termcap *termcap)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	const char *code, *value;
 	gboolean found_cr = FALSE, found_lf = FALSE;
 	gssize stripped_length;
@@ -130,7 +130,7 @@ _vte_matcher_init(struct _vte_matcher *matcher, const char *emulation,
 static gpointer
 _vte_matcher_create(gpointer key)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	char *emulation = key;
 	struct _vte_matcher *ret = NULL;
 
@@ -154,7 +154,7 @@ _vte_matcher_create(gpointer key)
 static void
 _vte_matcher_destroy(gpointer value)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	struct _vte_matcher *matcher = value;
 
 	_vte_debug_print(VTE_DEBUG_LIFECYCLE, "_vte_matcher_destroy()\n");
@@ -170,7 +170,7 @@ _vte_matcher_destroy(gpointer value)
 struct _vte_matcher *
 _vte_matcher_new(const char *emulation, struct _vte_termcap *termcap)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	struct _vte_matcher *ret = NULL;
 	g_static_mutex_lock(&_vte_matcher_mutex);
 
@@ -201,7 +201,7 @@ _vte_matcher_new(const char *emulation, struct _vte_termcap *termcap)
 void
 _vte_matcher_free(struct _vte_matcher *matcher)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	g_assert(_vte_matcher_cache != NULL);
 	g_static_mutex_lock(&_vte_matcher_mutex);
 	g_cache_remove(_vte_matcher_cache, matcher);
@@ -215,7 +215,7 @@ _vte_matcher_match(struct _vte_matcher *matcher,
 		   const char **res, const gunichar **consumed,
 		   GQuark *quark, GValueArray **array)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if (G_UNLIKELY (array != NULL && matcher->free_params != NULL)) {
 		*array = matcher->free_params;
 		matcher->free_params = NULL;
@@ -228,7 +228,7 @@ _vte_matcher_match(struct _vte_matcher *matcher,
 void
 _vte_matcher_print(struct _vte_matcher *matcher)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	matcher->impl->klass->print(matcher->impl);
 }
 
@@ -239,7 +239,7 @@ void
 _vte_matcher_free_params_array(struct _vte_matcher *matcher,
 		               GValueArray *params)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	guint i;
 	for (i = 0; i < params->n_values; i++) {
 		GValue *value = &params->values[i];

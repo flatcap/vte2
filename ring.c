@@ -33,7 +33,7 @@
 static void
 _vte_ring_validate (VteRing * ring)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	g_assert(ring != NULL);
 	_vte_debug_print(VTE_DEBUG_RING,
 			" Delta = %lu, Length = %lu, Max = %lu, Writable = %lu.\n",
@@ -54,7 +54,7 @@ _vte_ring_validate (VteRing * ring)
 void
 _vte_ring_init (VteRing *ring, gulong max_rows)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_debug_print(VTE_DEBUG_RING, "New ring %p.\n", ring);
 
 	memset (ring, 0, sizeof (*ring));
@@ -81,7 +81,7 @@ _vte_ring_init (VteRing *ring, gulong max_rows)
 void
 _vte_ring_fini (VteRing *ring)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gulong i;
 
 	for (i = 0; i <= ring->mask; i++)
@@ -106,21 +106,21 @@ typedef struct _VteRowRecord {
 static gboolean
 _vte_ring_read_row_record (VteRing *ring, VteRowRecord *record, gulong position)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	return _vte_stream_read (ring->row_stream, position * sizeof (*record), (char *) record, sizeof (*record));
 }
 
 static void
 _vte_ring_append_row_record (VteRing *ring, const VteRowRecord *record, gulong position)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_stream_append (ring->row_stream, (const char *) record, sizeof (*record));
 }
 
 static void
 _vte_ring_freeze_row (VteRing *ring, gulong position, const VteRowData *row)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteRowRecord record;
 	VteCell *cell;
 	GString *buffer = ring->utf8_buffer;
@@ -181,7 +181,7 @@ _vte_ring_freeze_row (VteRing *ring, gulong position, const VteRowData *row)
 static void
 _vte_ring_thaw_row (VteRing *ring, gulong position, VteRowData *row, gboolean truncate)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteRowRecord records[2], record;
 	VteIntCellAttr attr;
 	VteCellAttrChange attr_change;
@@ -272,7 +272,7 @@ _vte_ring_thaw_row (VteRing *ring, gulong position, VteRowData *row, gboolean tr
 static void
 _vte_ring_reset_streams (VteRing *ring, gulong position)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_debug_print (VTE_DEBUG_RING, "Reseting streams to %lu.\n", position);
 
 	_vte_stream_reset (ring->row_stream, position * sizeof (VteRowRecord));
@@ -288,7 +288,7 @@ _vte_ring_reset_streams (VteRing *ring, gulong position)
 static void
 _vte_ring_new_page (VteRing *ring)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_debug_print (VTE_DEBUG_RING, "Starting new stream page at %lu.\n", ring->writable);
 
 	_vte_stream_new_page (ring->attr_stream);
@@ -303,14 +303,14 @@ _vte_ring_new_page (VteRing *ring)
 static inline VteRowData *
 _vte_ring_writable_index (VteRing *ring, gulong position)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	return &ring->array[position & ring->mask];
 }
 
 const VteRowData *
 _vte_ring_index (VteRing *ring, gulong position)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if (G_LIKELY (position >= ring->writable))
 		return _vte_ring_writable_index (ring, position);
 
@@ -329,7 +329,7 @@ static void _vte_ring_ensure_writable_room (VteRing *ring);
 VteRowData *
 _vte_ring_index_writable (VteRing *ring, gulong position)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_ring_ensure_writable (ring, position);
 	return _vte_ring_writable_index (ring, position);
 }
@@ -337,7 +337,7 @@ _vte_ring_index_writable (VteRing *ring, gulong position)
 static void
 _vte_ring_freeze_one_row (VteRing *ring)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteRowData *row;
 
 	if (G_UNLIKELY (ring->writable == ring->start))
@@ -355,7 +355,7 @@ _vte_ring_freeze_one_row (VteRing *ring)
 static void
 _vte_ring_thaw_one_row (VteRing *ring)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteRowData *row;
 
 	g_assert (ring->start < ring->writable);
@@ -375,7 +375,7 @@ _vte_ring_thaw_one_row (VteRing *ring)
 static void
 _vte_ring_discard_one_row (VteRing *ring)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	ring->start++;
 	if (G_UNLIKELY (ring->start == ring->writable)) {
 		_vte_ring_reset_streams (ring, 0);
@@ -387,7 +387,7 @@ _vte_ring_discard_one_row (VteRing *ring)
 static void
 _vte_ring_maybe_freeze_one_row (VteRing *ring)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if (G_LIKELY (ring->writable + ring->mask == ring->end))
 		_vte_ring_freeze_one_row (ring);
 }
@@ -395,7 +395,7 @@ _vte_ring_maybe_freeze_one_row (VteRing *ring)
 static void
 _vte_ring_maybe_discard_one_row (VteRing *ring)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if ((gulong) _vte_ring_length (ring) == ring->max)
 		_vte_ring_discard_one_row (ring);
 }
@@ -403,7 +403,7 @@ _vte_ring_maybe_discard_one_row (VteRing *ring)
 static void
 _vte_ring_ensure_writable_room (VteRing *ring)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gulong new_mask, old_mask, i, end;
 	VteRowData *old_array, *new_array;;
 
@@ -431,7 +431,7 @@ _vte_ring_ensure_writable_room (VteRing *ring)
 static void
 _vte_ring_ensure_writable (VteRing *ring, gulong position)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if (G_LIKELY (position >= ring->writable))
 		return;
 
@@ -451,7 +451,7 @@ _vte_ring_ensure_writable (VteRing *ring, gulong position)
 void
 _vte_ring_resize (VteRing *ring, gulong max_rows)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	_vte_debug_print(VTE_DEBUG_RING, "Resizing to %lu.\n", max_rows);
 	_vte_ring_validate(ring);
 
@@ -470,7 +470,7 @@ _vte_ring_resize (VteRing *ring, gulong max_rows)
 void
 _vte_ring_shrink (VteRing *ring, gulong max_len)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	if ((gulong) _vte_ring_length (ring) <= max_len)
 		return;
 
@@ -504,7 +504,7 @@ _vte_ring_shrink (VteRing *ring, gulong max_len)
 VteRowData *
 _vte_ring_insert (VteRing *ring, gulong position)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gulong i;
 	VteRowData *row, tmp;
 
@@ -543,7 +543,7 @@ _vte_ring_insert (VteRing *ring, gulong position)
 void
 _vte_ring_remove (VteRing * ring, gulong position)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gulong i;
 	VteRowData tmp;
 
@@ -579,7 +579,7 @@ _vte_ring_remove (VteRing * ring, gulong position)
 VteRowData *
 _vte_ring_append (VteRing * ring)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	return _vte_ring_insert (ring, _vte_ring_next (ring));
 }
 
@@ -592,7 +592,7 @@ _vte_ring_write_row (VteRing *ring,
 		     GCancellable *cancellable,
 		     GError **error)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	VteCell *cell;
 	GString *buffer = ring->utf8_buffer;
 	int i;
@@ -630,7 +630,7 @@ _vte_ring_write_contents (VteRing *ring,
 			  GCancellable *cancellable,
 			  GError **error)
 {
-	printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s\n", __FUNCTION__);e
 	gulong i;
 
 	_vte_debug_print(VTE_DEBUG_RING, "Writing contents to GOutputStream.\n");
