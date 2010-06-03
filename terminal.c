@@ -648,7 +648,7 @@ static void
 vte_terminal_process_incoming (RarTerminal *terminal)
 {
 	printf ("Entering: %s\n", __FUNCTION__);
-	//RARXXX RarScreen *screen;
+	//RARXXX RarOuter *outer;
 	//RARXXX VteVisualPosition cursor;
 	//RARXXX gboolean cursor_visible;
 	GdkPoint bbox_topleft, bbox_bottomright;
@@ -671,11 +671,11 @@ vte_terminal_process_incoming (RarTerminal *terminal)
 #ifndef RARXXX
 	screen = terminal->pvt->screen;
 
-	delta = screen->scroll_delta;
-	bottom = screen->insert_delta == delta;
+	delta = outer->screen->scroll_delta;
+	bottom = outer->screen->insert_delta == delta;
 
 	/* Save the current cursor position. */
-	cursor = screen->cursor_current;
+	cursor = outer->screen->cursor_current;
 	cursor_visible = terminal->pvt->cursor_visible;
 #endif
 
@@ -797,10 +797,10 @@ skip_chunk:
 #ifndef RARXXX
 			/* if we have moved during the sequence handler, restart the bbox */
 			if (invalidated_text &&
-					(screen->cursor_current.col > bbox_bottomright.x + VTE_CELL_BBOX_SLACK ||
-					 screen->cursor_current.col < bbox_topleft.x - VTE_CELL_BBOX_SLACK     ||
-					 screen->cursor_current.row > bbox_bottomright.y + VTE_CELL_BBOX_SLACK ||
-					 screen->cursor_current.row < bbox_topleft.y - VTE_CELL_BBOX_SLACK)) {
+					(outer->screen->cursor_current.col > bbox_bottomright.x + VTE_CELL_BBOX_SLACK ||
+					 outer->screen->cursor_current.col < bbox_topleft.x - VTE_CELL_BBOX_SLACK     ||
+					 outer->screen->cursor_current.row > bbox_bottomright.y + VTE_CELL_BBOX_SLACK ||
+					 outer->screen->cursor_current.row < bbox_topleft.y - VTE_CELL_BBOX_SLACK)) {
 				/* Clip off any part of the box which isn't already on-screen. */
 				bbox_topleft.x = MAX(bbox_topleft.x, 0);
 				bbox_topleft.y = MAX(bbox_topleft.y, delta);
@@ -883,9 +883,9 @@ skip_chunk:
 
 #ifndef RARXXX
 			bbox_topleft.x = MIN(bbox_topleft.x,
-					screen->cursor_current.col);
+					outer->screen->cursor_current.col);
 			bbox_topleft.y = MIN(bbox_topleft.y,
-					screen->cursor_current.row);
+					outer->screen->cursor_current.row);
 #endif
 
 			/* Insert the character. */
@@ -894,10 +894,10 @@ skip_chunk:
 #ifndef RARXXX
 				/* line wrapped, correct bbox */
 				if (invalidated_text &&
-						(screen->cursor_current.col > bbox_bottomright.x + VTE_CELL_BBOX_SLACK	||
-						 screen->cursor_current.col < bbox_topleft.x - VTE_CELL_BBOX_SLACK	||
-						 screen->cursor_current.row > bbox_bottomright.y + VTE_CELL_BBOX_SLACK	||
-						 screen->cursor_current.row < bbox_topleft.y - VTE_CELL_BBOX_SLACK)) {
+						(outer->screen->cursor_current.col > bbox_bottomright.x + VTE_CELL_BBOX_SLACK	||
+						 outer->screen->cursor_current.col < bbox_topleft.x - VTE_CELL_BBOX_SLACK	||
+						 outer->screen->cursor_current.row > bbox_bottomright.y + VTE_CELL_BBOX_SLACK	||
+						 outer->screen->cursor_current.row < bbox_topleft.y - VTE_CELL_BBOX_SLACK)) {
 					/* Clip off any part of the box which isn't already on-screen. */
 					bbox_topleft.x = MAX(bbox_topleft.x, 0);
 					bbox_topleft.y = MAX(bbox_topleft.y, delta);
@@ -918,17 +918,17 @@ skip_chunk:
 				}
 				bbox_topleft.x = MIN(bbox_topleft.x, 0);
 				bbox_topleft.y = MIN(bbox_topleft.y,
-						screen->cursor_current.row);
+						outer->screen->cursor_current.row);
 #endif
 			}
 #ifndef RARXXX
 			/* Add the cells over which we have moved to the region
 			 * which we need to refresh for the user. */
 			bbox_bottomright.x = MAX(bbox_bottomright.x,
-					screen->cursor_current.col);
+					outer->screen->cursor_current.col);
 			/* cursor_current.row + 1 (defer until inv.) */
 			bbox_bottomright.y = MAX(bbox_bottomright.y,
-					screen->cursor_current.row);
+					outer->screen->cursor_current.row);
 #endif
 			invalidated_text = TRUE;
 
@@ -959,11 +959,11 @@ skip_chunk:
 #ifdef VTE_DEBUG
 		/* Some safety checks: ensure the visible parts of the buffer
 		 * are all in the buffer. */
-		g_assert(screen->insert_delta >=
-			 _vte_ring_delta(screen->row_data));
+		g_assert(outer->screen->insert_delta >=
+			 _vte_ring_delta(outer->screen->row_data));
 		/* The cursor shouldn't be above or below the addressable
 		 * part of the display buffer. */
-		g_assert(screen->cursor_current.row >= screen->insert_delta);
+		g_assert(outer->screen->cursor_current.row >= outer->screen->insert_delta);
 #endif
 
 next_match:
@@ -1041,8 +1041,8 @@ next_match:
 				bbox_bottomright.y - bbox_topleft.y);
 	}
 
-	if ((cursor.col != terminal->pvt->screen->cursor_current.col) ||
-	    (cursor.row != terminal->pvt->screen->cursor_current.row)) {
+	if ((cursor.col != terminal->pvt->outer->screen->cursor_current.col) ||
+	    (cursor.row != terminal->pvt->outer->screen->cursor_current.row)) {
 		/* invalidate the old and new cursor positions */
 		if (cursor_visible)
 			_vte_invalidate_cell(terminal, cursor.col, cursor.row);
@@ -1056,10 +1056,10 @@ next_match:
 	/* Tell the input method where the cursor is. */
 	if (GTK_WIDGET_REALIZED(terminal)) {
 		GdkRectangle rect;
-		rect.x = terminal->pvt->screen->cursor_current.col *
+		rect.x = terminal->pvt->outer->screen->cursor_current.col *
 			 terminal->char_width + terminal->pvt->inner_border.left;
 		rect.width = terminal->char_width;
-		rect.y = (terminal->pvt->screen->cursor_current.row - delta) *
+		rect.y = (terminal->pvt->outer->screen->cursor_current.row - delta) *
 			 terminal->char_height + terminal->pvt->inner_border.top;
 		rect.height = terminal->char_height;
 		gtk_im_context_set_cursor_location(terminal->pvt->im_context,
@@ -2108,7 +2108,7 @@ vte_terminal_set_emulation(RarTerminal *terminal, const char *emulation)
 	if (emulation == NULL) {
 		emulation = vte_terminal_get_default_emulation(terminal);
 	}
-	terminal->pvt->screen->shared->emulation = g_intern_string(emulation);
+	terminal->pvt->outer->emulation = g_intern_string(emulation);
 	_vte_debug_print(VTE_DEBUG_MISC,
 			"Setting emulation to `%s'...\n", emulation);
 	/* Find and read the right termcap file. */
@@ -2118,37 +2118,37 @@ vte_terminal_set_emulation(RarTerminal *terminal, const char *emulation)
 	if (terminal->pvt->matcher != NULL) {
 		_vte_matcher_free(terminal->pvt->matcher);
 	}
-	terminal->pvt->matcher = _vte_matcher_new(emulation, terminal->pvt->screen->shared->termcap);
+	terminal->pvt->matcher = _vte_matcher_new(emulation, terminal->pvt->outer->termcap);
 
-	if (terminal->pvt->screen->shared->termcap != NULL) {
+	if (terminal->pvt->outer->termcap != NULL) {
 		/* Read emulation flags. */
-		terminal->pvt->screen->shared->flags.am = _vte_termcap_find_boolean(terminal->pvt->screen->shared->termcap,
-								    terminal->pvt->screen->shared->emulation,
+		terminal->pvt->outer->flags.am = _vte_termcap_find_boolean(terminal->pvt->outer->termcap,
+								    terminal->pvt->outer->emulation,
 								    "am");
-		terminal->pvt->screen->shared->flags.bw = _vte_termcap_find_boolean(terminal->pvt->screen->shared->termcap,
-								    terminal->pvt->screen->shared->emulation,
+		terminal->pvt->outer->flags.bw = _vte_termcap_find_boolean(terminal->pvt->outer->termcap,
+								    terminal->pvt->outer->emulation,
 								    "bw");
-		terminal->pvt->screen->shared->flags.LP = _vte_termcap_find_boolean(terminal->pvt->screen->shared->termcap,
-								    terminal->pvt->screen->shared->emulation,
+		terminal->pvt->outer->flags.LP = _vte_termcap_find_boolean(terminal->pvt->outer->termcap,
+								    terminal->pvt->outer->emulation,
 								    "LP");
-		terminal->pvt->screen->shared->flags.ul = _vte_termcap_find_boolean(terminal->pvt->screen->shared->termcap,
-								    terminal->pvt->screen->shared->emulation,
+		terminal->pvt->outer->flags.ul = _vte_termcap_find_boolean(terminal->pvt->outer->termcap,
+								    terminal->pvt->outer->emulation,
 								    "ul");
-		terminal->pvt->screen->shared->flags.xn = _vte_termcap_find_boolean(terminal->pvt->screen->shared->termcap,
-								    terminal->pvt->screen->shared->emulation,
+		terminal->pvt->outer->flags.xn = _vte_termcap_find_boolean(terminal->pvt->outer->termcap,
+								    terminal->pvt->outer->emulation,
 								    "xn");
 
 		/* Resize to the given default. */
-		columns = _vte_termcap_find_numeric(terminal->pvt->screen->shared->termcap,
-						    terminal->pvt->screen->shared->emulation,
+		columns = _vte_termcap_find_numeric(terminal->pvt->outer->termcap,
+						    terminal->pvt->outer->emulation,
 						    "co");
 		if (columns <= 0) {
 			columns = VTE_COLUMNS;
 		}
 		terminal->pvt->default_column_count = columns;
 
-		rows = _vte_termcap_find_numeric(terminal->pvt->screen->shared->termcap,
-						 terminal->pvt->screen->shared->emulation,
+		rows = _vte_termcap_find_numeric(terminal->pvt->outer->termcap,
+						 terminal->pvt->outer->emulation,
 						 "li");
 		if (rows <= 0 ) {
 			rows = VTE_ROWS;
@@ -2201,15 +2201,15 @@ vte_terminal_set_size(RarTerminal *terminal, glong columns, glong rows)
 		terminal->column_count = columns;
 	}
 	if (old_rows != terminal->row_count || old_columns != terminal->column_count) {
-		RarScreen *screen = terminal->pvt->screen;
-		glong visible_rows = MIN (old_rows, _vte_ring_length (screen->row_data));
+		RarOuter *outer = terminal->pvt->outer;
+		glong visible_rows = MIN (old_rows, _vte_ring_length (outer->screen->row_data));
 		if (terminal->row_count < visible_rows) {
 			glong delta = visible_rows - terminal->row_count;
-			screen->insert_delta += delta;
+			outer->screen->insert_delta += delta;
 #ifndef RARXXX
 			vte_terminal_queue_adjustment_value_changed (
 					terminal,
-					screen->scroll_delta + delta);
+					outer->screen->scroll_delta + delta);
 #endif
 		}
 		//RARXXX gtk_widget_queue_resize_no_redraw (&terminal->widget);
@@ -2250,8 +2250,8 @@ vte_terminal_set_termcap(RarTerminal *terminal, const char *path,
 
 	if (path == NULL) {
 		wpath = g_strdup_printf(DATADIR "/" PACKAGE "/termcap/%s",
-					terminal->pvt->screen->shared->emulation ?
-					terminal->pvt->screen->shared->emulation :
+					terminal->pvt->outer->emulation ?
+					terminal->pvt->outer->emulation :
 					vte_terminal_get_default_emulation(terminal));
 		if (g_stat(wpath, &st) != 0) {
 			g_free(wpath);
@@ -2272,18 +2272,18 @@ vte_terminal_set_termcap(RarTerminal *terminal, const char *path,
 
 	_vte_debug_print(VTE_DEBUG_MISC, "Loading termcap `%s'...",
 			terminal->pvt->termcap_path);
-	if (terminal->pvt->screen->shared->termcap != NULL) {
-		_vte_termcap_free(terminal->pvt->screen->shared->termcap);
+	if (terminal->pvt->outer->termcap != NULL) {
+		_vte_termcap_free(terminal->pvt->outer->termcap);
 	}
-	terminal->pvt->screen->shared->termcap = _vte_termcap_new(terminal->pvt->termcap_path);
+	terminal->pvt->outer->termcap = _vte_termcap_new(terminal->pvt->termcap_path);
 	_vte_debug_print(VTE_DEBUG_MISC, "\n");
-	if (terminal->pvt->screen->shared->termcap == NULL) {
+	if (terminal->pvt->outer->termcap == NULL) {
 		_vte_terminal_inline_error_message(terminal,
 				"Failed to load terminal capabilities from '%s'",
 				terminal->pvt->termcap_path);
 	}
 	if (reset) {
-		vte_terminal_set_emulation(terminal, terminal->pvt->screen->shared->emulation);
+		vte_terminal_set_emulation(terminal, terminal->pvt->outer->emulation);
 	}
 
         g_object_thaw_notify(object);

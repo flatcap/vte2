@@ -9,44 +9,6 @@ typedef enum {
   VTE_REGEX_CURSOR_NAME
 } VteRegexCursorMode;
 
-typedef struct _RarShared {
-	glong row_count;
-	glong column_count;
-
-	gboolean text_modified_flag;
-	gboolean text_inserted_flag;
-	gboolean text_deleted_flag;
-	struct _vte_termcap *termcap;	/* termcap storage */
-	GHashTable *tabstops;
-	int keypad_mode;
-	const char *emulation;		/* terminal type to emulate */
-	struct vte_terminal_flags {	/* boolean termcap flags */
-		gboolean am;
-		gboolean bw;
-		gboolean LP;
-		gboolean ul;
-		gboolean xn;
-	} flags;
-
-	gboolean sun_fkey_mode;
-	gboolean hp_fkey_mode;
-	gboolean legacy_fkey_mode;
-	gboolean vt220_fkey_mode;
-
-	int mouse_tracking_mode; /* this is of type MouseTrackingMode,
-				    but we need to guarantee its type. */
-	gboolean smooth_scroll;
-	gboolean cursor_visible;
-	int cursor_mode;
-	GHashTable *dec_saved;
-	gboolean nrc_mode;
-	gboolean meta_sends_escape;
-	gboolean margin_bell;
-
-	//normal_screen
-	//alternate_screen
-} RarShared;
-
 #ifdef RARXXX // Copied from vte-private.h
 typedef struct _VteVisualPosition {
 	long row, col;
@@ -83,8 +45,45 @@ struct _RarScreen {
 	gboolean status_line;
 	GString *status_line_contents;
 	gboolean status_line_changed;
-
-	RarShared *shared;
 };
+
+typedef struct _RarOuter {
+	glong row_count;
+	glong column_count;
+
+	gboolean text_modified_flag;
+	gboolean text_inserted_flag;
+	gboolean text_deleted_flag;
+	struct _vte_termcap *termcap;	/* termcap storage */
+	GHashTable *tabstops;
+	int keypad_mode;
+	const char *emulation;		/* terminal type to emulate */
+	struct vte_terminal_flags {	/* boolean termcap flags */
+		gboolean am;
+		gboolean bw;
+		gboolean LP;
+		gboolean ul;
+		gboolean xn;
+	} flags;
+
+	gboolean sun_fkey_mode;
+	gboolean hp_fkey_mode;
+	gboolean legacy_fkey_mode;
+	gboolean vt220_fkey_mode;
+
+	int mouse_tracking_mode; /* this is of type MouseTrackingMode,
+				    but we need to guarantee its type. */
+	gboolean smooth_scroll;
+	gboolean cursor_visible;
+	int cursor_mode;
+	GHashTable *dec_saved;
+	gboolean nrc_mode;
+	gboolean meta_sends_escape;
+	gboolean margin_bell;
+
+	RarScreen normal_screen;
+	RarScreen alternate_screen;
+	RarScreen *screen;
+} RarOuter;
 
 #endif // __SCREEN_H__

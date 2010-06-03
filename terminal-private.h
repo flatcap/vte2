@@ -53,7 +53,7 @@ struct _RarTerminalPrivate {
 	VteBuffer *conv_buffer;
 
 	int default_column_count, default_row_count;	/* default sizes */
-	RarScreen *screen;
+	RarOuter *outer;
 };
 
 
