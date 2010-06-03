@@ -1915,7 +1915,6 @@ time_process_incoming (RarTerminal *terminal)
 	target = VTE_MAX_PROCESS_TIME / elapsed * terminal->pvt->input_bytes;
 	terminal->pvt->max_input_bytes =
 		(terminal->pvt->max_input_bytes + target) / 2;
-	printf ("Leaving: %s\n", __FUNCTION__);
 }
 
 /**

@@ -34,11 +34,19 @@ term_work (gpointer data)
 	printf ("\e[32m%s %d\e[0m\n", __FUNCTION__, count);
 
 	if (count == 12) {
-		char buffer[1024];
+		char buffer[20];
 		sprintf (buffer, "ls -la\n");
 
 		vte_terminal_feed_child (term, buffer, strlen (buffer));
 	}
+
+	if (count == 22) {
+		char buffer[20];
+		sprintf (buffer, "sleep 2; seq 10\n");
+
+		vte_terminal_feed_child (term, buffer, strlen (buffer));
+	}
+
 
 	return TRUE;
 }
