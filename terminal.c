@@ -697,13 +697,9 @@ vte_terminal_process_incoming (RarTerminal *terminal)
 			goto skip_chunk;
 		}
 
-#ifdef RARXXX
-		processed = chunk->len;
-#else
 		processed = _vte_iso2022_process(terminal->pvt->iso2022,
 				chunk->data, chunk->len,
 				unichars);
-#endif
 		if (G_UNLIKELY (processed != chunk->len)) {
 			/* shuffle the data about */
 			g_memmove (chunk->data, chunk->data + processed,
@@ -772,7 +768,6 @@ skip_chunk:
 		const gunichar *next;
 		GValueArray *params = NULL;
 
-#ifndef RARXXX
 		/* Try to match any control sequences. */
 		_vte_matcher_match(terminal->pvt->matcher,
 				   &wbuf[start],
@@ -781,7 +776,6 @@ skip_chunk:
 				   &next,
 				   &quark,
 				   &params);
-#endif
 		/* We're in one of three possible situations now.
 		 * First, the match string is a non-empty string and next
 		 * points to the first character which isn't part of this
