@@ -31,6 +31,7 @@
 #define VTE_MAX_PROCESS_TIME		100
 #define VTE_ROWS			24
 #define VTE_COLUMNS			80
+#define VTE_SCROLLBACK_INIT		100
 typedef struct _GdkPoint
 {
 	gint x;
@@ -148,20 +149,22 @@ rar_terminal_init (RarTerminal *terminal)
 	/* Initialize private data. */
 	pvt = terminal->pvt = GET_PRIVATE (terminal);
 
-#ifndef RARXXX
-	/* Initialize the screens and histories. */
-	_vte_ring_init (pvt->alternate_screen.row_data, terminal->row_count);
-	pvt->alternate_screen.sendrecv_mode = TRUE;
-	pvt->alternate_screen.status_line_contents = g_string_new(NULL);
-	pvt->screen = &terminal->pvt->alternate_screen;
-	_vte_terminal_set_default_attributes_y(terminal);
-
-	_vte_ring_init (pvt->normal_screen.row_data,  VTE_SCROLLBACK_INIT);
-	pvt->normal_screen.sendrecv_mode = TRUE;
-	pvt->normal_screen.status_line_contents = g_string_new(NULL);
-	pvt->screen = &terminal->pvt->normal_screen;
-	_vte_terminal_set_default_attributes_y(terminal);
+#ifdef RARXXX // temp object
+	terminal->pvt->outer = g_malloc0 (sizeof (RarOuter));
 #endif
+
+	/* Initialize the screens and histories. */
+	_vte_ring_init (pvt->outer->alternate_screen.row_data, terminal->row_count);
+	pvt->outer->alternate_screen.sendrecv_mode = TRUE;
+	pvt->outer->alternate_screen.status_line_contents = g_string_new(NULL);
+	pvt->outer->screen = &terminal->pvt->outer->alternate_screen;
+	//RARXXX _vte_terminal_set_default_attributes(terminal);
+
+	_vte_ring_init (pvt->outer->normal_screen.row_data,  VTE_SCROLLBACK_INIT);
+	pvt->outer->normal_screen.sendrecv_mode = TRUE;
+	pvt->outer->normal_screen.status_line_contents = g_string_new(NULL);
+	pvt->outer->screen = &terminal->pvt->outer->normal_screen;
+	//RARXXX _vte_terminal_set_default_attributes(terminal);
 
 	/* Set up I/O encodings. */
 	pvt->iso2022 = _vte_iso2022_state_new(pvt->encoding,
