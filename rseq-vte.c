@@ -2658,7 +2658,7 @@ vte_sequence_handler_decset_internal (RarOuter *outer,
 		 vte_sequence_handler_sc,},
 		/* 1049: Use alternate screen buffer, saving the cursor
 		 * position. */
-		{1049, NULL, NULL, (gpointer) &outer,
+		{1049, NULL, NULL, (gpointer) &outer->screen,
 		 &outer->normal_screen,
 		 &outer->alternate_screen,
 		 vte_sequence_handler_rc,
