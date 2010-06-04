@@ -157,7 +157,7 @@ rar_terminal_init (RarTerminal *terminal)
 #endif
 
 	/* Initialize the screens and histories. */
-	_vte_ring_init (pvt->outer->alternate_screen.row_data, terminal->row_count);
+	_vte_ring_init (pvt->outer->alternate_screen.row_data, terminal->pvt->outer->row_count);
 	pvt->outer->alternate_screen.sendrecv_mode = TRUE;
 	pvt->outer->alternate_screen.status_line_contents = g_string_new(NULL);
 	pvt->outer->screen = &terminal->pvt->outer->alternate_screen;
@@ -193,9 +193,15 @@ rar_terminal_init (RarTerminal *terminal)
 	 * be set up properly first. */
         pvt->pty = NULL;
 	vte_terminal_set_emulation(terminal, NULL);
+#ifdef RARXXX
+	//temporary hard coding
+	pvt->outer->column_count = VTE_COLUMNS;
+	pvt->outer->row_count = VTE_ROWS;
+#else
 	vte_terminal_set_size(terminal,
 			      pvt->default_column_count,
 			      pvt->default_row_count);
+#endif
 	pvt->pty_input_source = 0;
 	pvt->pty_output_source = 0;
 	pvt->pty_pid = -1;
@@ -802,10 +808,10 @@ skip_chunk:
 				bbox_topleft.x = MAX(bbox_topleft.x, 0);
 				bbox_topleft.y = MAX(bbox_topleft.y, delta);
 				bbox_bottomright.x = MIN(bbox_bottomright.x,
-						terminal->column_count);
+						terminal->pvt->outer->column_count);
 				/* lazily apply the +1 to the cursor_row */
 				bbox_bottomright.y = MIN(bbox_bottomright.y + 1,
-						delta + terminal->row_count);
+						delta + terminal->pvt->outer->row_count);
 
 				_vte_invalidate_cells(terminal,
 						bbox_topleft.x,
@@ -899,10 +905,10 @@ skip_chunk:
 					bbox_topleft.x = MAX(bbox_topleft.x, 0);
 					bbox_topleft.y = MAX(bbox_topleft.y, delta);
 					bbox_bottomright.x = MIN(bbox_bottomright.x,
-							terminal->column_count);
+							terminal->pvt->outer->column_count);
 					/* lazily apply the +1 to the cursor_row */
 					bbox_bottomright.y = MIN(bbox_bottomright.y + 1,
-							delta + terminal->row_count);
+							delta + terminal->pvt->outer->row_count);
 
 					_vte_invalidate_cells(terminal,
 							bbox_topleft.x,
@@ -998,7 +1004,7 @@ next_match:
 						    terminal->pvt->selection_start.row,
 						    0,
 						    terminal->pvt->selection_end.row,
-						    terminal->column_count,
+						    terminal->pvt->outer->column_count,
 						    vte_cell_is_selected,
 						    NULL,
 						    NULL);
@@ -1026,10 +1032,10 @@ next_match:
 		bbox_topleft.x = MAX(bbox_topleft.x, 0);
 		bbox_topleft.y = MAX(bbox_topleft.y, delta);
 		bbox_bottomright.x = MIN(bbox_bottomright.x,
-				terminal->column_count);
+				terminal->pvt->outer->column_count);
 		/* lazily apply the +1 to the cursor_row */
 		bbox_bottomright.y = MIN(bbox_bottomright.y + 1,
-				delta + terminal->row_count);
+				delta + terminal->pvt->outer->row_count);
 
 		_vte_invalidate_cells(terminal,
 				bbox_topleft.x,
@@ -1606,8 +1612,8 @@ vte_terminal_set_pty_object (RarTerminal *terminal,
 
 #ifndef RARXXX
         vte_terminal_set_size(terminal,
-                              terminal->column_count,
-                              terminal->row_count);
+                              terminal->pvt->outer->column_count,
+                              terminal->pvt->outer->row_count);
 #endif
 
         _vte_terminal_setup_utf8 (terminal);
@@ -2406,8 +2412,8 @@ vte_terminal_set_size(RarTerminal *terminal, glong columns, glong rows)
 			"Setting PTY size to %ldx%ld.\n",
 			columns, rows);
 
-	old_rows = terminal->row_count;
-	old_columns = terminal->column_count;
+	old_rows = terminal->pvt->outer->row_count;
+	old_columns = terminal->pvt->outer->column_count;
 
 	if (terminal->pvt->pty != NULL) {
                 GError *error = NULL;
@@ -2421,14 +2427,14 @@ vte_terminal_set_size(RarTerminal *terminal, glong columns, glong rows)
 		}
 		vte_terminal_refresh_size(terminal);
 	} else {
-		terminal->row_count = rows;
-		terminal->column_count = columns;
+		terminal->pvt->outer->row_count = rows;
+		terminal->pvt->outer->column_count = columns;
 	}
-	if (old_rows != terminal->row_count || old_columns != terminal->column_count) {
+	if (old_rows != terminal->pvt->outer->row_count || old_columns != terminal->pvt->outer->column_count) {
 		RarOuter *outer = terminal->pvt->outer;
 		glong visible_rows = MIN (old_rows, _vte_ring_length (outer->screen->row_data));
-		if (terminal->row_count < visible_rows) {
-			glong delta = visible_rows - terminal->row_count;
+		if (terminal->pvt->outer->row_count < visible_rows) {
+			glong delta = visible_rows - terminal->pvt->outer->row_count;
 			outer->screen->insert_delta += delta;
 #ifndef RARXXX
 			vte_terminal_queue_adjustment_value_changed (
@@ -2579,11 +2585,140 @@ vte_terminal_refresh_size(RarTerminal *terminal)
                 return;
 
         if (vte_pty_get_size(pvt->pty, &rows, &columns, &error)) {
-                terminal->row_count = rows;
-                terminal->column_count = columns;
+                terminal->pvt->outer->row_count = rows;
+                terminal->pvt->outer->column_count = columns;
         } else {
                 g_warning(_("Error reading PTY size, using defaults: %s\n"), error->message);
                 g_error_free(error);
 	}
 }
 
+
+/**
+ * dump_screen
+ */
+static void
+dump_screen (const char *name, RarScreen *screen)
+{
+	printf ("Screen: %s:\n", name);
+#if 0
+	//Unused vars
+	VteCellAttrChange *ac;
+	VteCellAttr *attr;
+#endif
+	VteRing *ring = screen->row_data;
+	unsigned long i;
+	int j;
+
+#if 0
+	// Ring vars
+	printf ("ring = %p\n", ring);
+	printf ("    max = %lu\n", ring->max);
+	printf ("    start = %lu\n", ring->start);
+	printf ("    end = %lu\n", ring->end);
+	printf ("    writable = %lu\n", ring->writable);
+	printf ("    mask = %lu\n", ring->mask);
+#endif
+#if 1
+	// List Array
+	printf ("    array\n");
+	for (i = 0; i <= ring->mask; i++) {
+		//if (i == 3) break;
+		/*
+		if (i == 3) {
+			i = ring->mask-3;
+			printf ("        ...\n");
+			continue;
+		}
+		*/
+		//printf ("        attr = %d\n", (int) ring->array[i].attr.soft_wrapped);
+		printf ("        %3lu ", i);
+		for (j = 0; j < ring->array[i].len; j++) {
+			char c = ring->array[i].cells[j].c;
+			printf ("%c", c ? c : '.');
+		}
+		printf ("\n");
+	}
+#endif
+#if 0
+	// List Attrs
+	for (j = 0; j < ring->array[0].len; j++) {
+		int fg,bg;
+		attr = &ring->array[0].cells[j].attr;
+		fg = attr->fore;
+		bg = attr->back;
+		if (fg == 256) fg = 7;
+		if (bg == 257) bg = 0;
+
+		printf ("char %2d: %2d %c%c%c%c%c%c%c%c%c [38;5;%dm%03d[0m [48;5;%dm%03d[0m '%c'\n",
+			j,
+			attr->columns,
+			attr->invisible     ? 'i' : ' ',
+			attr->bold          ? 'b' : ' ',
+			attr->reverse       ? 'r' : ' ',
+			attr->underline     ? 'u' : ' ',
+			attr->strikethrough ? 's' : ' ',
+			attr->fragment      ? 'f' : ' ',
+			attr->standout      ? 'S' : ' ',
+			attr->blink         ? 'B' : ' ',
+			attr->half          ? 'h' : ' ',
+			fg, attr->fore,
+			bg, attr->back,
+			ring->array[0].cells[j].c);
+	}
+#endif
+#if 0
+	// List Streams
+        printf ("    [33mlast_page = %lu[0m\n", ring->last_page);
+	VteFileStream *str1 = (VteFileStream*) ring->attr_stream;
+	VteFileStream *str2 = (VteFileStream*) ring->text_stream;
+	VteFileStream *str3 = (VteFileStream*) ring->row_stream;
+        printf ("    attr_stream = %p (%d,%lu) (%d,%lu)\n", ring->attr_stream, str1->fd[0], str1->offset[0], str1->fd[1], str1->offset[1]);
+        printf ("    text_stream = %p (%d,%lu) (%d,%lu)\n", ring->text_stream, str2->fd[0], str2->offset[0], str2->fd[1], str2->offset[1]);
+        printf ("    row_stream = %p (%d,%lu) (%d,%lu)\n", ring->row_stream, str3->fd[0], str3->offset[0], str3->fd[1], str3->offset[1]);
+#endif
+#if 0
+	// List Other
+	ac = &ring->last_attr;
+        printf ("    last_attr\n");
+        printf ("        text_offset = %lu\n", (gulong) ring->last_attr.text_offset);
+	printf ("        attr = %2d %c%c%c%c%c%c%c%c%c [38;5;%dm%03d[0m [48;5;%dm%03d[0m\n",
+		ac->attr.s.columns,
+		ac->attr.s.invisible     ? 'i' : ' ',
+		ac->attr.s.bold          ? 'b' : ' ',
+		ac->attr.s.reverse       ? 'r' : ' ',
+		ac->attr.s.underline     ? 'u' : ' ',
+		ac->attr.s.strikethrough ? 's' : ' ',
+		ac->attr.s.fragment      ? 'f' : ' ',
+		ac->attr.s.standout      ? 'S' : ' ',
+		ac->attr.s.blink         ? 'B' : ' ',
+		ac->attr.s.half          ? 'h' : ' ',
+		ac->attr.s.fore, ac->attr.s.fore,
+		ac->attr.s.back, ac->attr.s.back);
+
+        printf ("    utf8_buffer = %p\n", ring->utf8_buffer);
+        printf ("    cached_row\n");
+        printf ("        text = '");
+	for (j = 0; j < ring->cached_row.len; j++) {
+		printf ("%c", ring->cached_row.cells[j].c);
+	}
+	printf ("'\n");
+        printf ("        len = %d\n", ring->cached_row.len);
+        printf ("        attr = %d\n", (int) ring->cached_row.attr.soft_wrapped);
+        printf ("    cached_row_num = %ld\n", ring->cached_row_num);
+#endif
+}
+
+/**
+ * rar_terminal_dump_screens
+ */
+void
+rar_terminal_dump_screens (RarTerminal *term)
+{
+	RarOuter *outer = term->pvt->outer;
+
+	printf ("screen: (%ld,%ld)\n", outer->column_count, outer->row_count);
+
+	dump_screen ("Normal", &outer->normal_screen);
+	//dump_screen ("Alternate", &outer->alternate_screen);
+}

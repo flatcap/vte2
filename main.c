@@ -7,13 +7,20 @@
 #include "terminal.h"
 #include "view.h"
 
+GMainLoop *loop = NULL;
+
 /**
  * app_close
  */
 static gboolean
-app_close (gpointer loop)
+app_close (gpointer data)
 {
 	//printf ("quitting app_close\n");
+
+	RarTerminal *term = RAR_TERMINAL (data);
+
+	rar_terminal_dump_screens (term);
+
 	g_main_loop_quit (loop);
 	return FALSE;
 }
@@ -35,6 +42,7 @@ term_work (gpointer data)
 	if (count == 12) {
 		char buffer[20];
 		sprintf (buffer, "ls -la --color ~/bin\n");
+		//sprintf (buffer, "vi gdk_missing.h\n");
 
 		vte_terminal_feed_child (term, buffer, strlen (buffer));
 	}
@@ -42,6 +50,7 @@ term_work (gpointer data)
 	if (count == 22) {
 		char buffer[20];
 		sprintf (buffer, "sleep 2; seq 10\n");
+		//sprintf (buffer, ":help\n:qa!\n");
 
 		vte_terminal_feed_child (term, buffer, strlen (buffer));
 	}
@@ -59,16 +68,15 @@ main (int argc, char *argv[])
 	//printf ("Entering: %s\n", __FUNCTION__);
 	GObject *obj = NULL;
 	RarTerminal *term = NULL;
-	RarView *view1 = NULL;
-	RarView *view2 = NULL;
 	const char *env[] = { "ONE=apple", "TWO=banana", NULL };
 #if 0
+	RarView *view1 = NULL;
+	RarView *view2 = NULL;
 	int h1, h2;
 	int t1, t2;
 	char *str1, *str2;
 #endif
 	GMainContext *context = NULL;
-	GMainLoop *loop = NULL;
 
 	g_type_init();
 
@@ -81,10 +89,10 @@ main (int argc, char *argv[])
 	rar_terminal_set_env        (term, env);
 	rar_terminal_run_shell      (term);
 
+#if 0
 	view1 = rar_terminal_new_view (term);
 	view2 = rar_terminal_new_view (term);
 
-#if 0
 	rar_view_set_follow_cursor (view1, TRUE);
 	rar_view_set_follow_cursor (view2, FALSE);
 
@@ -105,12 +113,14 @@ main (int argc, char *argv[])
 #endif
 
 	loop = g_main_loop_new(context, TRUE);
-	g_timeout_add_seconds (5, app_close, (gpointer) loop);
+	g_timeout_add_seconds (5, app_close, (gpointer) term);
 	g_timeout_add (100,  term_work, (gpointer) term);
 	g_main_loop_run(loop);
 
+#if 0
 	g_object_unref (view1);
 	g_object_unref (view2);
+#endif
 	g_object_unref (term);
 
 	return 0;
