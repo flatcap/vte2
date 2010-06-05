@@ -17,9 +17,10 @@ app_close (gpointer data)
 {
 	//printf ("quitting app_close\n");
 
-	RarTerminal *term = RAR_TERMINAL (data);
+	//RarTerminal *term = RAR_TERMINAL (data);
 
-	rar_terminal_dump_screens (term);
+	//rar_terminal_dump_screens (term);
+	//rar_terminal_dump_termcap (term);
 
 	g_main_loop_quit (loop);
 	return FALSE;
@@ -113,7 +114,7 @@ main (int argc, char *argv[])
 #endif
 
 	loop = g_main_loop_new(context, TRUE);
-	g_timeout_add_seconds (5, app_close, (gpointer) term);
+	g_timeout_add_seconds (1, app_close, (gpointer) term);
 	g_timeout_add (100,  term_work, (gpointer) term);
 	g_main_loop_run(loop);
 

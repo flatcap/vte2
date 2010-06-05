@@ -24,7 +24,8 @@
 
 #include "vtetc.h"
 
-/*
+/**
+ * struct _vte_termcap
  * --- a termcap file is represented by a simple tree ---
  */
 typedef struct _vte_termcap
@@ -34,7 +35,9 @@ typedef struct _vte_termcap
   const char *end;
 } VteTermcap;
 
-/* a special strcmp that treats any character in
+/**
+ * _vte_termcap_strcmp
+ * a special strcmp that treats any character in
  * its third argument (plus '\0') as end of
  * string.
  *
@@ -107,7 +110,8 @@ _vte_termcap_strcmp (const char *a,
   return -1;
 }
 
-/*
+/**
+ * _vte_termcap_find_start
  * --- routines for searching the tree ---
  */
 static const char *
@@ -164,6 +168,9 @@ _vte_termcap_find_start (VteTermcap *termcap,
   return start;
 }
 
+/**
+ * _vte_termcap_unescape_string
+ */
 static int
 _vte_termcap_unescape_string(const char *string, char *result)
 {
@@ -262,6 +269,9 @@ _vte_termcap_unescape_string(const char *string, char *result)
   }
 }
 
+/**
+ * _vte_termcap_find_string_length
+ */
 char *
 _vte_termcap_find_string_length (VteTermcap *termcap,
                                  const char *tname,
@@ -289,6 +299,9 @@ _vte_termcap_find_string_length (VteTermcap *termcap,
   return string;
 }
 
+/**
+ * _vte_termcap_find_string
+ */
 char *
 _vte_termcap_find_string (VteTermcap *termcap,
                           const char *tname,
@@ -300,6 +313,9 @@ _vte_termcap_find_string (VteTermcap *termcap,
   return _vte_termcap_find_string_length (termcap, tname, cap, &length);
 }
 
+/**
+ * _vte_termcap_find_numeric
+ */
 long
 _vte_termcap_find_numeric (VteTermcap *termcap,
                            const char *tname,
@@ -322,6 +338,9 @@ _vte_termcap_find_numeric (VteTermcap *termcap,
   return value;
 }
 
+/**
+ * _vte_termcap_find_boolean
+ */
 gboolean
 _vte_termcap_find_boolean (VteTermcap *termcap,
                            const char *tname,
@@ -343,6 +362,9 @@ _vte_termcap_find_boolean (VteTermcap *termcap,
 
 /*
  * --- routines for building the tree from the file ---
+ */
+/**
+ * _vte_termcap_parse_entry
  */
 static void
 _vte_termcap_parse_entry (GTree *termcap, const char **cnt, const char *end)
@@ -436,6 +458,9 @@ _vte_termcap_parse_entry (GTree *termcap, const char **cnt, const char *end)
   *cnt = contents;
 }
 
+/**
+ * _vte_termcap_parse_file
+ */
 static GTree *
 _vte_termcap_parse_file (const char *contents, int length)
 {
@@ -479,10 +504,13 @@ _vte_termcap_parse_file (const char *contents, int length)
   return termcap;
 }
 
+/**
+ * _vte_termcap_create
+ */
 static VteTermcap *
 _vte_termcap_create (const char *filename)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s (%s)\n", __FUNCTION__, filename);
   const char *contents;
   VteTermcap *termcap;
   GMappedFile *file;
@@ -503,6 +531,9 @@ _vte_termcap_create (const char *filename)
   return termcap;
 }
 
+/**
+ * _vte_termcap_destroy
+ */
 static void
 _vte_termcap_destroy (VteTermcap *termcap)
 {
@@ -520,6 +551,9 @@ _vte_termcap_destroy (VteTermcap *termcap)
 static GStaticMutex _vte_termcap_mutex = G_STATIC_MUTEX_INIT;
 static GCache *_vte_termcap_cache = NULL;
 
+/**
+ * _vte_termcap_new
+ */
 VteTermcap *
 _vte_termcap_new(const char *filename)
 {
@@ -542,6 +576,9 @@ _vte_termcap_new(const char *filename)
   return result;
 }
 
+/**
+ * _vte_termcap_free
+ */
 void
 _vte_termcap_free (VteTermcap *termcap)
 {
@@ -551,3 +588,26 @@ _vte_termcap_free (VteTermcap *termcap)
   g_static_mutex_unlock (&_vte_termcap_mutex);
 }
 
+
+/**
+ * vte_tree_traverse
+ */
+gboolean
+vte_tree_traverse (gpointer key, gpointer value, gpointer data)
+{
+	printf ("\e[33m%s\e[0m\n%s\n\n", (char *) key, (char *) value);
+	return FALSE;
+}
+
+/**
+ * vte_termcap_dump
+ */
+void
+vte_termcap_dump (VteTermcap *termcap)
+{
+	printf ("GMappedFile = %p\n", termcap->file);
+	printf ("Tree        = %p\n", termcap->tree);
+	printf ("end         = '%s'\n", termcap->end);
+
+	g_tree_foreach (termcap->tree, vte_tree_traverse, NULL);
+}

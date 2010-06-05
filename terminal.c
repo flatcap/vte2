@@ -9,6 +9,7 @@
 #ifdef RARXXX // Not sure these are needed /here/
 #include <unistd.h>
 #include <fcntl.h>
+#include "vtetc.h"
 #endif
 
 #include <glib.h>
@@ -2722,3 +2723,13 @@ rar_terminal_dump_screens (RarTerminal *term)
 	dump_screen ("Normal", &outer->normal_screen);
 	//dump_screen ("Alternate", &outer->alternate_screen);
 }
+
+/**
+ * rar_terminal_dump_termcap
+ */
+void
+rar_terminal_dump_termcap (RarTerminal *term)
+{
+	vte_termcap_dump (term->pvt->outer->termcap);
+}
+

@@ -3,7 +3,7 @@
 #
 AWK	= awk
 CAT	= cat
-CC	= gcc
+CC	= ~/bin/colorgcc.pl
 CP	= cp
 GEN_GGM	= glib-genmarshal
 GEN_GME	= glib-mkenums

@@ -59,9 +59,11 @@ void rar_terminal_set_env        (RarTerminal *term, const char **env);
 void rar_terminal_run_shell      (RarTerminal *term);
 
 RarView * rar_terminal_new_view  (RarTerminal *term);
-void rar_terminal_dump_screens (RarTerminal *term);
 
 void vte_terminal_feed_child(RarTerminal *terminal, const char *text, glong length);
+
+void rar_terminal_dump_screens (RarTerminal *term);
+void rar_terminal_dump_termcap (RarTerminal *term);
 
 #endif // __TERMINAL_H__
 

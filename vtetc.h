@@ -54,6 +54,8 @@ char *_vte_termcap_find_string_length(struct _vte_termcap *termcap,
 				      const char *tname,
 				      const char *cap, gssize *length);
 
+void vte_termcap_dump (struct _vte_termcap *termcap);
+
 G_END_DECLS
 
 #endif
