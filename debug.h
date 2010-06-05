@@ -85,6 +85,7 @@ static void _vte_debug_print(guint flags, const char *fmt, ...)
 		va_end (ap);
 	}
 }
+
 #endif
 
 G_END_DECLS

@@ -46,6 +46,7 @@ _vte_ring_validate (VteRing * ring)
 	g_assert (ring->end - ring->start <= ring->max);
 	g_assert (ring->end - ring->writable <= ring->mask);
 }
+
 #else
 #define _vte_ring_validate(ring) G_STMT_START {} G_STMT_END
 #endif

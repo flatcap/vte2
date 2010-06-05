@@ -109,6 +109,7 @@ char_class_exact_check(gunichar c, struct char_class_data *data)
 	//printf ("Entering: %s\n", __FUNCTION__);
 	return (c == data->c) ? TRUE : FALSE;
 }
+
 static void
 char_class_exact_setup(const gunichar *s, struct char_class_data *data, int inc)
 {
@@ -116,6 +117,7 @@ char_class_exact_setup(const gunichar *s, struct char_class_data *data, int inc)
 	data->c = s[0];
 	return;
 }
+
 static void
 char_class_percent_setup(const gunichar *s, struct char_class_data *data,
 			 int inc)
@@ -124,6 +126,7 @@ char_class_percent_setup(const gunichar *s, struct char_class_data *data,
 	data->c = '%';
 	return;
 }
+
 static gboolean
 char_class_none_extract(const gunichar *s, gsize length,
 			struct char_class_data *data, GValueArray *array)
@@ -152,6 +155,7 @@ char_class_digit_check(gunichar c, struct char_class_data *data)
 			return FALSE;
 	}
 }
+
 static void
 char_class_digit_setup(const gunichar *s, struct char_class_data *data, int inc)
 {
@@ -159,6 +163,7 @@ char_class_digit_setup(const gunichar *s, struct char_class_data *data, int inc)
 	data->inc = inc;
 	return;
 }
+
 static gboolean
 char_class_digit_extract(const gunichar *s, gsize length,
 			 struct char_class_data *data, GValueArray *array)
@@ -201,6 +206,7 @@ char_class_multi_check(gunichar c, struct char_class_data *data)
 			return FALSE;
 	}
 }
+
 static void
 char_class_multi_setup(const gunichar *s, struct char_class_data *data, int inc)
 {
@@ -208,6 +214,7 @@ char_class_multi_setup(const gunichar *s, struct char_class_data *data, int inc)
 	data->inc = inc;
 	return;
 }
+
 static gboolean
 char_class_multi_extract(const gunichar *s, gsize length,
 			 struct char_class_data *data, GValueArray *array)
@@ -240,6 +247,7 @@ char_class_any_check(gunichar c, struct char_class_data *data)
 	//printf ("Entering: %s\n", __FUNCTION__);
 	return (c >= data->c) ? TRUE : FALSE;
 }
+
 static void
 char_class_any_setup(const gunichar *s, struct char_class_data *data, int inc)
 {
@@ -247,6 +255,7 @@ char_class_any_setup(const gunichar *s, struct char_class_data *data, int inc)
 	data->c = s[0] + inc;
 	return;
 }
+
 static gboolean
 char_class_any_extract(const gunichar *s, gsize length,
 		       struct char_class_data *data, GValueArray *array)
@@ -269,6 +278,7 @@ char_class_string_check(gunichar c, struct char_class_data *data)
 	//printf ("Entering: %s\n", __FUNCTION__);
 	return (c != data->c) ? TRUE : FALSE;
 }
+
 static void
 char_class_string_setup(const gunichar *s, struct char_class_data *data, int inc)
 {
@@ -276,6 +286,7 @@ char_class_string_setup(const gunichar *s, struct char_class_data *data, int inc
 	data->c = s[0];
 	return;
 }
+
 static gsize
 unichar_snlen(const gunichar *s, gsize length)
 {
@@ -288,6 +299,7 @@ unichar_snlen(const gunichar *s, gsize length)
 	}
 	return length;
 }
+
 static void
 unichar_sncpy(gunichar *d, const gunichar *s, gsize length)
 {
@@ -300,6 +312,7 @@ unichar_sncpy(gunichar *d, const gunichar *s, gsize length)
 		}
 	}
 }
+
 static int
 unichar_sncmp(const gunichar *a, const gunichar *b, gsize length)
 {
@@ -315,6 +328,7 @@ unichar_sncmp(const gunichar *a, const gunichar *b, gsize length)
 	}
 	return 0;
 }
+
 static gboolean
 char_class_string_extract(const gunichar *s, gsize length,
 			  struct char_class_data *data, GValueArray *array)

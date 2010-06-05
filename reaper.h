@@ -40,6 +40,7 @@ struct _VteReaper {
 	GIOChannel *_channel; /* unused */
 	int _iopipe[2]; /* unused */
 };
+
 typedef struct _VteReaper VteReaper;
 
 struct _VteReaperClass {
@@ -47,6 +48,7 @@ struct _VteReaperClass {
         /*< private >*/
 	guint child_exited_signal;
 };
+
 typedef struct _VteReaperClass VteReaperClass;
 
 GType vte_reaper_get_type(void);

@@ -63,6 +63,7 @@ _vte_keysym_name(guint keyval)
 	}
 	return "(unknown)";
 }
+
 static void
 _vte_keysym_print(guint keyval,
 		GdkModifierType modifiers,
@@ -120,6 +121,7 @@ _vte_keysym_print(guint keyval,
 		g_printerr(")");
 	}
 }
+
 #else
 static void
 _vte_keysym_print(guint keyval,
@@ -130,6 +132,7 @@ _vte_keysym_print(guint keyval,
 		gboolean vt220_mode)
 {
 }
+
 #endif
 
 enum _vte_cursor_mode {
@@ -250,30 +253,37 @@ static const struct _vte_keymap_entry _vte_keymap_GDK_2[] = {
 	{cursor_all, keypad_all, fkey_all, GDK_CONTROL_MASK, "\0", 1, X_NULL},
 	{cursor_all, keypad_all, fkey_all, 0, X_NULL, 0, X_NULL},
 };
+
 static const struct _vte_keymap_entry _vte_keymap_GDK_3[] = {
 	{cursor_all, keypad_all, fkey_all, GDK_CONTROL_MASK, "\033", 1, X_NULL},
 	{cursor_all, keypad_all, fkey_all, 0, X_NULL, 0, X_NULL},
 };
+
 static const struct _vte_keymap_entry _vte_keymap_GDK_4[] = {
 	{cursor_all, keypad_all, fkey_all, GDK_CONTROL_MASK, "\034", 1, X_NULL},
 	{cursor_all, keypad_all, fkey_all, 0, X_NULL, 0, X_NULL},
 };
+
 static const struct _vte_keymap_entry _vte_keymap_GDK_5[] = {
 	{cursor_all, keypad_all, fkey_all, GDK_CONTROL_MASK, "\035", 1, X_NULL},
 	{cursor_all, keypad_all, fkey_all, 0, X_NULL, 0, X_NULL},
 };
+
 static const struct _vte_keymap_entry _vte_keymap_GDK_6[] = {
 	{cursor_all, keypad_all, fkey_all, GDK_CONTROL_MASK, "\036", 1, X_NULL},
 	{cursor_all, keypad_all, fkey_all, 0, X_NULL, 0, X_NULL},
 };
+
 static const struct _vte_keymap_entry _vte_keymap_GDK_7[] = {
 	{cursor_all, keypad_all, fkey_all, GDK_CONTROL_MASK, "\037", 1, X_NULL},
 	{cursor_all, keypad_all, fkey_all, 0, X_NULL, 0, X_NULL},
 };
+
 static const struct _vte_keymap_entry _vte_keymap_GDK_8[] = {
 	{cursor_all, keypad_all, fkey_all, GDK_CONTROL_MASK, "\177", 1, X_NULL},
 	{cursor_all, keypad_all, fkey_all, 0, X_NULL, 0, X_NULL},
 };
+
 static const struct _vte_keymap_entry _vte_keymap_GDK_Minus[] = {
 	{cursor_all, keypad_all, fkey_all, GDK_CONTROL_MASK, "\037", 1, X_NULL},
 	{cursor_all, keypad_all, fkey_all, 0, X_NULL, 0, X_NULL},

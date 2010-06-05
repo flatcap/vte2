@@ -1011,6 +1011,7 @@ _vte_pty_read_ptypair(int tunnel, int *parentfd, int *childfd)
 		}
 	}
 }
+
 #elif defined (I_RECVFD)
 static void
 _vte_pty_read_ptypair(int tunnel, int *parentfd, int *childfd)
@@ -1025,6 +1026,7 @@ _vte_pty_read_ptypair(int tunnel, int *parentfd, int *childfd)
 	}
 	*childfd = i;
 }
+
 #endif
 
 #ifdef HAVE_SOCKETPAIR
@@ -1049,6 +1051,7 @@ _vte_pty_pipe_open(int *a, int *b)
 #endif
 	return ret;
 }
+
 #else
 static int
 _vte_pty_pipe_open(int *a, int *b)
@@ -1063,6 +1066,7 @@ _vte_pty_pipe_open(int *a, int *b)
 	}
 	return ret;
 }
+
 #endif
 
 /* Like read, but hide EINTR and EAGAIN. */

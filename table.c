@@ -58,12 +58,14 @@ enum _vte_table_argtype {
 	_vte_table_arg_string,
 	_vte_table_arg_char
 };
+
 struct _vte_table_arginfo {
 	const gunichar *start;
 	struct _vte_table_arginfo *next;
 	guint type:2;
 	guint length:30;
 };
+
 #define MAX_STACK 16
 struct _vte_table_arginfo_head {
 	guint stack_allocated;
@@ -78,6 +80,7 @@ _vte_table_arginfo_head_init(struct _vte_table_arginfo_head *head)
 	head->list = NULL;
 	head->stack_allocated = 0;
 }
+
 static inline struct _vte_table_arginfo*
 _vte_table_arginfo_alloc(struct _vte_table_arginfo_head *head)
 {
@@ -92,6 +95,7 @@ _vte_table_arginfo_alloc(struct _vte_table_arginfo_head *head)
 	head->list = info;
 	return info;
 }
+
 static void
 _vte_table_arginfo_head_revert(struct _vte_table_arginfo_head *head, struct _vte_table_arginfo *last)
 {
@@ -116,6 +120,7 @@ _vte_table_arginfo_head_revert(struct _vte_table_arginfo_head *head, struct _vte
 		info = next;
 	}while (TRUE);
 }
+
 static struct _vte_table_arginfo *
 _vte_table_arginfo_head_reverse(struct _vte_table_arginfo_head *head)
 {
@@ -131,6 +136,7 @@ _vte_table_arginfo_head_reverse(struct _vte_table_arginfo_head *head)
 	}
 	return prev;
 }
+
 static void
 _vte_table_arginfo_head_finalize(struct _vte_table_arginfo_head *head)
 {

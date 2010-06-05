@@ -117,14 +117,17 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_0[] = {
 	{'}', 0x00a3},  /* pound currency sign */
 	{'~', 0x00b7},	/* bullet */
 };
+
 /* United Kingdom.  VT100 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_A[] = {
 	{'$', GDK_sterling},
 };
+
 /* US-ASCII (no conversions).  VT100 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_B[] = {
 	{0, 0},
 };
+
 /* Dutch. VT220 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_4[] = {
 	{'#',  GDK_sterling},
@@ -137,6 +140,7 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_4[] = {
 	{'}',  GDK_onequarter},
 	{'~',  GDK_acute}
 };
+
 /* Finnish. VT220 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_C[] = {
 	{'[',  GDK_Adiaeresis},
@@ -149,6 +153,7 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_C[] = {
 	{'}',  GDK_aring},
 	{'~',  GDK_udiaeresis},
 };
+
 /* French. VT220 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_R[] = {
 	{'#',  GDK_sterling},
@@ -161,6 +166,7 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_R[] = {
 	{'}',  GDK_egrave},
 	{'~',  GDK_diaeresis},
 };
+
 /* French Canadian. VT220 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_Q[] = {
 	{'@',  GDK_agrave},
@@ -174,6 +180,7 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_Q[] = {
 	{'}',  GDK_egrave},
 	{'~',  GDK_ucircumflex},
 };
+
 /* German. VT220 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_K[] = {
 	{'@',  GDK_section},
@@ -185,6 +192,7 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_K[] = {
 	{'}',  GDK_udiaeresis},
 	{'~',  GDK_ssharp},
 };
+
 /* Italian. VT220 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_Y[] = {
 	{'#',  GDK_sterling},
@@ -198,6 +206,7 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_Y[] = {
 	{'}',  GDK_egrave},
 	{'~',  GDK_igrave},
 };
+
 /* Norwegian and Danish. VT220 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_E[] = {
 	{'@',  GDK_Adiaeresis},
@@ -211,6 +220,7 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_E[] = {
 	{'}',  GDK_aring},
 	{'~',  GDK_udiaeresis},
 };
+
 /* Spanish. VT220 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_Z[] = {
 	{'#',  GDK_sterling},
@@ -222,6 +232,7 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_Z[] = {
 	{'|',  GDK_ntilde},
 	{'}',  GDK_ccedilla},
 };
+
 /* Swedish. VT220 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_H[] = {
 	{'@',  GDK_Eacute},
@@ -235,6 +246,7 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_H[] = {
 	{'}',  GDK_aring},
 	{'~',  GDK_udiaeresis},
 };
+
 /* Swiss. VT220 and higher (per XTerm docs). */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_equal[] = {
 	{'#',  GDK_ugrave},
@@ -250,6 +262,7 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_equal[] = {
 	{'}',  GDK_udiaeresis},
 	{'~',  GDK_ucircumflex},
 };
+
 /* Codepage 437. */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_U[] = {
 #include "unitable.CP437"
@@ -259,27 +272,33 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_U[] = {
 static const struct _vte_iso2022_map16 _vte_iso2022_map_J[] = {
 #include "unitable.JIS0201"
 };
+
 /* Japanese.  JIS X 0208-1978, per RFC 1468/2237. */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_wide_at[] = {
 #include "unitable.JIS0208"
 };
+
 /* Chinese.  GB 2312-80, per RFC 1922. */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_wide_A[] = {
 #include "unitable.GB2312"
 };
+
 /* Japanese.  JIS X 0208-1983, per RFC 1468/2237. */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_wide_B[] = {
 #include "unitable.JIS0208"
 };
+
 /* Korean.  KS X 1001 (formerly KS C 5601), per Ken Lunde's
  * CJKV_Information_Processing. */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_wide_C[] = {
 #include "unitable.KSX1001"
 };
+
 /* Japanese.  JIS X 0212-1990, per RFC 2237. */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_wide_D[] = {
 #include "unitable.JIS0212"
 };
+
 /* Chinese.  CNS 11643-plane-1, per RFC 1922. */
 static const struct _vte_iso2022_map32 _vte_iso2022_map_wide_G[] = {
 #include "unitable.CNS11643"

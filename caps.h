@@ -42,6 +42,7 @@ struct _vte_capability_quark {
 	gboolean key;
 	GQuark quark;
 };
+
 struct _vte_capability_string {
 	const char *code;
 	const char *value;
