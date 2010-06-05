@@ -32,7 +32,6 @@ HDR	= buffer.h caps.h config.h debug.h gdk_missing.h gnome-pty.h iso2022.h \
 	  vtepty-private.h vterowdata.h vtestream-base.h vtestream-file.h \
 	  vtestream.h vtetc.h vtetree.h vteunistr.h
 
-SRC	+= keymap.c
 HDR	+= keymap.h keysyms.c
 
 # Generated source
@@ -107,8 +106,8 @@ CFLAGS	+= -Wwrite-strings
 # Basic include dirs
 CFLAGS	+= -I.
 CFLAGS	+= -Iunitable
-CFLAGS	+= $(shell pkg-config gobject-2.0 gio-unix-2.0 ncurses --cflags)
-LDFLAGS	+= $(shell pkg-config gobject-2.0 gio-unix-2.0 ncurses --libs)
+CFLAGS	+= $(shell pkg-config --cflags gobject-2.0 gio-unix-2.0 gmodule-2.0 gthread-2.0 ncurses)
+LDFLAGS	+= $(shell pkg-config --libs   gobject-2.0 gio-unix-2.0 gmodule-2.0 gthread-2.0 ncurses)
 
 #-------------------------------------------------------------------------------
 # Build targets

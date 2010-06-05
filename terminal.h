@@ -30,7 +30,6 @@ struct _RarTerminal {
 	RarTerminalPrivate *pvt;
 
 	/* These were in VteTerminal */
-	Adj *adjustment;	// GtkAdjustment
 };
 
 /**
