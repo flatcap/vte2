@@ -2733,3 +2733,12 @@ rar_terminal_dump_termcap (RarTerminal *term)
 	vte_termcap_dump (term->pvt->outer->termcap);
 }
 
+/**
+ * rar_terminal_dump_matcher
+ */
+void
+rar_terminal_dump_matcher (RarTerminal *term)
+{
+	vte_matcher_dump (term->pvt->matcher);
+}
+

@@ -64,6 +64,7 @@ void vte_terminal_feed_child(RarTerminal *terminal, const char *text, glong leng
 
 void rar_terminal_dump_screens (RarTerminal *term);
 void rar_terminal_dump_termcap (RarTerminal *term);
+void rar_terminal_dump_matcher (RarTerminal *term);
 
 #endif // __TERMINAL_H__
 

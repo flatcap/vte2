@@ -17,10 +17,11 @@ app_close (gpointer data)
 {
 	//printf ("quitting app_close\n");
 
-	//RarTerminal *term = RAR_TERMINAL (data);
+	RarTerminal *term = RAR_TERMINAL (data);
 
 	//rar_terminal_dump_screens (term);
 	//rar_terminal_dump_termcap (term);
+	rar_terminal_dump_matcher (term);
 
 	g_main_loop_quit (loop);
 	return FALSE;

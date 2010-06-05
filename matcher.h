@@ -71,6 +71,8 @@ void _vte_matcher_print(struct _vte_matcher *matcher);
 /* Free a parameter array. */
 void _vte_matcher_free_params_array(struct _vte_matcher *matcher, GValueArray *params);
 
+void vte_matcher_dump (struct _vte_matcher *matcher);
+
 G_END_DECLS
 
 #endif

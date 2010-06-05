@@ -27,6 +27,13 @@
 #include "table.h"
 #include "trie.h"
 
+#ifdef RARXXX
+#include <stdlib.h>
+#endif
+
+/**
+ * struct _vte_matcher
+ */
 struct _vte_matcher {
 	_vte_matcher_match_func match; /* shortcut to the most common op */
 	struct _vte_matcher_impl *impl;
@@ -38,21 +45,28 @@ static GCache *_vte_matcher_cache = NULL;
 static struct _vte_matcher_impl dummy_vte_matcher_trie = {
 	&_vte_matcher_trie
 };
+
 static struct _vte_matcher_impl dummy_vte_matcher_table = {
 	&_vte_matcher_table
 };
 
-/* Add a string to the matcher. */
+/**
+ * _vte_matcher_add
+ * Add a string to the matcher.
+ */
 static void
 _vte_matcher_add(const struct _vte_matcher *matcher,
 		 const char *pattern, gssize length,
 		 const char *result, GQuark quark)
 {
-	//printf ("Entering: %s\n", __FUNCTION__);
+	//printf ("Entering: %s - %s, %s\n", __FUNCTION__, pattern+1, result);
 	matcher->impl->klass->add(matcher->impl, pattern, length, result, quark);
 }
 
-/* Loads all sequences into matcher */
+/**
+ * _vte_matcher_init
+ * Loads all sequences into matcher
+ */
 static void
 _vte_matcher_init(struct _vte_matcher *matcher, const char *emulation,
 		  struct _vte_termcap *termcap)
@@ -124,9 +138,13 @@ _vte_matcher_init(struct _vte_matcher *matcher, const char *emulation,
 		_vte_matcher_print(matcher);
 		g_printerr("\n");
 	}
+	//RARXXX vte_matcher_dump (matcher);
 }
 
-/* Allocates new matcher structure. */
+/**
+ * _vte_matcher_create
+ * Allocates new matcher structure.
+ */
 static gpointer
 _vte_matcher_create(gpointer key)
 {
@@ -150,7 +168,10 @@ _vte_matcher_create(gpointer key)
 	return ret;
 }
 
-/* Noone uses this matcher, free it. */
+/**
+ * _vte_matcher_destroy
+ * Noone uses this matcher, free it.
+ */
 static void
 _vte_matcher_destroy(gpointer value)
 {
@@ -166,7 +187,10 @@ _vte_matcher_destroy(gpointer value)
 	g_slice_free(struct _vte_matcher, matcher);
 }
 
-/* Create and init matcher. */
+/**
+ * _vte_matcher
+ * Create and init matcher.
+ */
 struct _vte_matcher *
 _vte_matcher_new(const char *emulation, struct _vte_termcap *termcap)
 {
@@ -197,7 +221,10 @@ _vte_matcher_new(const char *emulation, struct _vte_termcap *termcap)
 	return ret;
 }
 
-/* Free a matcher. */
+/**
+ * _vte_matcher_free
+ * Free a matcher.
+ */
 void
 _vte_matcher_free(struct _vte_matcher *matcher)
 {
@@ -208,7 +235,10 @@ _vte_matcher_free(struct _vte_matcher *matcher)
 	g_static_mutex_unlock(&_vte_matcher_mutex);
 }
 
-/* Check if a string matches a sequence the matcher knows about. */
+/**
+ * _vte_matcher_match
+ * Check if a string matches a sequence the matcher knows about.
+ */
 const char *
 _vte_matcher_match(struct _vte_matcher *matcher,
 		   const gunichar *pattern, gssize length,
@@ -224,7 +254,10 @@ _vte_matcher_match(struct _vte_matcher *matcher,
 					res, consumed, quark, array);
 }
 
-/* Dump out the contents of a matcher, mainly for debugging. */
+/**
+ * _vte_matcher_print
+ * Dump out the contents of a matcher, mainly for debugging.
+ */
 void
 _vte_matcher_print(struct _vte_matcher *matcher)
 {
@@ -232,9 +265,12 @@ _vte_matcher_print(struct _vte_matcher *matcher)
 	matcher->impl->klass->print(matcher->impl);
 }
 
-/* Free a parameter array.  Most of the GValue elements can clean up after
+/**
+ * _vte_matcher_free_params_array
+ * Free a parameter array.  Most of the GValue elements can clean up after
  * themselves, but we're using gpointers to hold unicode character strings, and
- * we need to free those ourselves. */
+ * we need to free those ourselves.
+ */
 void
 _vte_matcher_free_params_array(struct _vte_matcher *matcher,
 		               GValueArray *params)
@@ -253,5 +289,58 @@ _vte_matcher_free_params_array(struct _vte_matcher *matcher,
 		matcher->free_params = params;
 		params->n_values = 0;
 	}
+}
+
+/**
+ * vte_matcher_dump
+ */
+void
+vte_matcher_dump (struct _vte_matcher *matcher)
+{
+	int i;
+	int count;
+	GValue *val;
+	char *str;
+
+	printf ("functions:\n");
+	printf ("\n");
+	printf ("trie:\n");
+	printf ("	impl = %p\n", &dummy_vte_matcher_trie);
+	printf ("	klass = %p\n", dummy_vte_matcher_trie.klass);
+	printf ("	create = %p\n", dummy_vte_matcher_trie.klass->create);
+	printf ("	add = %p\n", dummy_vte_matcher_trie.klass->add);
+	printf ("	print = %p\n", dummy_vte_matcher_trie.klass->print);
+	printf ("	match = %p\n", dummy_vte_matcher_trie.klass->match);
+	printf ("	destroy = %p\n", dummy_vte_matcher_trie.klass->destroy);
+	printf ("\n");
+	printf ("table:\n");
+	printf ("	impl = %p\n", &dummy_vte_matcher_table);
+	printf ("	klass = %p\n", dummy_vte_matcher_table.klass);
+	printf ("	create = %p\n", dummy_vte_matcher_table.klass->create);
+	printf ("	add = %p\n", dummy_vte_matcher_table.klass->add);
+	printf ("	print = %p\n", dummy_vte_matcher_table.klass->print);
+	printf ("	match = %p\n", dummy_vte_matcher_table.klass->match);
+	printf ("	destroy = %p\n", dummy_vte_matcher_table.klass->destroy);
+	printf ("\n");
+
+	printf ("func   = %p\n", matcher->match);
+	printf ("impl   = %p\n", matcher->impl);
+	printf ("params = %p\n", matcher->free_params);
+
+	count = matcher->free_params->n_values;
+	printf ("values (%d)\n", count);
+
+	for (i = 0; i < count; i++) {
+		val = g_value_array_get_nth (matcher->free_params, i);
+		str = g_strdup_value_contents (val);
+		printf ("\t%s\n", str);
+		free (str);
+	}
+
+	matcher->impl->klass->print (matcher->impl);
+
+	//_vte_matcher_match_func match;
+	//struct _vte_matcher_impl *impl;
+	//GValueArray *free_params;
 }
 

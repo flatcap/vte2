@@ -16,15 +16,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <config.h>
+#include "config.h"
+
+#ifndef RARXXX
 #include <sys/types.h>
 #include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <glib-object.h>
+#endif
+
 #include <string.h>
 #include <glib.h>
-#include <glib-object.h>
 #include "debug.h"
 #include "iso2022.h"
 #include "matcher.h"
