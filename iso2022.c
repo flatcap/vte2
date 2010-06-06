@@ -53,14 +53,23 @@
 /* An invalid codepoint. */
 #define INVALID_CODEPOINT 0xFFFD
 
+/**
+ * struct _vte_iso2022_map16
+ */
 struct _vte_iso2022_map16 {
 	guint16 from, to;
 };
 
+/**
+ * struct _vte_iso2022_map32
+ */
 struct _vte_iso2022_map32 {
 	guint32 from, to;
 };
 
+/**
+ * struct _vte_iso2022_block
+ */
 struct _vte_iso2022_block {
 	enum {
 		_vte_iso2022_cdata,
@@ -70,8 +79,11 @@ struct _vte_iso2022_block {
 	gulong start, end;
 };
 
+/**
+ * struct _vte_iso2022_state
+ */
 struct _vte_iso2022_state {
-	gboolean nrc_enabled;
+	gboolean nrc_enabled; /* National Replacement Character set */
 	int current, override;
 	gunichar g[4];
 	const gchar *codeset, *native_codeset, *utf8_codeset, *target_codeset;
@@ -82,8 +94,12 @@ struct _vte_iso2022_state {
 	VteBuffer *buffer;
 };
 
-/* DEC Special Character and Line Drawing Set.  VT100 and higher (per XTerm
- * docs). */
+
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_0 - DEC Special Chars
+ * DEC Special Character and Line Drawing Set.  VT100 and higher (per XTerm
+ * docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_0[] = {
 	{ 96, 0x25c6},	/* diamond */
 	{'a', 0x2592},	/* checkerboard */
@@ -118,17 +134,26 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_0[] = {
 	{'~', 0x00b7},	/* bullet */
 };
 
-/* United Kingdom.  VT100 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_A - United Kingdom
+ * United Kingdom.  VT100 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_A[] = {
 	{'$', GDK_sterling},
 };
 
-/* US-ASCII (no conversions).  VT100 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_B - US ASCII
+ * US-ASCII (no conversions).  VT100 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_B[] = {
 	{0, 0},
 };
 
-/* Dutch. VT220 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_4 - Dutch
+ * Dutch. VT220 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_4[] = {
 	{'#',  GDK_sterling},
 	{'@',  GDK_threequarters},
@@ -141,7 +166,10 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_4[] = {
 	{'~',  GDK_acute}
 };
 
-/* Finnish. VT220 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_C - Finnish
+ * Finnish. VT220 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_C[] = {
 	{'[',  GDK_Adiaeresis},
 	{'\\', GDK_Odiaeresis},
@@ -154,7 +182,10 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_C[] = {
 	{'~',  GDK_udiaeresis},
 };
 
-/* French. VT220 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_R - French
+ * French. VT220 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_R[] = {
 	{'#',  GDK_sterling},
 	{'@',  GDK_agrave},
@@ -167,7 +198,10 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_R[] = {
 	{'~',  GDK_diaeresis},
 };
 
-/* French Canadian. VT220 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_Q - French Canadian
+ * French Canadian. VT220 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_Q[] = {
 	{'@',  GDK_agrave},
 	{'[',  GDK_acircumflex},
@@ -181,7 +215,10 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_Q[] = {
 	{'~',  GDK_ucircumflex},
 };
 
-/* German. VT220 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_K - German
+ * German. VT220 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_K[] = {
 	{'@',  GDK_section},
 	{'[',  GDK_Adiaeresis},
@@ -193,7 +230,10 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_K[] = {
 	{'~',  GDK_ssharp},
 };
 
-/* Italian. VT220 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_Y - Italian
+ * Italian. VT220 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_Y[] = {
 	{'#',  GDK_sterling},
 	{'@',  GDK_section},
@@ -207,7 +247,10 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_Y[] = {
 	{'~',  GDK_igrave},
 };
 
-/* Norwegian and Danish. VT220 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_E - Norwegian, Danish
+ * Norwegian and Danish. VT220 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_E[] = {
 	{'@',  GDK_Adiaeresis},
 	{'[',  GDK_AE},
@@ -221,7 +264,10 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_E[] = {
 	{'~',  GDK_udiaeresis},
 };
 
-/* Spanish. VT220 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_Z - Spanish
+ * Spanish. VT220 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_Z[] = {
 	{'#',  GDK_sterling},
 	{'@',  GDK_section},
@@ -233,7 +279,10 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_Z[] = {
 	{'}',  GDK_ccedilla},
 };
 
-/* Swedish. VT220 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_H - Swedish
+ * Swedish. VT220 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_H[] = {
 	{'@',  GDK_Eacute},
 	{'[',  GDK_Adiaeresis},
@@ -247,7 +296,10 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_H[] = {
 	{'~',  GDK_udiaeresis},
 };
 
-/* Swiss. VT220 and higher (per XTerm docs). */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_equal - Swiss
+ * Swiss. VT220 and higher (per XTerm docs).
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_equal[] = {
 	{'#',  GDK_ugrave},
 	{'@',  GDK_agrave},
@@ -263,47 +315,75 @@ static const struct _vte_iso2022_map16 _vte_iso2022_map_equal[] = {
 	{'~',  GDK_ucircumflex},
 };
 
-/* Codepage 437. */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_U - Codepage 437
+ * Codepage 437.
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_U[] = {
 #include "unitable.CP437"
 };
 
-/* Japanese.  JIS X 0201-1976 ("Roman" set), per RFC 1468/2237. */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_J - Japanese
+ * Japanese.  JIS X 0201-1976 ("Roman" set), per RFC 1468/2237.
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_J[] = {
 #include "unitable.JIS0201"
 };
 
-/* Japanese.  JIS X 0208-1978, per RFC 1468/2237. */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_wide_at - Japanese
+ * Japanese.  JIS X 0208-1978, per RFC 1468/2237.
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_wide_at[] = {
 #include "unitable.JIS0208"
 };
 
-/* Chinese.  GB 2312-80, per RFC 1922. */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_wide_A - Chinese
+ * Chinese.  GB 2312-80, per RFC 1922.
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_wide_A[] = {
 #include "unitable.GB2312"
 };
 
-/* Japanese.  JIS X 0208-1983, per RFC 1468/2237. */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_wide_B - Japanese
+ * Japanese.  JIS X 0208-1983, per RFC 1468/2237.
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_wide_B[] = {
 #include "unitable.JIS0208"
 };
 
-/* Korean.  KS X 1001 (formerly KS C 5601), per Ken Lunde's
- * CJKV_Information_Processing. */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_wide_C - Korean
+ * Korean.  KS X 1001 (formerly KS C 5601), per Ken Lunde's
+ * CJKV_Information_Processing.
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_wide_C[] = {
 #include "unitable.KSX1001"
 };
 
-/* Japanese.  JIS X 0212-1990, per RFC 2237. */
+/**
+ * struct _vte_iso2022_map16 _vte_iso2022_map_wide_D - Japanese
+ * Japanese.  JIS X 0212-1990, per RFC 2237.
+ */
 static const struct _vte_iso2022_map16 _vte_iso2022_map_wide_D[] = {
 #include "unitable.JIS0212"
 };
 
-/* Chinese.  CNS 11643-plane-1, per RFC 1922. */
+/**
+ * struct _vte_iso2022_map32 _vte_iso2022_map_wide_G - Chinese
+ * Chinese.  CNS 11643-plane-1, per RFC 1922.
+ */
 static const struct _vte_iso2022_map32 _vte_iso2022_map_wide_G[] = {
 #include "unitable.CNS11643"
 };
 
+
+/**
+ * _vte_direct_compare
+ */
 static gint
 _vte_direct_compare(gconstpointer a, gconstpointer b)
 {
@@ -311,9 +391,12 @@ _vte_direct_compare(gconstpointer a, gconstpointer b)
 	return GPOINTER_TO_INT(a) - GPOINTER_TO_INT(b);
 }
 
-/* If we have the encoding, decide how wide an ambiguously-wide character is
+/**
+ * _vte_iso2022_ambiguous_width
+ * If we have the encoding, decide how wide an ambiguously-wide character is
  * based on the encoding.  This is basically what GNU libc does, and it agrees
- * with my reading of Unicode UAX 11, so.... */
+ * with my reading of Unicode UAX 11, so....
+ */
 static int
 _vte_iso2022_ambiguous_width(struct _vte_iso2022_state *state)
 {
@@ -371,6 +454,9 @@ _vte_iso2022_ambiguous_width(struct _vte_iso2022_state *state)
 	return 1;
 }
 
+/**
+ * _vte_iso2022_is_ambiguous
+ */
 static inline gboolean
 _vte_iso2022_is_ambiguous(gunichar c)
 {
@@ -382,6 +468,9 @@ _vte_iso2022_is_ambiguous(gunichar c)
 	return G_UNLIKELY (!g_unichar_iswide (c) && g_unichar_iswide_cjk (c));
 }
 
+/**
+ * _vte_iso2022_unichar_width
+ */
 int
 _vte_iso2022_unichar_width(struct _vte_iso2022_state *state,
 			   gunichar c)
@@ -400,6 +489,9 @@ _vte_iso2022_unichar_width(struct _vte_iso2022_state *state,
 	return 1;
 }
 
+/**
+ * _vte_iso2022_map_init16
+ */
 static GHashTable *
 _vte_iso2022_map_init16(const struct _vte_iso2022_map16 *map, gssize length)
 {
@@ -418,6 +510,9 @@ _vte_iso2022_map_init16(const struct _vte_iso2022_map16 *map, gssize length)
 	return ret;
 }
 
+/**
+ * _vte_iso2022_map_init32
+ */
 static GHashTable *
 _vte_iso2022_map_init32(const struct _vte_iso2022_map32 *map, gssize length)
 {
@@ -436,6 +531,9 @@ _vte_iso2022_map_init32(const struct _vte_iso2022_map32 *map, gssize length)
 	return ret;
 }
 
+/**
+ * _vte_iso2022_map_get
+ */
 static void
 _vte_iso2022_map_get(gunichar mapname,
 		     GHashTable **_map, guint *bytes_per_char, guint *force_width,
@@ -751,6 +849,9 @@ _vte_iso2022_map_get(gunichar mapname,
 	}
 }
 
+/**
+ * _vte_iso2022_get_encoded_width
+ */
 int
 _vte_iso2022_get_encoded_width(gunichar c)
 {
@@ -760,6 +861,9 @@ _vte_iso2022_get_encoded_width(gunichar c)
 	return CLAMP(width, 0, 2);
 }
 
+/**
+ * _vte_iso2022_set_encoded_width
+ */
 static gunichar
 _vte_iso2022_set_encoded_width(gunichar c, int width)
 {
@@ -770,6 +874,9 @@ _vte_iso2022_set_encoded_width(gunichar c, int width)
 	return c;
 }
 
+/**
+ * _vte_iso2022_state
+ */
 struct _vte_iso2022_state *
 _vte_iso2022_state_new(const char *native_codeset,
 		       _vte_iso2022_codeset_changed_cb_fn fn,
@@ -817,6 +924,9 @@ _vte_iso2022_state_new(const char *native_codeset,
 	return state;
 }
 
+/**
+ * _vte_iso2022_state_free
+ */
 void
 _vte_iso2022_state_free(struct _vte_iso2022_state *state)
 {
@@ -828,6 +938,9 @@ _vte_iso2022_state_free(struct _vte_iso2022_state *state)
 	g_slice_free(struct _vte_iso2022_state, state);
 }
 
+/**
+ * _vte_iso2022_state_set_codeset
+ */
 void
 _vte_iso2022_state_set_codeset(struct _vte_iso2022_state *state,
 			       const char *codeset)
@@ -854,6 +967,9 @@ _vte_iso2022_state_set_codeset(struct _vte_iso2022_state *state,
 	state->ambiguous_width = _vte_iso2022_ambiguous_width (state);
 }
 
+/**
+ * _vte_iso2022_state_get_codeset
+ */
 const char *
 _vte_iso2022_state_get_codeset(struct _vte_iso2022_state *state)
 {
@@ -861,6 +977,9 @@ _vte_iso2022_state_get_codeset(struct _vte_iso2022_state *state)
 	return state->codeset;
 }
 
+/**
+ * _vte_iso2022_find_nextctl
+ */
 static const guchar *
 _vte_iso2022_find_nextctl(const guchar *p, const guchar * const q)
 {
@@ -885,6 +1004,9 @@ _vte_iso2022_find_nextctl(const guchar *p, const guchar * const q)
 	return NULL;
 }
 
+/**
+ * _vte_iso2022_sequence_length
+ */
 static long
 _vte_iso2022_sequence_length(const unsigned char *nextctl, gsize length)
 {
@@ -1090,6 +1212,9 @@ _vte_iso2022_sequence_length(const unsigned char *nextctl, gsize length)
 	return sequence_length;
 }
 
+/**
+ * _vte_iso2022_state
+ */
 static int
 process_8_bit_sequence(struct _vte_iso2022_state *state,
 		       const guchar **inbuf, gsize *inbytes,
@@ -1169,6 +1294,9 @@ process_8_bit_sequence(struct _vte_iso2022_state *state,
 	return bytes_per_char + 1;
 }
 
+/**
+ * _vte_iso2022_state
+ */
 static glong
 process_cdata(struct _vte_iso2022_state *state, const guchar *cdata, gsize length,
 	      GArray *gunichars)
@@ -1336,6 +1464,9 @@ process_cdata(struct _vte_iso2022_state *state, const guchar *cdata, gsize lengt
 	return processed;
 }
 
+/**
+ * _vte_iso2022_process_single
+ */
 gunichar
 _vte_iso2022_process_single(struct _vte_iso2022_state *state,
 			    gunichar c, gunichar map)
@@ -1364,6 +1495,9 @@ _vte_iso2022_process_single(struct _vte_iso2022_state *state,
 	return ret;
 }
 
+/**
+ * _vte_iso2022_state
+ */
 static void
 process_control(struct _vte_iso2022_state *state, guchar *ctl, gsize length,
 		GArray *gunichars)
@@ -1640,6 +1774,9 @@ process_control(struct _vte_iso2022_state *state, guchar *ctl, gsize length,
 	}
 }
 
+/**
+ * _vte_iso2022_state
+ */
 static guint
 process_block (struct _vte_iso2022_state *state,
 	       guchar *input,
@@ -1712,6 +1849,9 @@ process_block (struct _vte_iso2022_state *state,
 	return preserve_last;
 }
 
+/**
+ * _vte_iso2022_process
+ */
 gsize
 _vte_iso2022_process(struct _vte_iso2022_state *state,
 		     guchar *input, gsize length,

@@ -108,7 +108,7 @@ static GTimer *process_timer;
 
 /* Enumerations */
 /**
- * Object properties
+ * enum: Object properties
  */
 enum {
         PROP_0,
@@ -117,7 +117,7 @@ enum {
 };
 
 /**
- * Signals
+ * enum: Signals
  */
 enum
 {

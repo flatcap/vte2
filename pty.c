@@ -85,8 +85,11 @@ static pid_t _vte_pty_helper_pid = -1;
 static int _vte_pty_helper_tunnel = -1;
 #endif
 
-/* Reset the handlers for all known signals to their defaults.  The parent
- * (or one of the libraries it links to) may have changed one to be ignored. */
+/**
+ * _vte_pty_reset_signal_handlers
+ * Reset the handlers for all known signals to their defaults.  The parent
+ * (or one of the libraries it links to) may have changed one to be ignored.
+ */
 static void
 _vte_pty_reset_signal_handlers(void)
 {
@@ -188,6 +191,9 @@ _vte_pty_reset_signal_handlers(void)
 
 typedef struct _VtePtyPrivate VtePtyPrivate;
 
+/**
+ * struct VtePtyChildSetupData
+ */
 typedef struct {
 	enum {
 		TTY_OPEN_BY_NAME,
@@ -200,7 +206,7 @@ typedef struct {
 } VtePtyChildSetupData;
 
 /**
- * VtePty:
+ * struct VtePty:
  *
  * Since: 0.26
  */
@@ -211,6 +217,9 @@ struct _VtePty {
         VtePtyPrivate *priv;
 };
 
+/**
+ * struct _VtePtyPrivate
+ */
 struct _VtePtyPrivate {
         VtePtyFlags flags;
         int pty_fd;
@@ -225,6 +234,9 @@ struct _VtePtyPrivate {
         guint using_helper : 1;
 };
 
+/**
+ * struct _VtePtyClass
+ */
 struct _VtePtyClass {
         GObjectClass parent_class;
 };
@@ -352,7 +364,7 @@ vte_pty_child_setup (VtePty *pty)
  * - replace current env rather than adding!
  */
 
-/*
+/**
  * __vte_pty_get_argv:
  * @command: the command to run
  * @argv: the argument vector
@@ -392,7 +404,7 @@ __vte_pty_get_argv (const char *command,
 	return argv2;
 }
 
-/*
+/**
  * __vte_pty_merge_environ:
  * @envp: environment vector
  *
@@ -445,7 +457,7 @@ __vte_pty_merge_environ (char **envp)
 	return (gchar **) g_ptr_array_free (array, FALSE);
 }
 
-/*
+/**
  * __vte_pty_get_pty_flags:
  * @lastlog: %TRUE if the session should be logged to the lastlog
  * @utmp: %TRUE if the session should be logged to the utmp/utmpx log
@@ -474,7 +486,7 @@ __vte_pty_get_pty_flags(gboolean lastlog,
         return flags;
 }
 
-/*
+/**
  * __vte_pty_spawn:
  * @pty: a #VtePty
  * @directory: the name of a directory the command should start in, or %NULL
@@ -576,7 +588,7 @@ __vte_pty_spawn (VtePty *pty,
         return FALSE;
 }
 
-/*
+/**
  * __vte_pty_fork:
  * @pty: a #VtePty
  * @pid: (out) a location to store a #GPid, or %NULL
@@ -744,7 +756,7 @@ vte_pty_get_size(VtePty *pty,
 	}
 }
 
-/*
+/**
  * _vte_pty_ptsname:
  * @master: file descriptor to the PTY master
  * @error: a location to store a #GError, or %NULL
@@ -810,7 +822,7 @@ _vte_pty_ptsname(int master,
 #endif
 }
 
-/*
+/**
  * _vte_pty_getpt:
  * @error: a location to store a #GError, or %NULL
  *
@@ -869,6 +881,9 @@ _vte_pty_getpt(GError **error)
 	return fd;
 }
 
+/**
+ * _vte_pty_grantpt
+ */
 static gboolean
 _vte_pty_grantpt(int master,
                  GError **error)
@@ -889,6 +904,9 @@ _vte_pty_grantpt(int master,
         return TRUE;
 }
 
+/**
+ * _vte_pty_unlockpt
+ */
 static gboolean
 _vte_pty_unlockpt(int fd,
                   GError **error)
@@ -921,7 +939,7 @@ _vte_pty_unlockpt(int fd,
 #endif
 }
 
-/*
+/**
  * _vte_pty_open_unix98:
  * @pty: a #VtePty
  * @error: a location to store a #GError, or %NULL
@@ -968,6 +986,9 @@ _vte_pty_open_unix98(VtePty *pty,
 
 #ifdef VTE_USE_GNOME_PTY_HELPER
 #ifdef HAVE_RECVMSG
+/**
+ * _vte_pty_read_ptypair
+ */
 static void
 _vte_pty_read_ptypair(int tunnel, int *parentfd, int *childfd)
 {
@@ -1013,6 +1034,9 @@ _vte_pty_read_ptypair(int tunnel, int *parentfd, int *childfd)
 }
 
 #elif defined (I_RECVFD)
+/**
+ * _vte_pty_read_ptypair
+ */
 static void
 _vte_pty_read_ptypair(int tunnel, int *parentfd, int *childfd)
 {
@@ -1030,6 +1054,9 @@ _vte_pty_read_ptypair(int tunnel, int *parentfd, int *childfd)
 #endif
 
 #ifdef HAVE_SOCKETPAIR
+/**
+ * _vte_pty_pipe_open
+ */
 static int
 _vte_pty_pipe_open(int *a, int *b)
 {
@@ -1053,6 +1080,9 @@ _vte_pty_pipe_open(int *a, int *b)
 }
 
 #else
+/**
+ * _vte_pty_pipe_open
+ */
 static int
 _vte_pty_pipe_open(int *a, int *b)
 {
@@ -1069,7 +1099,10 @@ _vte_pty_pipe_open(int *a, int *b)
 
 #endif
 
-/* Like read, but hide EINTR and EAGAIN. */
+/**
+ * n_read
+ * Like read, but hide EINTR and EAGAIN.
+ */
 static ssize_t
 n_read(int fd, void *buffer, size_t count)
 {
@@ -1102,7 +1135,10 @@ n_read(int fd, void *buffer, size_t count)
 	return n;
 }
 
-/* Like write, but hide EINTR and EAGAIN. */
+/**
+ * n_write
+ * Like write, but hide EINTR and EAGAIN.
+ */
 static ssize_t
 n_write(int fd, const void *buffer, size_t count)
 {
@@ -1135,7 +1171,7 @@ n_write(int fd, const void *buffer, size_t count)
 	return n;
 }
 
-/*
+/**
  * _vte_pty_stop_helper:
  *
  * Terminates the running GNOME PTY helper.
@@ -1486,6 +1522,9 @@ vte_pty_close (VtePty *pty)
 
 /* VTE PTY class */
 
+/**
+ * enum Property Types
+ */
 enum {
         PROP_0,
         PROP_FLAGS,
@@ -1495,6 +1534,9 @@ enum {
 
 /* GInitable impl */
 
+/**
+ * vte_pty_initable_init
+ */
 static gboolean
 vte_pty_initable_init (GInitable *initable,
                        GCancellable *cancellable,
@@ -1561,6 +1603,9 @@ vte_pty_initable_init (GInitable *initable,
 	return ret;
 }
 
+/**
+ * vte_pty_initable_iface_init
+ */
 static void
 vte_pty_initable_iface_init (GInitableIface  *iface)
 {
@@ -1573,6 +1618,9 @@ vte_pty_initable_iface_init (GInitableIface  *iface)
 G_DEFINE_TYPE_WITH_CODE (VtePty, vte_pty, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, vte_pty_initable_iface_init))
 
+/**
+ * vte_pty_init
+ */
 static void
 vte_pty_init (VtePty *pty)
 {
@@ -1593,6 +1641,9 @@ vte_pty_init (VtePty *pty)
 #endif // RARXXX
 }
 
+/**
+ * vte_pty_finalize
+ */
 static void
 vte_pty_finalize (GObject *object)
 {
@@ -1616,6 +1667,9 @@ vte_pty_finalize (GObject *object)
         G_OBJECT_CLASS (vte_pty_parent_class)->finalize (object);
 }
 
+/**
+ * vte_pty_get_property
+ */
 static void
 vte_pty_get_property (GObject    *object,
                        guint       property_id,
@@ -1644,6 +1698,9 @@ vte_pty_get_property (GObject    *object,
         }
 }
 
+/**
+ * vte_pty_set_property
+ */
 static void
 vte_pty_set_property (GObject      *object,
                        guint         property_id,
@@ -1673,6 +1730,9 @@ vte_pty_set_property (GObject      *object,
         }
 }
 
+/**
+ * vte_pty_class_init
+ */
 static void
 vte_pty_class_init (VtePtyClass *klass)
 {
@@ -1893,6 +1953,9 @@ vte_pty_set_term (VtePty *pty,
 
 static GHashTable *fd_to_pty_hash = NULL;
 
+/**
+ * get_vte_pty_for_fd
+ */
 static VtePty *
 get_vte_pty_for_fd (int fd)
 {

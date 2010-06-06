@@ -3,12 +3,6 @@
 
 #include "ring.h"
 
-typedef enum {
-  VTE_REGEX_CURSOR_GDKCURSOR,
-  VTE_REGEX_CURSOR_GDKCURSORTYPE,
-  VTE_REGEX_CURSOR_NAME
-} VteRegexCursorMode;
-
 #ifdef RARXXX // Copied from vte-private.h
 typedef struct _VteVisualPosition {
 	long row, col;
@@ -17,8 +11,11 @@ typedef struct _VteVisualPosition {
 
 typedef struct _RarScreen RarScreen;
 
-/* Screen data.  We support the normal screen, and an alternate
- * screen, which seems to be a DEC-specific feature. */
+/**
+ * struct RarScreen
+ * Screen data.  We support the normal screen, and an alternate
+ * screen, which seems to be a DEC-specific feature.
+ */
 struct _RarScreen {
 	VteRing row_data[1];	/* buffer contents */
 	VteVisualPosition cursor_current, cursor_saved;
@@ -47,6 +44,9 @@ struct _RarScreen {
 	gboolean status_line_changed;
 };
 
+/**
+ * struct RarOuter
+ */
 typedef struct _RarOuter {
 	glong row_count;
 	glong column_count;
@@ -72,7 +72,7 @@ typedef struct _RarOuter {
 	gboolean vt220_fkey_mode;
 
 	int mouse_tracking_mode; /* this is of type MouseTrackingMode,
-				    but we need to guarantee its type. */
+				  * but we need to guarantee its type. */
 	gboolean smooth_scroll;
 	gboolean cursor_visible;
 	int cursor_mode;
