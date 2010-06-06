@@ -19,6 +19,7 @@
 #include "config.h"
 
 #ifndef RARXXX
+// Really?
 #include <sys/types.h>
 #include <assert.h>
 #include <ctype.h>
@@ -43,6 +44,9 @@
 #define _vte_table_is_numeric_list(__c) \
 	((((__c) >= '0') && ((__c) <= '9')) || (__c) == ';')
 
+/**
+ * struct _vte_table
+ */
 struct _vte_table {
 	struct _vte_matcher_impl impl;
 	GQuark resultq;
@@ -56,13 +60,19 @@ struct _vte_table {
 	struct _vte_table **table;
 };
 
-/* Argument info. */
+/**
+ * enum _vte_table_argtype
+ * Argument info.
+ */
 enum _vte_table_argtype {
 	_vte_table_arg_number=0,
 	_vte_table_arg_string,
 	_vte_table_arg_char
 };
 
+/**
+ * struct _vte_table_arginfo
+ */
 struct _vte_table_arginfo {
 	const gunichar *start;
 	struct _vte_table_arginfo *next;
@@ -71,12 +81,18 @@ struct _vte_table_arginfo {
 };
 
 #define MAX_STACK 16
+/**
+ * struct _vte_table_arginfo_head
+ */
 struct _vte_table_arginfo_head {
 	guint stack_allocated;
 	struct _vte_table_arginfo *list;
 	struct _vte_table_arginfo stack[MAX_STACK];
 };
 
+/**
+ * _vte_table_arginfo_head_init
+ */
 static void
 _vte_table_arginfo_head_init(struct _vte_table_arginfo_head *head)
 {
@@ -85,6 +101,9 @@ _vte_table_arginfo_head_init(struct _vte_table_arginfo_head *head)
 	head->stack_allocated = 0;
 }
 
+/**
+ * _vte_table_arginfo_alloc
+ */
 static inline struct _vte_table_arginfo*
 _vte_table_arginfo_alloc(struct _vte_table_arginfo_head *head)
 {
@@ -100,6 +119,9 @@ _vte_table_arginfo_alloc(struct _vte_table_arginfo_head *head)
 	return info;
 }
 
+/**
+ * _vte_table_arginfo_head_revert
+ */
 static void
 _vte_table_arginfo_head_revert(struct _vte_table_arginfo_head *head, struct _vte_table_arginfo *last)
 {
@@ -125,6 +147,9 @@ _vte_table_arginfo_head_revert(struct _vte_table_arginfo_head *head, struct _vte
 	}while (TRUE);
 }
 
+/**
+ * _vte_table_arginfo_head_reverse
+ */
 static struct _vte_table_arginfo *
 _vte_table_arginfo_head_reverse(struct _vte_table_arginfo_head *head)
 {
@@ -141,6 +166,9 @@ _vte_table_arginfo_head_reverse(struct _vte_table_arginfo_head *head)
 	return prev;
 }
 
+/**
+ * _vte_table_arginfo_head_finalize
+ */
 static void
 _vte_table_arginfo_head_finalize(struct _vte_table_arginfo_head *head)
 {
@@ -156,7 +184,10 @@ _vte_table_arginfo_head_finalize(struct _vte_table_arginfo_head *head)
 	}
 }
 
-/* Create an empty, one-level table. */
+/**
+ * _vte_table_new
+ * Create an empty, one-level table.
+ */
 struct _vte_table *
 _vte_table_new(void)
 {
@@ -167,6 +198,9 @@ _vte_table_new(void)
 	return ret;
 }
 
+/**
+ * _vte_table_literal_new
+ */
 static struct _vte_table **
 _vte_table_literal_new(void)
 {
@@ -174,7 +208,10 @@ _vte_table_literal_new(void)
 	return g_new0(struct _vte_table *, VTE_TABLE_MAX_LITERAL);
 }
 
-/* Free a table. */
+/**
+ * _vte_table_free
+ * Free a table.
+ */
 void
 _vte_table_free(struct _vte_table *table)
 {
@@ -208,7 +245,10 @@ _vte_table_free(struct _vte_table *table)
 	g_slice_free(struct _vte_table, table);
 }
 
-/* Add a string to the tree with the given increment value. */
+/**
+ * _vte_table_addi
+ * Add a string to the tree with the given increment value.
+ */
 static void
 _vte_table_addi(struct _vte_table *table,
 		const unsigned char *original, gssize original_length,
@@ -415,7 +455,10 @@ _vte_table_addi(struct _vte_table *table,
 			result, quark, inc);
 }
 
-/* Add a string to the matching tree. */
+/**
+ * _vte_table_add
+ * Add a string to the matching tree.
+ */
 void
 _vte_table_add(struct _vte_table *table,
 	       const char *pattern, gssize length,
@@ -428,7 +471,10 @@ _vte_table_add(struct _vte_table *table,
 			result, quark, 0);
 }
 
-/* Match a string in a subtree. */
+/**
+ * _vte_table_matchi
+ * Match a string in a subtree.
+ */
 static const char *
 _vte_table_matchi(struct _vte_table *table,
 		  const gunichar *candidate, gssize length,
@@ -553,6 +599,9 @@ _vte_table_matchi(struct _vte_table *table,
 	return NULL;
 }
 
+/**
+ * _vte_table_extract_numbers
+ */
 static void
 _vte_table_extract_numbers(GValueArray **array,
 			   struct _vte_table_arginfo *arginfo, long increment)
@@ -579,6 +628,9 @@ _vte_table_extract_numbers(GValueArray **array,
 	g_value_unset(&value);
 }
 
+/**
+ * _vte_table_extract_string
+ */
 static void
 _vte_table_extract_string(GValueArray **array,
 			  struct _vte_table_arginfo *arginfo)
@@ -603,6 +655,9 @@ _vte_table_extract_string(GValueArray **array,
 	g_value_unset(&value);
 }
 
+/**
+ * _vte_table_extract_char
+ */
 static void
 _vte_table_extract_char(GValueArray **array,
 			struct _vte_table_arginfo *arginfo, long increment)
@@ -620,7 +675,10 @@ _vte_table_extract_char(GValueArray **array,
 	g_value_unset(&value);
 }
 
-/* Check if a string matches something in the tree. */
+/**
+ * _vte_table_match
+ * Check if a string matches something in the tree.
+ */
 const char *
 _vte_table_match(struct _vte_table *table,
 		 const gunichar *candidate, gssize length,
@@ -762,12 +820,17 @@ _vte_table_match(struct _vte_table *table,
 	return ret;
 }
 
+/**
+ * _vte_table_printi
+ */
 static void
 _vte_table_printi(struct _vte_table *table, const char *lead, int *count)
 {
 	//printf ("Entering: %s\n", __FUNCTION__);
 	unsigned int i;
 	char *newlead = NULL;
+
+	//printf ("Lead = %s\n", lead);
 
 	(*count)++;
 
@@ -808,7 +871,10 @@ _vte_table_printi(struct _vte_table *table, const char *lead, int *count)
 	}
 }
 
-/* Dump out the contents of a tree. */
+/**
+ * _vte_table_print
+ * Dump out the contents of a tree.
+ */
 void
 _vte_table_print(struct _vte_table *table)
 {
@@ -819,6 +885,9 @@ _vte_table_print(struct _vte_table *table)
 		count, (long) count * sizeof(struct _vte_table));
 }
 
+/**
+ * struct _vte_matcher_class _vte_matcher_table
+ */
 const struct _vte_matcher_class _vte_matcher_table = {
 	(_vte_matcher_create_func)_vte_table_new,
 	(_vte_matcher_add_func)_vte_table_add,
