@@ -28,7 +28,7 @@
  * Since: 0.26
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "vtepty.h"
 #include "vtepty-private.h"

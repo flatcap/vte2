@@ -18,7 +18,7 @@
  * Red Hat Author(s): Nalin Dahyabhai, Behdad Esfahbod
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "debug.h"
 #include "vterowdata.h"

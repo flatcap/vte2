@@ -18,7 +18,7 @@
  * Red Hat Author(s): Behdad Esfahbod
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "debug.h"
 #include "vtestream.h"

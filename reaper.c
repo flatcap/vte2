@@ -31,7 +31,7 @@
  * Since 0.11.11
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "debug.h"
 #include "marshal.h"

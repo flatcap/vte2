@@ -19,7 +19,7 @@
  * 	Behdad Esfahbod
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "vteunistr.h"
 

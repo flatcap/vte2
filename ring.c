@@ -18,7 +18,7 @@
  * Red Hat Author(s): Nalin Dahyabhai, Behdad Esfahbod
  */
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 
 #include "debug.h"
@@ -29,8 +29,23 @@
  * VteRing: A buffer ring
  */
 
+/**
+ * struct _VteRowRecord
+ */
+typedef struct _VteRowRecord {
+	gsize text_offset;
+	gsize attr_offset;
+} VteRowRecord;
+
+
+static void _vte_ring_ensure_writable (VteRing *ring, gulong position);
+static void _vte_ring_ensure_writable_room (VteRing *ring);
+
 #ifdef VTE_DEBUG
 static void
+/**
+ * _vte_ring_validate
+ */
 _vte_ring_validate (VteRing * ring)
 {
 	//printf ("Entering: %s\n", __FUNCTION__);
@@ -51,7 +66,9 @@ _vte_ring_validate (VteRing * ring)
 #define _vte_ring_validate(ring) G_STMT_START {} G_STMT_END
 #endif
 
-
+/**
+ * _vte_ring_init
+ */
 void
 _vte_ring_init (VteRing *ring, gulong max_rows)
 {
@@ -79,6 +96,9 @@ _vte_ring_init (VteRing *ring, gulong max_rows)
 	_vte_ring_validate(ring);
 }
 
+/**
+ * _vte_ring_fini
+ */
 void
 _vte_ring_fini (VteRing *ring)
 {
@@ -99,11 +119,9 @@ _vte_ring_fini (VteRing *ring)
 	_vte_row_data_fini (&ring->cached_row);
 }
 
-typedef struct _VteRowRecord {
-	gsize text_offset;
-	gsize attr_offset;
-} VteRowRecord;
-
+/**
+ * _vte_ring_read_row_record
+ */
 static gboolean
 _vte_ring_read_row_record (VteRing *ring, VteRowRecord *record, gulong position)
 {
@@ -111,6 +129,9 @@ _vte_ring_read_row_record (VteRing *ring, VteRowRecord *record, gulong position)
 	return _vte_stream_read (ring->row_stream, position * sizeof (*record), (char *) record, sizeof (*record));
 }
 
+/**
+ * _vte_ring_append_row_record
+ */
 static void
 _vte_ring_append_row_record (VteRing *ring, const VteRowRecord *record, gulong position)
 {
@@ -118,6 +139,9 @@ _vte_ring_append_row_record (VteRing *ring, const VteRowRecord *record, gulong p
 	_vte_stream_append (ring->row_stream, (const char *) record, sizeof (*record));
 }
 
+/**
+ * _vte_ring_freeze_row
+ */
 static void
 _vte_ring_freeze_row (VteRing *ring, gulong position, const VteRowData *row)
 {
@@ -179,6 +203,9 @@ _vte_ring_freeze_row (VteRing *ring, gulong position, const VteRowData *row)
 	_vte_ring_append_row_record (ring, &record, position);
 }
 
+/**
+ * _vte_ring_thaw_row
+ */
 static void
 _vte_ring_thaw_row (VteRing *ring, gulong position, VteRowData *row, gboolean truncate)
 {
@@ -270,6 +297,9 @@ _vte_ring_thaw_row (VteRing *ring, gulong position, VteRowData *row, gboolean tr
 	}
 }
 
+/**
+ * _vte_ring_reset_streams
+ */
 static void
 _vte_ring_reset_streams (VteRing *ring, gulong position)
 {
@@ -286,6 +316,9 @@ _vte_ring_reset_streams (VteRing *ring, gulong position)
 	ring->last_page = position;
 }
 
+/**
+ * _vte_ring_new_page
+ */
 static void
 _vte_ring_new_page (VteRing *ring)
 {
@@ -299,8 +332,9 @@ _vte_ring_new_page (VteRing *ring)
 	ring->last_page = ring->writable;
 }
 
-
-
+/**
+ * _vte_ring_writable_index
+ */
 static inline VteRowData *
 _vte_ring_writable_index (VteRing *ring, gulong position)
 {
@@ -308,6 +342,9 @@ _vte_ring_writable_index (VteRing *ring, gulong position)
 	return &ring->array[position & ring->mask];
 }
 
+/**
+ * _vte_ring_index
+ */
 const VteRowData *
 _vte_ring_index (VteRing *ring, gulong position)
 {
@@ -324,9 +361,9 @@ _vte_ring_index (VteRing *ring, gulong position)
 	return &ring->cached_row;
 }
 
-static void _vte_ring_ensure_writable (VteRing *ring, gulong position);
-static void _vte_ring_ensure_writable_room (VteRing *ring);
-
+/**
+ * _vte_ring_index_writable
+ */
 VteRowData *
 _vte_ring_index_writable (VteRing *ring, gulong position)
 {
@@ -335,6 +372,9 @@ _vte_ring_index_writable (VteRing *ring, gulong position)
 	return _vte_ring_writable_index (ring, position);
 }
 
+/**
+ * _vte_ring_freeze_one_row
+ */
 static void
 _vte_ring_freeze_one_row (VteRing *ring)
 {
@@ -353,6 +393,9 @@ _vte_ring_freeze_one_row (VteRing *ring)
 		_vte_ring_new_page (ring);
 }
 
+/**
+ * _vte_ring_thaw_one_row
+ */
 static void
 _vte_ring_thaw_one_row (VteRing *ring)
 {
@@ -373,6 +416,9 @@ _vte_ring_thaw_one_row (VteRing *ring)
 	_vte_ring_thaw_row (ring, ring->writable, row, TRUE);
 }
 
+/**
+ * _vte_ring_discard_one_row
+ */
 static void
 _vte_ring_discard_one_row (VteRing *ring)
 {
@@ -385,6 +431,9 @@ _vte_ring_discard_one_row (VteRing *ring)
 		ring->writable = ring->start;
 }
 
+/**
+ * _vte_ring_maybe_freeze_one_row
+ */
 static void
 _vte_ring_maybe_freeze_one_row (VteRing *ring)
 {
@@ -393,6 +442,9 @@ _vte_ring_maybe_freeze_one_row (VteRing *ring)
 		_vte_ring_freeze_one_row (ring);
 }
 
+/**
+ * _vte_ring_maybe_discard_one_row
+ */
 static void
 _vte_ring_maybe_discard_one_row (VteRing *ring)
 {
@@ -401,6 +453,9 @@ _vte_ring_maybe_discard_one_row (VteRing *ring)
 		_vte_ring_discard_one_row (ring);
 }
 
+/**
+ * _vte_ring_ensure_writable_room
+ */
 static void
 _vte_ring_ensure_writable_room (VteRing *ring)
 {
@@ -429,6 +484,9 @@ _vte_ring_ensure_writable_room (VteRing *ring)
 	g_free (old_array);
 }
 
+/**
+ * _vte_ring_ensure_writable
+ */
 static void
 _vte_ring_ensure_writable (VteRing *ring, gulong position)
 {
@@ -468,6 +526,9 @@ _vte_ring_resize (VteRing *ring, gulong max_rows)
 	ring->max = max_rows;
 }
 
+/**
+ * _vte_ring_shrink
+ */
 void
 _vte_ring_shrink (VteRing *ring, gulong max_len)
 {
@@ -567,7 +628,6 @@ _vte_ring_remove (VteRing * ring, gulong position)
 	_vte_ring_validate(ring);
 }
 
-
 /**
  * _vte_ring_append:
  * @ring: a #VteRing
@@ -584,7 +644,9 @@ _vte_ring_append (VteRing * ring)
 	return _vte_ring_insert (ring, _vte_ring_next (ring));
 }
 
-
+/**
+ * _vte_ring_write_row
+ */
 static gboolean
 _vte_ring_write_row (VteRing *ring,
 		     GOutputStream *stream,
