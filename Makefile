@@ -3,7 +3,7 @@
 #
 AWK	= awk
 CAT	= cat
-CC	= ~/bin/colorgcc.pl
+#CC	= ~/bin/colorgcc.pl
 CP	= cp
 GEN_GGM	= glib-genmarshal
 GEN_GME	= glib-mkenums
@@ -66,13 +66,13 @@ CFLAGS	+= -fno-common
 #CFLAGS	+= -ftest-coverage
 
 # Extra definitions
-CFLAGS	+= -DDATADIR='"/home/dev/install/share"'
+CFLAGS	+= -DDATADIR='"/home/work/terminal/install/share"'
 #CFLAGS	+= -DG_DISABLE_ASSERT
 CFLAGS	+= -DG_LOG_DOMAIN='"Vte"'
 CFLAGS	+= -D_GNU_SOURCE
 CFLAGS	+= -DHAVE_CONFIG_H
-CFLAGS	+= -DLIBEXECDIR='"/home/dev/install/libexec"'
-CFLAGS	+= -DLOCALEDIR='"/home/dev/install/share/locale"'
+CFLAGS	+= -DLIBEXECDIR='"/home/work/terminal/install/libexec"'
+CFLAGS	+= -DLOCALEDIR='"/home/work/terminal/install/share/locale"'
 CFLAGS	+= -DVTE_COMPILATION
 #CFLAGS	+= -DVTE_DEBUG
 CFLAGS	+= -DRARXXX
@@ -149,13 +149,13 @@ gtk:
 	$(LN) /usr/src/dev/gtk+-2.20.1/gtk
 
 symbols:
-	$(LN) /home/dev/notes/symbols
+	$(LN) /home/work/terminal/notes/symbols
 
 src:
-	$(LN) /home/dev/git.vte/src $@
+	$(LN) /home/work/terminal/git/vte/src $@
 
 work:
-	$(LN) /home/dev/vte $@
+	$(LN) /home/work/terminal/vte $@
 
 #-------------------------------------------------------------------------------
 # Generated files
